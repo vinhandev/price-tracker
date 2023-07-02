@@ -12,3 +12,7 @@ export const formatMoney = (value: number) => {
     currency: 'VND',
   }).format(value);
 }
+
+export const navigate = (path: string) => {
+  window.location.href = path;
+}

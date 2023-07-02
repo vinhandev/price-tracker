@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import { convertStringToNumber } from './utils/helper';
+import { convertStringToNumber, navigate } from './utils/helper';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -12,7 +12,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from './services/firebase';
 import { colors } from './assets/colors';
 
@@ -43,6 +43,7 @@ type GroupPriceProps = {
   data: PriceProps[];
 };
 
+const noPrice = -1;
 function App() {
   const initData: GroupPriceProps[] = [
     {
@@ -293,29 +294,23 @@ function App() {
         const group = paramPrices[index];
         for (let i = 0; i < group.data.length; i++) {
           const element = paramPrices[index].data[i];
-          const response = await fetch(element.link, {
-            // headers: {
-            //   'Access-Control-Allow-Origin': '*',
-            //   'Access-Control-Allow-Methods':'PUT, GET, HEAD, POST, DELETE, OPTIONS'
-            // },
-          });
-          setProgressValue(index + 1);
-          const data = (await response.text())
-            .replace(/\n/g, ' ')
-            .replace(/\r/g, ' ')
-            .replace(/\t/g, ' ')
-            .split('=""')
-            .join('')
-            .split(' ')
-            .join('');
+          try {
+            const response = await fetch(element.link);
+            const data = (await response.text())
+              .replace(/\n/g, ' ')
+              .replace(/\r/g, ' ')
+              .replace(/\t/g, ' ')
+              .split('=""')
+              .join('')
+              .split(' ')
+              .join('');
 
-          const price =
-            data
-              .split(element.first.split(' ').join(''))[1]
-              ?.split(element.last.split(' ').join(''))[0] ?? '0';
-          if (price !== '0') {
+            const price =
+              data
+                .split(element.first.split(' ').join(''))[1]
+                ?.split(element.last.split(' ').join(''))[0] ?? '0';
             const number = convertStringToNumber(price);
-            if (number !== null) {
+            if (number !== null && number !== 0) {
               if (!element?.data) {
                 element.data = [
                   {
@@ -329,13 +324,17 @@ function App() {
                   date: new Date().getTime(),
                 });
               }
+            } else {
+              throw new Error('no price');
             }
-          } else {
+          } catch (error) {
             element.data?.push({
-              price: 0,
+              price: noPrice,
               date: new Date().getTime(),
             });
           }
+
+          setProgressValue(index + 1);
         }
       }
       setPrices(paramPrices);
@@ -374,6 +373,8 @@ function App() {
           justifyContent: 'center',
           alignItems: 'center',
           flexDirection: 'column',
+          backgroundColor: '#070F2B',
+          color: '#15F5BA',
         }}
       >
         <div className="spinner-border" role="status" />
@@ -412,30 +413,41 @@ function App() {
         >
           Reload
         </button>
-        {/* <button
+        {import.meta.env.MODE === 'development' && (
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={async () => {
+              await deleteDoc(doc(db, 'Prices', 'vinhan'));
+              await setPrices(initData);
+              await handleFetch(initData);
+            }}
+          >
+            Delete
+          </button>
+        )}
+        <button
           type="button"
           className="btn btn-danger"
-          onClick={async () => {
-            await deleteDoc(doc(db, 'Prices', 'vinhan'));
-            await setPrices(initData);
-            await handleFetch(initData);
+          onClick={() => {
+            navigate('/add');
           }}
         >
-          Delete
-        </button> */}
+          Import New
+        </button>
       </div>
       <div
+        className="row"
         style={{
           borderRadius: 10,
-          display: 'flex',
           flexWrap: 'wrap',
         }}
       >
         {prices.map((item) => (
           <div
             key={item.label}
+            className="item col-12 col-lg-6"
             style={{
-              width: '100%',
               paddingBottom: 20,
               height: '100vh',
             }}
@@ -467,7 +479,13 @@ function App() {
                   ) ?? [],
                 datasets: item.data.map((subItem, subIndex) => ({
                   label: subItem.name,
-                  data: subItem.data?.map((subItem) => subItem.price) ?? [],
+                  data:
+                    subItem.data?.map((subItem) => {
+                      if (subItem.price === noPrice) {
+                        return undefined;
+                      }
+                      return subItem.price;
+                    }) ?? [],
                   borderColor: colors[subIndex],
                   backgroundColor: `${colors[subIndex]}55`,
                 })),
