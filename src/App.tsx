@@ -114,21 +114,17 @@ function App() {
   ];
   const [count, setCount] = useState<number>(0);
   const [data, setData] = useState<Props[]>(initData);
-  const corsAnywhereUrl = 'https://cors-anywhere.herokuapp.com/';
 
   useEffect(() => {
     async function handleFetch() {
       for (let index = 0; index < initData.length; index++) {
         const element = initData[index];
-        const response = await fetch(
-          corsAnywhereUrl + element.link.replace('https://', ''),
-          {
-            // headers: {
-            //   'Access-Control-Allow-Origin': '*',
-            //   'Access-Control-Allow-Methods':'PUT, GET, HEAD, POST, DELETE, OPTIONS'
-            // },
-          }
-        );
+        const response = await fetch(element.link, {
+          // headers: {
+          //   'Access-Control-Allow-Origin': '*',
+          //   'Access-Control-Allow-Methods':'PUT, GET, HEAD, POST, DELETE, OPTIONS'
+          // },
+        });
         const data = (await response.text())
           .replace(/\n/g, ' ')
           .replace(/\r/g, ' ')
