@@ -114,6 +114,7 @@ function App() {
   ];
   const [count, setCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
+  const [progressValue, setProgressValue] = useState<number>(0);
   const [data, setData] = useState<Props[]>(initData);
 
   async function handleFetch() {
@@ -127,6 +128,7 @@ function App() {
           //   'Access-Control-Allow-Methods':'PUT, GET, HEAD, POST, DELETE, OPTIONS'
           // },
         });
+        setProgressValue((progressValue) => progressValue + 1);
         const data = (await response.text())
           .replace(/\n/g, ' ')
           .replace(/\r/g, ' ')
@@ -145,7 +147,7 @@ function App() {
       }
       setData(initData);
     } catch (error) {
-      alert(error);
+      console.error(error);
     }
     setLoading(false);
     setCount(count + 1);
@@ -155,7 +157,13 @@ function App() {
     handleFetch();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div>
+        <p>{Math.round((progressValue / initData.length) * 100)} </p>
+        <p>Loading...</p>
+      </div>
+    );
 
   return (
     <div
@@ -197,7 +205,20 @@ function App() {
           </div>
         </div>
       ))}
-      <button onClick={handleFetch}>Reload</button>
+      <div
+        style={{
+          padding: 10,
+        }}
+      >
+        <button
+          onClick={async () => {
+            setProgressValue(0);
+            await handleFetch();
+          }}
+        >
+          Reload
+        </button>
+      </div>
     </div>
   );
 }
