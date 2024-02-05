@@ -67,6 +67,15 @@ function App() {
       color: '#7FC7D9',
     },
     {
+      name: 'DIENTHOAIHAY: Xiaomi Redmi Note 13 Pro 5G 12gb/256gb',
+      date: new Date(),
+      link: 'https://dienthoaihay.vn/xiaomi/xiaomi-redmi-note-13-pro-5g-p706.html?mau=tim&bonho=12gb-256gb',
+      price: '0',
+      first: `<div class="extend_name"> 12GB / 256GB</div><div class="extend_price">`,
+      last: `</div>`,
+      color: '#7FC7D9',
+    },
+    {
       name: 'DIENTHOAIHAY: Realme GT Neo5 SE 5G 12/256gb',
       date: new Date(),
       link: 'https://dienthoaihay.vn/realme/realme-gt-neo-5-se-5g-p572.html?mau=xanh-da-sac&bonho=12gb-256gb',
@@ -118,6 +127,7 @@ function App() {
   const [data, setData] = useState<Props[]>(initData);
 
   async function handleFetch() {
+    setProgressValue(0);
     setLoading(true);
     try {
       for (let index = 0; index < initData.length; index++) {
@@ -159,9 +169,24 @@ function App() {
 
   if (loading)
     return (
-      <div>
-        <p>{Math.round((progressValue / initData.length) * 100)} </p>
-        <p>Loading...</p>
+      <div
+        style={{
+          width: '100vw',
+          height: '100vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+        }}
+      >
+        <div className="spinner-border" role="status" />
+        <h6
+          style={{
+            paddingTop: 10,
+          }}
+        >
+          {Math.round((progressValue / initData.length) * 100)} %
+        </h6>
       </div>
     );
 
@@ -169,55 +194,64 @@ function App() {
     <div
       style={{
         width: '100%',
+        padding: 50,
       }}
     >
       <h3>Reload count:{count}</h3>
-      {data.map((item) => (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            width: '90%',
-            margin: 'auto',
-            backgroundColor: item.color,
-          }}
-          key={item.link}
-        >
-          <div
-            style={{
-              borderWidth: 1,
-              width: '70%',
-              fontWeight: 'bold',
-              border: '1px solid black',
-              padding: 20,
-            }}
-          >
-            <a href={item.link}>{item.name}</a>
-          </div>
-          <div
-            style={{
-              width: '30%',
-              border: '1px solid black',
-              padding: 20,
-            }}
-          >
-            {item.price}
-          </div>
-        </div>
-      ))}
       <div
         style={{
-          padding: 10,
+          paddingTop: 20,
+          paddingBottom: 20,
         }}
       >
         <button
+          type="button"
+          className="btn btn-primary"
           onClick={async () => {
-            setProgressValue(0);
             await handleFetch();
           }}
         >
           Reload
         </button>
+      </div>
+      <div
+        style={{
+          borderRadius: 10,
+        }}
+      >
+        {data.map((item) => (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              width: '100%',
+              margin: 'auto',
+              backgroundColor: item.color,
+            }}
+            key={item.link}
+          >
+            <div
+              style={{
+                borderWidth: 1,
+                width: '70%',
+                fontWeight: 'bold',
+                border: '1px solid black',
+                padding: 20,
+              }}
+            >
+              <a href={item.link}>{item.name}</a>
+            </div>
+            <div
+              style={{
+                width: '30%',
+                border: '1px solid black',
+                padding: 20,
+              }}
+            >
+              {item.price}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
