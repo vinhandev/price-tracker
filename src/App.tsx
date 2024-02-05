@@ -120,12 +120,15 @@ function App() {
     async function handleFetch() {
       for (let index = 0; index < initData.length; index++) {
         const element = initData[index];
-        const response = await fetch(corsAnywhereUrl + element.link.replace('https://', ''), {
-          // headers: {
-          //   'Access-Control-Allow-Origin': '*',
-          //   'Access-Control-Allow-Methods':'PUT, GET, HEAD, POST, DELETE, OPTIONS'
-          // },
-        });
+        const response = await fetch(
+          corsAnywhereUrl + element.link.replace('https://', ''),
+          {
+            // headers: {
+            //   'Access-Control-Allow-Origin': '*',
+            //   'Access-Control-Allow-Methods':'PUT, GET, HEAD, POST, DELETE, OPTIONS'
+            // },
+          }
+        );
         const data = (await response.text())
           .replace(/\n/g, ' ')
           .replace(/\r/g, ' ')
@@ -138,7 +141,9 @@ function App() {
           data
             .split(element.first.split(' ').join(''))[1]
             ?.split(element.last.split(' ').join(''))[0] ?? '0';
-        initData[index].price = price;
+        if (price !== '0') {
+          initData[index].price = price;
+        }
       }
       setData(initData);
     }
@@ -146,7 +151,7 @@ function App() {
       console.log('reload');
       await handleFetch();
       setCount((prev) => prev + 1);
-    }, 10000);
+    }, 1000);
   }, []);
 
   return (
