@@ -113,10 +113,12 @@ function App() {
     },
   ];
   const [count, setCount] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<Props[]>(initData);
 
-  useEffect(() => {
-    async function handleFetch() {
+  async function handleFetch() {
+    setLoading(true);
+    try {
       for (let index = 0; index < initData.length; index++) {
         const element = initData[index];
         const response = await fetch(element.link, {
@@ -142,13 +144,18 @@ function App() {
         }
       }
       setData(initData);
+    } catch (error) {
+      alert(error);
     }
-    setInterval(async () => {
-      console.log('reload');
-      await handleFetch();
-      setCount((prev) => prev + 1);
-    }, 1000);
+    setLoading(false);
+    setCount(count + 1);
+  }
+
+  useEffect(() => {
+    handleFetch();
   }, []);
+
+  if (loading) return <p>Loading...</p>;
 
   return (
     <div
@@ -190,6 +197,7 @@ function App() {
           </div>
         </div>
       ))}
+      <button onClick={handleFetch}>Reload</button>
     </div>
   );
 }
