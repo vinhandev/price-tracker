@@ -379,7 +379,7 @@ function App() {
         <div className="spinner-border" role="status" />
         <h6
           style={{
-            paddingTop: 10,
+            paddingTop: 20,
           }}
         >
           {Math.round((progressValue / (initData.length + 1)) * 100)} %
@@ -471,15 +471,6 @@ function App() {
                   backgroundColor: `${colors[subIndex]}55`,
                 })),
               }}
-              // getElementAtEvent={(elements) => {
-              //   if (elements.length > 0) {
-              //     const clickedElement = elements[0];
-              //     const datasetIndex = clickedElement.datasetIndex;
-              //     const dataIndex = clickedElement.index;
-              //     const selectedData = item.data[datasetIndex].data[dataIndex];
-              //     window.open(selectedData.link, '_blank');
-              //   }
-              // }}
             />
           </div>
         ))}
