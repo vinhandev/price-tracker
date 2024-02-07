@@ -12,7 +12,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from './services/firebase';
 import { colors } from './assets/colors';
 
@@ -399,6 +399,8 @@ function App() {
         style={{
           paddingTop: 20,
           paddingBottom: 20,
+          display: 'flex',
+          gap: 20,
         }}
       >
         <button
@@ -409,6 +411,17 @@ function App() {
           }}
         >
           Reload
+        </button>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={async () => {
+            await deleteDoc(doc(db, 'Prices', 'vinhan'));
+            await setPrices(initData);
+            await handleFetch(initData);
+          }}
+        >
+          Delete
         </button>
       </div>
       <div
@@ -422,23 +435,22 @@ function App() {
           <div
             key={item.label}
             style={{
-              width: '50%',
+              width: '100%',
+              padding: 20,
             }}
           >
             <div>{item.label}</div>
             <Line
               options={{
                 responsive: true,
-                onClick(event, elements, chart) {
-                  console.log('hmm', event, elements, chart);
+                onClick: (_, elements) => {
                   if (elements.length > 0) {
-                    console.log(event, elements, chart);
-
-                    // const clickedElement = elements[0];
-                    // const datasetIndex = clickedElement.datasetIndex;
-                    // const dataIndex = clickedElement.index;
-                    // const selectedData = item.data[datasetIndex].data[dataIndex];
-                    // window.open(selectedData.link, '_blank');
+                    const clickedElement = elements[0];
+                    const datasetIndex = clickedElement.datasetIndex;
+                    const selectedData = item.data?.[datasetIndex];
+                    if (selectedData?.link) {
+                      window.open(selectedData.link, '_blank');
+                    }
                   }
                 },
               }}
