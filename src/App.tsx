@@ -409,7 +409,7 @@ function App() {
         >
           Reload
         </button>
-        <button
+        {/* <button
           type="button"
           className="btn btn-danger"
           onClick={async () => {
@@ -419,7 +419,7 @@ function App() {
           }}
         >
           Delete
-        </button>
+        </button> */}
       </div>
       <div
         style={{
