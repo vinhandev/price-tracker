@@ -237,18 +237,14 @@ function App() {
       data: [
         {
           name: 'Cellphones',
-
           link: 'https://cellphones.com.vn/macbook-pro-14-inch-2021-1tb.html',
-
           first: `<span data-v-da80e888>`,
           last: `</span>`,
           color: '#CDFADB',
         },
         {
           name: 'Mac24h',
-
           link: 'https://mac24h.vn/macbook-pro-14-inch-2021-apple-m1-pro-10-core-cpu-16-core-gpu16gb-1tb-like-new-cha-active.html',
-
           first: `<span id="sec_discounted_price_41803" class="ty-price-num">`,
           last: `</span>`,
           color: '#CDFADB',
