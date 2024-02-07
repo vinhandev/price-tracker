@@ -49,35 +49,35 @@ function App() {
       label: 'Iphone 13 Chính Hãng',
       data: [
         {
-          name: 'APPLE: iPhone 13 128GB',
+          name: 'Apple',
           link: 'https://www.apple.com/vn/shop/buy-iphone/iphone-13',
           first: `<spanclass="dimensionCapacity">128<small>GB<spanclass="visuallyhidden">Chúthích</span>²</small></span><spanclass="dimensionColor">Hồng</span><spanclass="carrier-logos">Unlocked</span><spanclass="price"><spanclass="current_price">`,
           last: `<`,
           color: '#FF8911',
         },
         {
-          name: 'FPT: iPhone 13 128GB | Chính hãng VN/A',
+          name: 'Fpt',
           link: 'https://fptshop.com.vn/dien-thoai/iphone-13',
           first: `iPhone13128GB</a></span><p>`,
           last: `<`,
           color: '#CDFADB',
         },
         {
-          name: 'THEGIOIDIDONG: iPhone 13 128GB | Chính hãng VN/A',
+          name: 'The gioi di dong',
           link: 'https://www.thegioididong.com/dtdd/iphone-13',
           first: `<p class="box-price-present">`,
           last: `&#x2`,
           color: '#CDFADB',
         },
         {
-          name: 'CELLPHONES: iPhone 13 128GB | Chính hãng VN/A',
+          name: 'Cellphones',
           link: 'https://cellphones.com.vn/iphone-13.html',
           first: `<div data-v-da80e888><strong>128GB</strong></div><span data-v-da80e888>`,
           last: `</span>`,
           color: '#CDFADB',
         },
         {
-          name: 'HOANGHAMOBILE: Điện thoại iPhone 13 (128GB) - Chính hãng VN/A',
+          name: 'HoanghaMobile',
 
           link: 'https://hoanghamobile.com/dien-thoai-di-dong/apple-iphone-13-128gb-chinh-hang-vn-a',
 
@@ -86,7 +86,7 @@ function App() {
           color: '#CDFADB',
         },
         {
-          name: 'SHOPDUNK: Điện thoại iPhone 13 (128GB) - Chính hãng VN/A',
+          name: 'ShopDunk',
 
           link: 'https://shopdunk.com/iphone-13',
 
@@ -95,7 +95,7 @@ function App() {
           color: '#CDFADB',
         },
         {
-          name: 'VIETTEL: iPhone 13 128GB',
+          name: 'Viettel',
 
           link: 'https://viettelstore.vn/dien-thoai/iphone-13-128gb-pid288660.html',
 
@@ -104,7 +104,7 @@ function App() {
           color: '#CDFADB',
         },
         {
-          name: '2TMOBILE: iPhone 13 128GB Chính hãng',
+          name: '2TMobile',
 
           link: 'https://2tmobile.com/iphone-13-128gb-chinh-hang-vn-a/',
 
@@ -113,7 +113,7 @@ function App() {
           color: '#CDFADB',
         },
         {
-          name: 'DIENMAYCHOLON: iPhone 13 128GB Chính Hãng (VN/A)',
+          name: 'Dien may cho lon',
 
           link: 'https://dienmaycholon.vn/dien-thoai-di-dong/iphone-13-128gb-chinh-hang-vna',
 
@@ -236,7 +236,7 @@ function App() {
       label: ' Macbook Pro M1',
       data: [
         {
-          name: 'CELLPHONES: Macbook Pro 14 M1 Pro 10 CPU - 16 GPU 16GB 1TB 2021 | Chính hãng Apple Việt Nam',
+          name: 'Cellphones',
 
           link: 'https://cellphones.com.vn/macbook-pro-14-inch-2021-1tb.html',
 
@@ -245,7 +245,7 @@ function App() {
           color: '#CDFADB',
         },
         {
-          name: 'MAC24H:【USED】Macbook Pro 14 inch 2021 【Apple M1 Pro 10-core CPU, 16-core GPU】16GB 1TB',
+          name: 'Mac24h',
 
           link: 'https://mac24h.vn/macbook-pro-14-inch-2021-apple-m1-pro-10-core-cpu-16-core-gpu16gb-1tb-like-new-cha-active.html',
 
@@ -254,7 +254,7 @@ function App() {
           color: '#CDFADB',
         },
         {
-          name: 'MAC24H: Macbook Pro 14 inch 2021 【Apple M1 Pro 8-core CPU, 14-core GPU】16GB 512GB',
+          name: 'Mac24h',
 
           link: 'https://mac24h.vn/macbook-pro-14-inch-2021-apple-m1-pro-8-core-cpu-14-core-gpu16gb-512gb.html',
 
@@ -263,7 +263,7 @@ function App() {
           color: '#CDFADB',
         },
         {
-          name: '2TMOBILE: MacBook Pro 14 2021 M1 Pro 16GB 1TB 99%',
+          name: '2TMobile',
 
           link: 'https://2tmobile.com/macbook-pro-14-2021-m1-pro-10-cpu-16-gpu-16gb-1tb-cu-99/',
 
@@ -272,7 +272,7 @@ function App() {
           color: '#CDFADB',
         },
         {
-          name: 'TRUNGTRAN.VN: Macbook Pro 14 M1 Pro RAM 16GB SSD 512GB Retina 2021',
+          name: 'Trungtran.vn',
 
           link: 'https://trungtran.vn/macbook-pro-14-m1-pro-2021/',
 
