@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 # firebase
-src/services/firebase.ts
+.env
