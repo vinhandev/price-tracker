@@ -441,6 +441,7 @@ function App() {
           >
             <div>{item.label}</div>
             <Line
+              style={{ minHeight: '100vh' }}
               options={{
                 responsive: true,
                 onClick: (_, elements) => {
