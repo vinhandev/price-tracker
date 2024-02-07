@@ -436,7 +436,7 @@ function App() {
             key={item.label}
             style={{
               width: '100%',
-              padding: 20,
+              paddingBottom: 20,
             }}
           >
             <div>{item.label}</div>
