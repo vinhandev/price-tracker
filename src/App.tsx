@@ -437,13 +437,14 @@ function App() {
             style={{
               width: '100%',
               paddingBottom: 20,
+              height:'100vh'
             }}
           >
             <div>{item.label}</div>
             <Line
-              style={{ minHeight: '100vh' }}
               options={{
                 responsive: true,
+                maintainAspectRatio: false,
                 onClick: (_, elements) => {
                   if (elements.length > 0) {
                     const clickedElement = elements[0];
