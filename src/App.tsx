@@ -286,6 +286,8 @@ function App() {
   const [prices, setPrices] = useState<GroupPriceProps[]>([]);
 
   async function handleFetch(paramPrices: GroupPriceProps[]) {
+    console.log('hello');
+
     setProgressValue(0);
     setLoading(true);
     try {
@@ -345,7 +347,6 @@ function App() {
   useEffect(() => {
     async function getData() {
       const response = await getDoc(doc(db, 'Prices', 'vinhan'));
-      console.log(response?.data()?.data);
 
       if (response.exists()) {
         if (response.data().data?.length > 0) {
@@ -433,7 +434,7 @@ function App() {
             style={{
               width: '100%',
               paddingBottom: 20,
-              height:'100vh'
+              height: '100vh',
             }}
           >
             <div>{item.label}</div>
