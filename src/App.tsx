@@ -285,7 +285,7 @@ function App() {
   ];
 
   const [count, setCount] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [progressValue, setProgressValue] = useState<number>(0);
   const [prices, setPrices] = useState<GroupPriceProps[]>([]);
 
