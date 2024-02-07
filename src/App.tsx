@@ -56,7 +56,7 @@ function App() {
           color: '#FF8911',
         },
         {
-          name: 'Fpt',
+          name: 'FPT',
           link: 'https://fptshop.com.vn/dien-thoai/iphone-13',
           first: `iPhone13128GB</a></span><p>`,
           last: `<`,
@@ -127,7 +127,7 @@ function App() {
       label: 'Iphone 13 Cũ',
       data: [
         {
-          name: 'PHUCKHANGMOBILE: iPhone 13 128GB Quốc Tế (Zin - 99%)',
+          name: 'Phuc Khang Mobile',
 
           link: 'https://phuckhangmobile.com/iphone-13-128gb-quoc-te-zin-99-6085.html',
 
@@ -136,7 +136,7 @@ function App() {
           color: '#EBD9B4',
         },
         {
-          name: 'XTMOBILE: iPhone 13 128GB (Cũ 99%)',
+          name: 'XTMobile',
 
           link: 'https://www.xtmobile.vn/iphone-13-128gb-cu-likenew',
 
@@ -145,7 +145,7 @@ function App() {
           color: '#EBD9B4',
         },
         {
-          name: '2TMOBILE: iPhone 13 128GB 99%',
+          name: '2TMobile',
 
           link: 'https://2tmobile.com/iphone-13-128gb-cu-dep-99/',
 
@@ -154,7 +154,7 @@ function App() {
           color: '#EBD9B4',
         },
         {
-          name: 'DIDONGVIET: iPhone 13 128GB (Likenew)',
+          name: 'Di Dong Viet',
 
           link: 'https://didongviet.vn/may-cu-gia-re/iphone-13-128gb-likenew.html',
 
@@ -163,7 +163,7 @@ function App() {
           color: '#EBD9B4',
         },
         {
-          name: 'PHUCKHANGMOBILE: iPhone 13 128GB Quốc Tế (Likenew - 98%)',
+          name: 'Phuc Khang Mobile',
 
           link: 'https://phuckhangmobile.com/iphone-13-128gb-quoc-te-likenew-98-6102.html',
 
@@ -172,7 +172,7 @@ function App() {
           color: '#EBD9B4',
         },
         {
-          name: 'CLICKBUY: iPhone 13 128GB Cũ đẹp 99%',
+          name: 'Click Buy',
 
           link: 'https://clickbuy.com.vn/apple-iphone-13-128gb-chinh-hang-cu.html',
 
@@ -181,7 +181,7 @@ function App() {
           color: '#EBD9B4',
         },
         {
-          name: 'CLICKBUY: iPhone 13 Lock 128GB Cũ đẹp 99%',
+          name: 'Click Buy',
 
           link: 'https://clickbuy.com.vn/iphone-13-128gb-lock-cu-dep-99.html',
 
@@ -195,7 +195,7 @@ function App() {
       label: 'Android phone',
       data: [
         {
-          name: 'MOBILECITY: Điện thoại Xiaomi Redmi Note 12 Turbo (Snapdragon 7+ Gen 2) 8-128gb',
+          name: 'MobileCity',
 
           link: 'https://mobilecity.vn/dien-thoai/xiaomi-redmi-note-12-turbo-edition.html',
 
@@ -204,7 +204,7 @@ function App() {
           color: '#7FC7D9',
         },
         {
-          name: 'DIENTHOAIHAY: Xiaomi Redmi Note 12 Turbo Edition 12gb/256gb',
+          name: 'DienThoaiHay',
 
           link: 'https://dienthoaihay.vn/xiaomi/xiaomi-redmi-note-12-turbo-edition-p601.html?bonho=12gb-256gb&mau=xanh',
 
@@ -213,7 +213,7 @@ function App() {
           color: '#7FC7D9',
         },
         {
-          name: 'DIENTHOAIHAY: Xiaomi Redmi Note 13 Pro 5G 12gb/256gb',
+          name: 'DienThoaiHay',
 
           link: 'https://dienthoaihay.vn/xiaomi/xiaomi-redmi-note-13-pro-5g-p706.html?mau=tim&bonho=12gb-256gb',
 
@@ -222,7 +222,7 @@ function App() {
           color: '#7FC7D9',
         },
         {
-          name: 'DIENTHOAIHAY: Realme GT Neo5 SE 5G 12/256gb',
+          name: 'DienThoaiHay',
 
           link: 'https://dienthoaihay.vn/realme/realme-gt-neo-5-se-5g-p572.html?mau=xanh-da-sac&bonho=12gb-256gb',
 
