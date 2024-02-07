@@ -12,7 +12,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from './services/firebase';
 import { colors } from './assets/colors';
 
@@ -442,7 +442,7 @@ function App() {
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
-                
+
                 onClick: (_, elements) => {
                   if (elements.length > 0) {
                     const clickedElement = elements[0];
