@@ -411,7 +411,7 @@ function App() {
         </button>
         <button
           type="button"
-          className="btn btn-primary"
+          className="btn btn-danger"
           onClick={async () => {
             await deleteDoc(doc(db, 'Prices', 'vinhan'));
             await setPrices(initData);
@@ -442,6 +442,7 @@ function App() {
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
+                
                 onClick: (_, elements) => {
                   if (elements.length > 0) {
                     const clickedElement = elements[0];
