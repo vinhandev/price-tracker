@@ -391,7 +391,7 @@ function App() {
     <div
       style={{
         width: '100%',
-        padding: 50,
+        padding: 10,
       }}
     >
       <h3>Reload count:{count}</h3>
