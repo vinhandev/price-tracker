@@ -44,8 +44,6 @@ type GroupPriceProps = {
 };
 
 function App() {
-  console.log('App');
-
   const initData: GroupPriceProps[] = [
     {
       label: 'Iphone 13 Chính Hãng',
@@ -288,8 +286,6 @@ function App() {
   const [prices, setPrices] = useState<GroupPriceProps[]>([]);
 
   async function handleFetch(paramPrices: GroupPriceProps[]) {
-    console.log('hello');
-
     setProgressValue(0);
     setLoading(true);
     try {
