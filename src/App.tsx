@@ -44,6 +44,8 @@ type GroupPriceProps = {
 };
 
 function App() {
+  console.log('App');
+
   const initData: GroupPriceProps[] = [
     {
       label: 'Iphone 13 Chính Hãng',
