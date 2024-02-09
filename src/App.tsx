@@ -462,7 +462,7 @@ function App() {
                   ) ?? [],
                 datasets: item.data.map((item, subIndex) => ({
                   label: item.name,
-                  data: item.data?.map((item) => item.price) ?? [],
+                  data: item.data?.map((subItem) => subItem.price) ?? [],
                   borderColor: colors[subIndex],
                   backgroundColor: `${colors[subIndex]}55`,
                 })),
