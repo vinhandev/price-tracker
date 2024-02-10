@@ -330,6 +330,11 @@ function App() {
                 });
               }
             }
+          } else {
+            element.data?.push({
+              price: 0,
+              date: new Date().getTime(),
+            });
           }
         }
       }
@@ -460,9 +465,9 @@ function App() {
                         item.date
                       ).getMinutes()} ${new Date(item.date).toDateString()}`
                   ) ?? [],
-                datasets: item.data.map((item, subIndex) => ({
-                  label: item.name,
-                  data: item.data?.map((subItem) => subItem.price) ?? [],
+                datasets: item.data.map((subItem, subIndex) => ({
+                  label: subItem.name,
+                  data: subItem.data?.map((subItem) => subItem.price) ?? [],
                   borderColor: colors[subIndex],
                   backgroundColor: `${colors[subIndex]}55`,
                 })),
