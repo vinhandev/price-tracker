@@ -471,7 +471,7 @@ function App() {
               }}
               data={{
                 labels:
-                  item.data[0].data?.map(
+                  item.data[1].data?.map(
                     (item) =>
                       `${new Date(item.date).getHours()}:${new Date(
                         item.date
