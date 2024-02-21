@@ -38,7 +38,7 @@ export type PriceProps = {
   color: string;
 };
 
-type GroupPriceProps = {
+export type GroupPriceProps = {
   label: string;
   data: PriceProps[];
 };
