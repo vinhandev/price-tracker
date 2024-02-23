@@ -292,7 +292,7 @@ function App() {
     try {
       for (let index = 0; index < paramPrices.length; index++) {
         const group = paramPrices[index];
-        for (let i = 0; i < group.data.length; i++) {
+        for (let i = 0; i < group?.data.length; i++) {
           const element = paramPrices[index].data[i];
           try {
             const response = await fetch(element.link);
@@ -443,7 +443,7 @@ function App() {
           flexWrap: 'wrap',
         }}
       >
-        {prices.map((item) => (
+        {prices?.map((item) => (
           <div
             key={item.label}
             className="item col-12 col-lg-6"
@@ -462,7 +462,7 @@ function App() {
                   if (elements.length > 0) {
                     const clickedElement = elements[0];
                     const datasetIndex = clickedElement.datasetIndex;
-                    const selectedData = item.data?.[datasetIndex];
+                    const selectedData = item?.data?.[datasetIndex];
                     if (selectedData?.link) {
                       window.open(selectedData.link, '_blank');
                     }
@@ -471,16 +471,16 @@ function App() {
               }}
               data={{
                 labels:
-                  item.data[1].data?.map(
+                  item?.data?.[1]?.data?.map(
                     (item) =>
                       `${new Date(item.date).getHours()}:${new Date(
                         item.date
                       ).getMinutes()} ${new Date(item.date).toDateString()}`
                   ) ?? [],
-                datasets: item.data.map((subItem, subIndex) => ({
+                datasets: item?.data?.map((subItem, subIndex) => ({
                   label: subItem.name,
                   data:
-                    subItem.data?.map((subItem) => {
+                    subItem?.data?.map((subItem) => {
                       if (subItem.price === noPrice) {
                         return undefined;
                       }
