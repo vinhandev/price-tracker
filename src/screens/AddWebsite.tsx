@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { convertStringToNumber } from '../utils/helper';
+import { convertStringToNumber, formatMoney } from '../utils/helper';
 import { Selector } from '../components/inputs/Selector/Selector';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../services/firebase';
@@ -53,16 +53,49 @@ export default function AddWebsite() {
           data: [],
         },
       ]);
+      alert('success');
     }
   }
-  function handleAddWebsite() {}
+  function handleAddWebsite() {
+    const text = prompt(
+      `Add new name for website:  \n + Website: ${value} \n + Product: ${selector} \n + Price: ${formatMoney(
+        price
+      )}`
+    );
+    if (text) {
+      const tmpPrices: GroupPriceProps[] = prices.map((item) => {
+        if (item.label === selector) {
+          return {
+            ...item,
+            data: [
+              ...item.data,
+              {
+                color: '',
+                link: value,
+                first: from,
+                last: to,
+                name: text,
+                data: [],
+              },
+            ],
+          };
+        }
+        return item;
+      });
+      setPrices(tmpPrices);
+      alert('success');
+      window.location.reload();
+    }
+  }
 
   useEffect(() => {
     async function getData() {
       const response = await getDoc(doc(db, 'Prices', 'vinhan'));
-
+      console.log('prices', response.data());
       if (response.exists()) {
         if (response.data().data?.length > 0) {
+          console.log('prices', response.data().data);
+
           setPrices(response.data().data as GroupPriceProps[]);
         }
       }
@@ -71,89 +104,113 @@ export default function AddWebsite() {
   }, []);
 
   useEffect(() => {
-    setDoc(doc(db, 'Prices', 'vinhan'), { data: prices });
+    if (prices.length > 0) {
+      setDoc(doc(db, 'Prices', 'vinhan'), { data: prices });
+    }
   }, [prices]);
 
   return (
     <div
+      className="row d-flex justify-content-center"
       style={{
         padding: 20,
-        gap: 10,
-        display: 'flex',
-        flexDirection: 'column',
+        height: '100vh',
       }}
     >
-      <div>Website</div>
-      <input
-        className="form-control"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      />
-      <div>First</div>
-      <input
-        className="form-control"
-        value={from}
-        onChange={(e) => setFrom(e.target.value)}
-      />
-      <div>Last</div>
-      <input
-        className="form-control"
-        value={to}
-        onChange={(e) => setTo(e.target.value)}
-      />
-      <div>Selector</div>
-      <Selector
-        data={prices.map((item) => ({
-          label: item.label,
-          value: item.label,
-        }))}
-        value={selector}
-        onChange={setSelector}
-      />
-      <button onClick={handleAddNewProduct} className="btn btn-primary">
-        Add New Product
-      </button>
-      <button onClick={handlePriceChange} className="btn btn-primary">
-        Add New Website
-      </button>
-      {isLoading && <div>Loading</div>}
-      <div>Price</div>
       <div
+        className="col-4 gap-3"
         style={{
-          border: 'solid 1px black',
-          height: 100,
-          marginTop: 10,
-          overflowY: 'auto',
-          padding: 10,
+          gap: 10,
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
-        {price1}
+        <div>Products</div>
+        <Selector
+          data={prices.map((item) => ({
+            label: item.label,
+            value: item.label,
+          }))}
+          value={selector}
+          onChange={setSelector}
+        />
+        <button onClick={handleAddNewProduct} className="btn btn-primary">
+          Add New Product
+        </button>
+        <div>Website</div>
+        <input
+          className="form-control"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
+        <div>First</div>
+        <input
+          className="form-control"
+          value={from}
+          onChange={(e) => setFrom(e.target.value)}
+        />
+        <div>Last</div>
+        <input
+          className="form-control"
+          value={to}
+          onChange={(e) => setTo(e.target.value)}
+        />
+
+        <button onClick={handlePriceChange} className="btn btn-primary">
+          Preview Website
+        </button>
       </div>
-      <div
-        style={{
-          border: 'solid 1px black',
-          height: 100,
-          marginTop: 10,
-          overflowY: 'auto',
-          padding: 10,
-        }}
-      >
-        {price2}
+      <div className="col-8 gap-3 d-flex flex-column">
+        {isLoading && <div>Loading</div>}
+        <div>Price</div>
+        <div
+          style={{
+            border: 'solid 1px black',
+            height: 100,
+            marginTop: 10,
+            overflowY: 'auto',
+            padding: 10,
+          }}
+        >
+          {price1}
+        </div>
+        <div
+          style={{
+            border: 'solid 1px black',
+            height: 100,
+            marginTop: 10,
+            overflowY: 'auto',
+            padding: 10,
+          }}
+        >
+          {price2}
+        </div>
+        <div
+          style={{
+            border: 'solid 1px black',
+            height: 100,
+            marginTop: 10,
+            overflowY: 'auto',
+            padding: 10,
+          }}
+        >
+          {price}
+        </div>
+        <div
+          style={{
+            border: 'solid 1px black',
+            height: 100,
+            marginTop: 10,
+            overflowY: 'auto',
+            padding: 10,
+          }}
+        >
+          {formatMoney(price)}
+        </div>
+        <button onClick={handleAddWebsite} className="btn btn-primary">
+          Submit
+        </button>
       </div>
-      <div
-        style={{
-          border: 'solid 1px black',
-          height: 100,
-          marginTop: 10,
-          overflowY: 'auto',
-          padding: 10,
-        }}
-      >
-        {price}
-      </div>
-      <button onClick={handleAddWebsite} className="btn btn-primary">
-        Submit
-      </button>
     </div>
   );
 }
