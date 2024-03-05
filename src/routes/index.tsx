@@ -123,7 +123,11 @@ export default function RouterProvider() {
           }}
           className="d-flex flex-row"
         >
+          <div className="d-block d-md-none">
+            <Sidebar />
+          </div>
           <div
+            className="d-none d-md-block"
             style={{
               paddingLeft: 20,
               paddingRight: 20,
@@ -134,7 +138,6 @@ export default function RouterProvider() {
             <Logo />
             <Sidebar />
             <div
-              className="d-none d-md-block"
               style={{
                 paddingTop: 20,
               }}
