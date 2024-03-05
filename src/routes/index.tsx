@@ -1,26 +1,24 @@
-import {
-  createBrowserRouter,
-  RouterProvider as RNRouterProvider,
-} from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AddWebsite from '../screens/AddWebsite';
 import Introduction from '../screens/Introduction';
 import Homepage from '../screens/Homepage';
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Introduction />,
-  },
-  {
-    path: '/home',
-    element: <Homepage />,
-  },
-  {
-    path: '/add',
-    element: <AddWebsite />,
-  },
-]);
+import { Sidebar } from '../components';
+import Loading from '../components/Loading/Loading';
 
 export default function RouterProvider() {
-  return <RNRouterProvider router={router} />;
+  return (
+    <div>
+      <BrowserRouter>
+        <Sidebar />
+
+        <Routes>
+          <Route path="/" element={<Introduction />} />
+          <Route path="/home" element={<Homepage />} />
+          <Route path="/add" element={<AddWebsite />} />
+        </Routes>
+
+        <Loading />
+      </BrowserRouter>
+    </div>
+  );
 }
