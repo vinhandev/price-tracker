@@ -6,24 +6,32 @@ type Props = {
     label: string;
     price: number;
     where: string;
+    link: string;
   }[];
 };
 export default function HighLight({ data }: Props) {
   const isDarkMode = useStore((state) => state.isDarkMode);
+  const onPress = (link: string) => {
+    if (link) {
+      window.open(link, '_blank');
+    }
+  };
   return (
     <div
+      className="flex-column flex-md-row"
       style={{
         display: 'flex',
-        flexDirection: 'column',
         gap: 10,
       }}
     >
       {data.map((item) => {
         return (
           <div
+            onClick={() => onPress(item.link)}
             style={{
+              flexGrow: 1,
               borderRadius: 10,
-              background: isDarkMode ? '#191919' : '#FAFAFA',
+              background: isDarkMode ? '#191919' : '#EEEEEE',
               padding: 20,
             }}
           >

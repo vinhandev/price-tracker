@@ -3,118 +3,140 @@ import HighLight from '../components/HighLight/HighLight';
 import Layout from '../components/Layout';
 import Records from '../components/Records/Records';
 import Tabs from '../components/Tabs/Tabs';
-import { useEffect } from 'react';
+import { useMemo } from 'react';
 import { useStore } from '../store/useStore';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from '../services/firebase';
-import { GroupPriceProps } from '../types/prices';
-import { convertStringToNumber } from '../utils/helper';
-
+import HorizonSelector from '../components/HorizonSelector/HorizonSelector';
 
 export default function Homepage() {
   const setOpenSidebar = useStore((state) => state.setOpenSidebar);
 
-  const setPrices = useStore((state) => state.setPrices);
-  const setProgressValue = useStore((state) => state.setProgressValue);
-  const setLoading = useStore((state) => state.setLoading);
+  const isDarkMode = useStore((state) => state.isDarkMode);
 
   const prices = useStore((state) => state.prices);
+  const selectedProduct = useStore((state) => state.selectedProduct);
 
-  async function handleFetch(paramPrices: GroupPriceProps[]) {
-    setProgressValue(0);
-    setLoading(true);
-    try {
-      for (let index = 0; index < paramPrices.length; index++) {
-        const group = paramPrices[index];
-        for (let i = 0; i < group?.data.length; i++) {
-          const element = paramPrices[index].data[i];
-          try {
-            const response = await fetch(element.link);
-            const data = (await response.text())
-              .replace(/\n/g, ' ')
-              .replace(/\r/g, ' ')
-              .replace(/\t/g, ' ')
-              .split('=""')
-              .join('')
-              .split(' ')
-              .join('');
-
-            const price =
-              data
-                .split(element.first.split(' ').join(''))[1]
-                ?.split(element.last.split(' ').join(''))[0] ?? '0';
-            const number = convertStringToNumber(price);
-            if (number !== null && number !== 0) {
-              if (!element?.data) {
-                element.data = [
-                  {
-                    price: number,
-                    date: new Date().getTime(),
-                  },
-                ];
-              } else {
-                element.data?.push({
-                  price: number,
-                  date: new Date().getTime(),
-                });
-              }
-            } else {
-              throw new Error('no price');
+  const lowestPrice = useMemo(() => {
+    if (prices && selectedProduct) {
+      const selectedProductList = prices.find(
+        (item) => item.label === selectedProduct
+      );
+      if (selectedProductList) {
+        const allPrices: { price: number; link: string; name: string }[] = [];
+        selectedProductList.data.forEach((item) => {
+          item.data?.forEach((subItem) => {
+            if (subItem.price !== -1) {
+              allPrices.push({
+                price: subItem.price,
+                link: item.link,
+                name: item.name,
+              });
             }
-          } catch (error) {
-            element.data?.push({
-              price: -1,
-              date: new Date().getTime(),
+          });
+        });
+        if (allPrices.length > 0) {
+          const price = Math.min(...allPrices.map((item) => item.price));
+          const whereToBuy = allPrices.find((item) => item.price === price);
+          return {
+            price: whereToBuy?.price,
+            whereToBuy: whereToBuy?.name,
+            link: whereToBuy?.link,
+          };
+        }
+      }
+    }
+    return { price: 0, whereToBuy: '', link: '' };
+  }, [prices, selectedProduct]);
+  const currentLowestPrice = useMemo(() => {
+    if (prices && selectedProduct) {
+      const selectedProductList = prices.find(
+        (item) => item.label === selectedProduct
+      );
+      if (selectedProductList) {
+        const allPrices: { price: number; link: string; name: string }[] = [];
+        selectedProductList.data.forEach((item) => {
+          if (
+            item?.data?.length &&
+            item.data?.[item.data.length - 1]?.price > 0
+          ) {
+            allPrices.push({
+              price: item.data?.[item.data.length - 1].price,
+              link: item.link,
+              name: item.name,
             });
           }
-
-          setProgressValue(index + 1);
-        }
-      }
-      setPrices(paramPrices);
-      await setDoc(doc(db, 'Prices', 'vinhan'), { data: paramPrices });
-    } catch (error) {
-      console.error(error);
-    }
-    setLoading(false);
-  }
-
-  useEffect(() => {
-    async function getData() {
-      const response = await getDoc(doc(db, 'Prices', 'vinhan'));
-
-      if (response.exists()) {
-        if (response.data().data?.length > 0) {
-          setPrices(response.data().data as GroupPriceProps[]);
-          await handleFetch(response.data().data as GroupPriceProps[]);
-        } else {
-          setPrices([]);
-          await handleFetch([]);
+        });
+        if (allPrices.length > 0) {
+          const price = Math.min(...allPrices.map((item) => item.price));
+          const whereToBuy = allPrices.find((item) => item.price === price);
+          return {
+            price: whereToBuy?.price,
+            whereToBuy: whereToBuy?.name,
+            link: whereToBuy?.link,
+          };
         }
       }
     }
-    getData();
-  }, []);
+    return { price: 0, whereToBuy: '', link: '' };
+  }, [prices, selectedProduct]);
+
+  const averagePrice = useMemo(() => {
+    if (prices && selectedProduct) {
+      const selectedProductList = prices.find(
+        (item) => item.label === selectedProduct
+      );
+      if (selectedProductList) {
+        const allPrices: number[] = [];
+        selectedProductList.data.forEach((item) => {
+          item.data?.forEach((subItem) => {
+            if (subItem.price !== -1) {
+              allPrices.push(subItem.price);
+            }
+          });
+        });
+        if (allPrices.length > 0) {
+          return allPrices.reduce((a, b) => a + b, 0) / allPrices.length;
+        }
+      }
+    }
+    return 0;
+  }, [prices, selectedProduct]);
+
+  const highlightData = [
+    {
+      label: 'Current lowest price',
+      price: currentLowestPrice.price ?? 0,
+      where: currentLowestPrice.whereToBuy ?? '',
+      link: currentLowestPrice.link ?? '',
+    },
+    {
+      label: 'Avarage price',
+      price: averagePrice,
+      where: '',
+      link: '',
+    },
+    {
+      label: 'Lowest price',
+      price: lowestPrice.price ?? 0,
+      where: lowestPrice.whereToBuy ?? '',
+      link: lowestPrice.link ?? '',
+    },
+  ];
 
   return (
     <Layout>
-      <div
-        style={{
-          display: 'flex',
-          flex: 1,
-          flexDirection: 'column',
-        }}
-      >
+      <div>
         <div
+          className="d-flex d-md-none"
           style={{
-            display: 'flex',
-
             flexDirection: 'row',
-
             alignItems: 'center',
             justifyContent: 'space-between',
 
             padding: 20,
+
+            position: 'fixed',
+            backgroundColor: isDarkMode ? 'black' : 'white',
+            width: '100%',
           }}
         >
           <IconButton onClick={setOpenSidebar} variant="menu" />
@@ -122,40 +144,88 @@ export default function Homepage() {
           <ProductBar />
           <DarkModeButton />
         </div>
-        <div style={{}}>
+        <div
+          style={{
+            padding: 20,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+          className="d-none d-md-flex"
+        >
+          <div>
+            <h3 className="text">Price Tracker</h3>
+          </div>
+          <div>
+            <DarkModeButton />
+          </div>
+        </div>
+        <div className="d-none d-md-block">
+          <HorizonSelector />
+        </div>
+        <div
+          style={{
+            height: '100%',
+            flex: 1,
+          }}
+        >
+          <div
+            style={{
+              padding: 20,
+            }}
+            className="d-none d-md-block"
+          >
+            <div
+              style={{
+                fontWeight: 'bold',
+                paddingBottom: 5,
+              }}
+            >
+              High Light
+            </div>
+
+            <HighLight data={highlightData} />
+          </div>
+          <div
+            className="d-none d-md-block"
+            style={{
+              fontWeight: 'bold',
+              paddingBottom: 5,
+              paddingLeft: 20,
+            }}
+          >
+            Graphs
+          </div>
           <Chart />
-          <Tabs
-            data={[
-              {
-                label: 'Hightlight',
-                tab: (
-                  <HighLight
-                    data={[
-                      {
-                        label: 'Best price',
-                        price: 4500000,
-                        where: 'Thegioididong',
-                      },
-                      {
-                        label: 'Best price',
-                        price: 4500000,
-                        where: 'Thegioididong',
-                      },
-                      {
-                        label: 'Best price',
-                        price: 4500000,
-                        where: 'Thegioididong',
-                      },
-                    ]}
-                  />
-                ),
-              },
-              {
-                label: 'Records',
-                tab: <Records />,
-              },
-            ]}
-          />
+          <div className="d-block d-md-none">
+            <Tabs
+              data={[
+                {
+                  label: 'Highlight',
+                  tab: <HighLight data={highlightData} />,
+                },
+                {
+                  label: 'Records',
+                  tab: <Records />,
+                },
+              ]}
+            />
+          </div>
+          <div
+            style={{
+              padding: 20,
+            }}
+            className="d-none d-md-block"
+          >
+            <div
+              style={{
+                fontWeight: 'bold',
+              }}
+            >
+              Records
+            </div>
+            <Records />
+          </div>
         </div>
       </div>
     </Layout>
