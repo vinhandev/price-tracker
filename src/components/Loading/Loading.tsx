@@ -1,9 +1,17 @@
 import { useStore } from '../../store/useStore';
 
-export default function Loading() {
+export default function Loading({
+  count,
+  currentProduct,
+  currentShop,
+}: {
+  count: number;
+  currentProduct: string;
+  currentShop: string;
+}) {
   const isLoading = useStore((state) => state.isLoading);
-  const progressValue = useStore((state) => state.progressValue);
   const prices = useStore((state) => state.prices);
+  if (!prices) return null;
   return (
     <div
       style={{
@@ -23,9 +31,9 @@ export default function Loading() {
       }}
     >
       <div className="spinner-border" role="status" />
-      <div>
-        {Math.round((progressValue / (prices ? prices.length + 1 : 5)) * 100)}%
-      </div>
+      <div>{currentProduct}</div>
+      <div>{currentShop}</div>
+      <div>{((count * 100) / prices?.length).toFixed(2)}%</div>
     </div>
   );
 }

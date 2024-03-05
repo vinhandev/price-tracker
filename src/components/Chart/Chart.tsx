@@ -22,19 +22,34 @@ ChartJS.register(
 import { Line } from 'react-chartjs-2';
 import { useStore } from '../../store/useStore';
 import { colors } from '../../assets/colors';
+import { formatDate } from '../../utils/helper';
 
 export default function Chart() {
   const prices = useStore((state) => state.prices);
   const product = useStore((state) => state.selectedProduct);
   const item = prices?.find((item) => item.label === product);
 
-  if (!item) return <div>No data</div>;
+  if (!item)
+    return (
+      <div
+        style={{
+          width: '100%',
+          height: 500,
+          justifyContent: 'center',
+          alignItems: 'center',
+          display: 'flex',
+        }}
+      >
+        No data
+      </div>
+    );
 
   return (
     <div
       style={{
+
         width: '100%',
-        height: '50vh',
+        height: 500,
         paddingLeft: 20,
         paddingRight: 20,
       }}
@@ -43,7 +58,6 @@ export default function Chart() {
         options={{
           responsive: true,
           maintainAspectRatio: false,
-
           onClick: (_, elements) => {
             if (elements.length > 0) {
               const clickedElement = elements[0];
@@ -57,12 +71,9 @@ export default function Chart() {
         }}
         data={{
           labels:
-            item?.data?.[1]?.data?.map(
-              (item) =>
-                `${new Date(item.date).getHours()}:${new Date(
-                  item.date
-                ).getMinutes()} ${new Date(item.date).toDateString()}`
-            ) ?? [],
+            item?.data?.[1]?.data?.map((item) => {
+              return formatDate(new Date(item.date));
+            }) ?? [],
           datasets: item?.data?.map((subItem, subIndex) => ({
             label: subItem.name,
             data:

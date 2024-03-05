@@ -15,7 +15,9 @@ export function Selector({ data, onChange, value, noBorder = false }: Props) {
     <select
       className="form-select"
       value={value}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={(e) => {
+        onChange(e.target.value);
+      }}
       style={{
         background: isDarkMode ? '#000' : '#fff',
         color: isDarkMode ? '#fff' : '#000',

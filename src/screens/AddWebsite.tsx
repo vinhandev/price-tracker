@@ -3,7 +3,7 @@ import { convertStringToNumber, formatMoney } from '../utils/helper';
 import { Selector } from '../components/Inputs/Selector/Selector';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../services/firebase';
-import { GroupPriceProps } from '../App';
+import { GroupPriceProps } from '../types/prices';
 
 export default function AddWebsite() {
   const [value, setValue] = React.useState('');
@@ -85,7 +85,7 @@ export default function AddWebsite() {
       await setDoc(doc(db, 'Prices', 'vinhan'), { data: tmpPrices });
       setPrices(tmpPrices);
       alert('success');
-      window.location.href='home';
+      window.location.href = 'home';
     }
   }
 
@@ -116,6 +116,7 @@ export default function AddWebsite() {
       style={{
         padding: 20,
         height: '100vh',
+        width: '100%',
       }}
     >
       <div

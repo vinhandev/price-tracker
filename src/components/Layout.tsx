@@ -5,10 +5,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div
       style={{
-        display: 'flex',
+        height: '100%',
+        width: '100%',
 
-        minHeight: '100vh',
-
+        paddingBottom: 20,
         backgroundColor: isDarkMode ? '#000' : '#ffffff',
         color: isDarkMode ? '#F6F5F5' : '#000000',
       }}

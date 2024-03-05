@@ -48,7 +48,8 @@ export default function Tabs({ data }: Props) {
                 width: activeIndex === index ? '100%' : 0,
                 height: '100%',
                 opacity: activeIndex === index ? 1 : 0,
-                transition: 'width 0.5s, opacity 0.5s',
+                display: activeIndex === index ? 'block' : 'none',
+                transition: 'width 0.5s, opacity 0.5s, display 1s',
               }}
             >
               {item.tab}
