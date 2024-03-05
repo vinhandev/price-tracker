@@ -118,16 +118,25 @@ export default function RouterProvider() {
     <div>
       <BrowserRouter>
         <div
-          style={{ backgroundColor: isDarkMode ? '#000' : '#ffffff' }}
+          style={{
+            backgroundColor: isDarkMode ? '#000' : '#ffffff',
+          }}
           className="d-flex flex-row"
         >
-          <div>
+          <div
+            style={{
+              paddingLeft: 20,
+              paddingRight: 20,
+              borderRight: '1px solid #ccc',
+              width: '20%',
+            }}
+          >
             <Logo />
             <Sidebar />
             <div
               className="d-none d-md-block"
               style={{
-                padding: 20,
+                paddingTop: 20,
               }}
             >
               <button

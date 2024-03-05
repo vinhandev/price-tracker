@@ -5,9 +5,12 @@ import {
   sidebarClasses,
 } from 'react-pro-sidebar';
 import { useStore } from '../../store/useStore';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function Sidebar() {
+  const location = useLocation();
+  const { pathname } = location;
+
   const isDarkMode = useStore((state) => state.isDarkMode);
   const openSidebar = useStore((state) => state.openSidebar);
   const setOpenSidebar = useStore((state) => state.setOpenSidebar);
@@ -19,6 +22,7 @@ export default function Sidebar() {
             backgroundColor: isDarkMode ? 'black' : 'white',
             color: isDarkMode ? 'white' : 'black',
           },
+          borderWidth: 0,
         }}
         toggled={openSidebar}
         breakPoint="md"
@@ -27,17 +31,32 @@ export default function Sidebar() {
         <Menu
           menuItemStyles={{
             button: {
-              [`&.active`]: {
-                backgroundColor: '#13395e',
-                color: '#b6c8d9',
+              borderRadius: 10,
+
+              [`&.ps-active`]: {
+                backgroundColor: isDarkMode ? '#fff' : '#000',
+                color: isDarkMode ? '#000' : '#b6c8d9',
+              },
+              [`&.ps-active:hover`]: {
+                backgroundColor: isDarkMode ? '#fff' : '#000',
+                color: isDarkMode ? '#000' : '#b6c8d9',
+              },
+              [`&:hover`]: {
+                backgroundColor: isDarkMode ? 'black' : 'white',
+                color: isDarkMode ? 'white' : 'black',
               },
             },
           }}
         >
-          <MenuItem component={<Link to="/home" />}> Price Tracker</MenuItem>
-          <MenuItem component={<Link to="/add" />}> Add Product </MenuItem>
-          <MenuItem component={<Link to="/add" />}> Add Website </MenuItem>
-          <MenuItem component={<Link to="/setting" />}> Setting </MenuItem>
+          <MenuItem
+            active={pathname === '/home'}
+            component={<Link to="/home" />}
+          >
+            Price Tracker
+          </MenuItem>
+          <MenuItem active={pathname === '/add'} component={<Link to="/add" />}>
+            Add Product
+          </MenuItem>
         </Menu>
       </RNSidebar>
     </div>

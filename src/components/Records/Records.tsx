@@ -10,6 +10,7 @@ type RecordType = {
 
 export default function Records() {
   const prices = useStore((state) => state.prices);
+  const isDarkMode = useStore((state) => state.isDarkMode);
   const selectedProduct = useStore((state) => state.selectedProduct);
 
   const priceList = useMemo(() => {
@@ -33,28 +34,114 @@ export default function Records() {
   }, [prices, selectedProduct]);
   return (
     <div>
-      <table className='table' style={{ flex: 1 }}>
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Date</th>
-            <th scope="col">Shop</th>
-            <th scope="col">Price</th>
+      <table
+        className="table"
+        style={{
+          flex: 1,
+          background: isDarkMode ? '#000' : '#fff',
+          color: isDarkMode ? '#fff' : '#000',
+        }}
+      >
+        <thead
+          style={{
+            flex: 1,
+            background: isDarkMode ? '#000' : '#fff',
+            color: isDarkMode ? '#fff' : '#000',
+          }}
+        >
+          <tr
+            style={{
+              flex: 1,
+              background: isDarkMode ? '#000' : '#fff',
+              color: isDarkMode ? '#fff' : '#000',
+            }}
+          >
+            <th
+              scope="col"
+              style={{
+                flex: 1,
+                background: isDarkMode ? '#000' : '#fff',
+                color: isDarkMode ? '#fff' : '#000',
+              }}
+            >
+              #
+            </th>
+            <th
+              scope="col"
+              style={{
+                flex: 1,
+                background: isDarkMode ? '#000' : '#fff',
+                color: isDarkMode ? '#fff' : '#000',
+              }}
+            >
+              Date
+            </th>
+            <th
+              scope="col"
+              style={{
+                flex: 1,
+                background: isDarkMode ? '#000' : '#fff',
+                color: isDarkMode ? '#fff' : '#000',
+              }}
+            >
+              Shop
+            </th>
+            <th
+              scope="col"
+              style={{
+                flex: 1,
+                background: isDarkMode ? '#000' : '#fff',
+                color: isDarkMode ? '#fff' : '#000',
+              }}
+            >
+              Price
+            </th>
           </tr>
         </thead>
         <tbody>
           {priceList.map((item, index) => (
             <tr>
-              <th scope="row">{index}</th>
-              <td>
+              <th
+                scope="row"
+                style={{
+                  flex: 1,
+                  background: isDarkMode ? '#000' : '#fff',
+                  color: isDarkMode ? '#fff' : '#000',
+                }}
+              >
+                {index}
+              </th>
+              <td
+                style={{
+                  flex: 1,
+                  background: isDarkMode ? '#000' : '#fff',
+                  color: isDarkMode ? '#fff' : '#000',
+                }}
+              >
                 {new Date(item.date).toLocaleDateString('vi', {
                   day: 'numeric',
                   month: 'numeric',
                   year: '2-digit',
                 })}
               </td>
-              <td>{item.label}</td>
-              <td>{formatMoney(item.price)}</td>
+              <td
+                style={{
+                  flex: 1,
+                  background: isDarkMode ? '#000' : '#fff',
+                  color: isDarkMode ? '#fff' : '#000',
+                }}
+              >
+                {item.label}
+              </td>
+              <td
+                style={{
+                  flex: 1,
+                  background: isDarkMode ? '#000' : '#fff',
+                  color: isDarkMode ? '#fff' : '#000',
+                }}
+              >
+                {formatMoney(item.price)}
+              </td>
             </tr>
           ))}
         </tbody>
