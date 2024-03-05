@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import { convertStringToNumber } from './utils/helper';
-import { Line } from 'react-chartjs-2';
+import { convertStringToNumber, navigate } from './utils/helper';
+// import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -43,6 +43,7 @@ export type GroupPriceProps = {
   data: PriceProps[];
 };
 
+const noPrice = -1;
 function App() {
   const initData: GroupPriceProps[] = [
     {
@@ -347,22 +348,7 @@ function App() {
     setCount(count + 1);
   }
 
-  useEffect(() => {
-    async function getData() {
-      const response = await getDoc(doc(db, 'Prices', 'vinhan'));
-
-      if (response.exists()) {
-        if (response.data().data?.length > 0) {
-          setPrices(response.data().data as GroupPriceProps[]);
-          await handleFetch(response.data().data as GroupPriceProps[]);
-        } else {
-          setPrices(initData);
-          await handleFetch(initData);
-        }
-      }
-    }
-    getData();
-  }, []);
+  
 
   if (loading)
     return (
@@ -441,7 +427,7 @@ function App() {
             }}
           >
             <div>{item.label}</div>
-            <Line
+            {/* <Line
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
@@ -478,7 +464,7 @@ function App() {
                   backgroundColor: `${colors[subIndex]}55`,
                 })),
               }}
-            />
+            /> */}
           </div>
         ))}
       </div>

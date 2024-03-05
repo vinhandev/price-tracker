@@ -1,0 +1,11 @@
+.icon_wrapper {
+  border-radius: 10;
+  border-width: 1px;
+  cursor: pointer;
+
+  transition: background-color 0.2s ease-in-out;
+}
+
+.icon_wrapper:hover {
+  background-color: #B6BBC4;
+}

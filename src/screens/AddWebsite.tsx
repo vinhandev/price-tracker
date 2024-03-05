@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { convertStringToNumber, formatMoney } from '../utils/helper';
-import { Selector } from '../components/inputs/Selector/Selector';
+import { Selector } from '../components/Inputs/Selector/Selector';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../services/firebase';
 import { GroupPriceProps } from '../App';
@@ -56,7 +56,7 @@ export default function AddWebsite() {
       alert('success');
     }
   }
-  function handleAddWebsite() {
+  async function handleAddWebsite() {
     const text = prompt(
       `Add new name for website:  \n + Website: ${value} \n + Product: ${selector} \n + Price: ${formatMoney(
         price
@@ -82,9 +82,10 @@ export default function AddWebsite() {
         }
         return item;
       });
+      await setDoc(doc(db, 'Prices', 'vinhan'), { data: tmpPrices });
       setPrices(tmpPrices);
       alert('success');
-      window.location.reload();
+      window.location.href='home';
     }
   }
 
