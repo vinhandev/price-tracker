@@ -20,6 +20,7 @@ export default function Tabs({ data }: Props) {
         <div className="flex-row d-flex" style={{ gap: 20 }}>
           {data.map((item, index) => (
             <div
+              key={index}
               style={{
                 paddingTop: 10,
                 paddingBottom: 10,
@@ -44,6 +45,7 @@ export default function Tabs({ data }: Props) {
         <div className="d-flex flex-row">
           {data?.map((item, index) => (
             <div
+              key={index}
               style={{
                 width: activeIndex === index ? '100%' : 0,
                 height: '100%',

@@ -29,3 +29,27 @@ export const formatDate = (date: Date) => {
   const month = date.getMonth() + 1;
   return `${day}/${month}`;
 };
+
+export const showSuccess = () => {
+  alert('success');
+};
+export const showError = (error: unknown) => {
+  console.error(error);
+};
+
+export function extractDomainName(url: string): string | null {
+  try {
+    const parsedUrl = new URL(url);
+    const domainParts = parsedUrl.hostname.split('.');
+    if (domainParts.length >= 2) {
+      // The domain should be the second-level domain (e.g., "openai" in "chat.openai.com")
+      return domainParts[0];
+    } else {
+      // If the URL doesn't have a valid domain structure, return null
+      return null;
+    }
+  } catch (error) {
+    console.error('Error parsing URL:', error);
+    return null;
+  }
+}

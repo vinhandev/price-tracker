@@ -25,6 +25,7 @@ import { colors } from '../../assets/colors';
 import { formatDate } from '../../utils/helper';
 
 export default function Chart() {
+  const labels = useStore((state) => state.labels);
   const prices = useStore((state) => state.prices);
   const product = useStore((state) => state.selectedProduct);
   const item = prices?.find((item) => item.label === product);
@@ -47,7 +48,6 @@ export default function Chart() {
   return (
     <div
       style={{
-
         width: '100%',
         height: 500,
         paddingLeft: 20,
@@ -71,8 +71,8 @@ export default function Chart() {
         }}
         data={{
           labels:
-            item?.data?.[1]?.data?.map((item) => {
-              return formatDate(new Date(item.date));
+            labels.map((item) => {
+              return formatDate(new Date(item));
             }) ?? [],
           datasets: item?.data?.map((subItem, subIndex) => ({
             label: subItem.name,

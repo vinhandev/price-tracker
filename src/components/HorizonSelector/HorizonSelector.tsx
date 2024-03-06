@@ -25,10 +25,12 @@ export default function HorizonSelector() {
           display: 'flex',
           flexDirection: 'row',
           gap: 10,
+          flexWrap: 'wrap',
         }}
       >
         {prices?.map((item) => (
           <div
+          key={item.label}
             style={{
               color: product === item.label ? 'white' : 'black',
               cursor: 'pointer',

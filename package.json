@@ -11,6 +11,7 @@
     "deploy": "yarn build & firebase deploy"
   },
   "dependencies": {
+    "bootstrap-icons": "^1.11.3",
     "chart.js": "^4.4.1",
     "firebase": "^10.8.0",
     "puppeteer": "^21.11.0",

@@ -6,6 +6,7 @@ import Tabs from '../components/Tabs/Tabs';
 import { useMemo } from 'react';
 import { useStore } from '../store/useStore';
 import HorizonSelector from '../components/HorizonSelector/HorizonSelector';
+import { useEffect } from 'react';
 
 export default function Homepage() {
   const setOpenSidebar = useStore((state) => state.setOpenSidebar);
@@ -14,6 +15,8 @@ export default function Homepage() {
 
   const prices = useStore((state) => state.prices);
   const selectedProduct = useStore((state) => state.selectedProduct);
+  const product = useStore((state) => state.selectedProduct);
+  const setProduct = useStore((state) => state.setSelectedProduct);
 
   const lowestPrice = useMemo(() => {
     if (prices && selectedProduct) {
@@ -121,6 +124,14 @@ export default function Homepage() {
       link: lowestPrice.link ?? '',
     },
   ];
+
+  useEffect(() => {
+    if (prices && product === '') {
+      console.log('prices', prices, prices?.[0]?.label);
+
+      setProduct(prices?.[0]?.label);
+    }
+  }, [prices, product, setProduct]);
 
   return (
     <Layout>
