@@ -8,20 +8,19 @@ import Logo from '../components/Logo/Logo';
 
 import { useEffect, useState } from 'react';
 import { GroupPriceProps } from '../types/prices';
-import { convertStringToNumber, showError } from '../utils/helper';
+import { convertStringToNumber, isSameDay, showError } from '../utils/helper';
 import { getFirebasePrices, updateFirebasePrices } from '../utils/firebase';
+import SettingScreen from '../screens/Setting';
 
 export default function RouterProvider() {
   const [count, setCount] = useState(0);
   const [currentProduct, setCurrentProduct] = useState('');
   const [currentShop, setCurrentShop] = useState('');
-  const labels = useStore((state) => state.labels);
   const prices = useStore((state) => state.prices);
   const isDarkMode = useStore((state) => state.isDarkMode);
 
   const setLoading = useStore((state) => state.setLoading);
   const initData = useStore((state) => state.initData);
-  const setPrices = useStore((state) => state.setPrices);
 
   async function handleFetch(
     paramPrices: GroupPriceProps[],
@@ -34,6 +33,8 @@ export default function RouterProvider() {
     setLoading(true);
     try {
       if (paramPrices?.length === 0) throw new Error('Prices not found');
+      const lastDayLabels = paramLabels[paramLabels.length - 1];
+      const isToday = isSameDay(new Date(lastDayLabels), new Date(lastUpdate));
       for (let index = 0; index < paramPrices.length; index++) {
         const group = paramPrices[index];
         setCurrentProduct(() => group.label);
@@ -66,6 +67,10 @@ export default function RouterProvider() {
                   },
                 ];
               } else {
+                if (isToday) {
+                  element.data.pop();
+                }
+
                 element.data?.push({
                   price: number,
                   date: lastUpdate,
@@ -82,10 +87,13 @@ export default function RouterProvider() {
               throw new Error('no price');
             }
           } catch (error) {
-            element.data?.push({
-              price: -1,
-              date: lastUpdate,
-            });
+            if (!isToday) {
+              element.data?.push({
+                price: -1,
+                date: lastUpdate,
+              });
+            }
+
             setCount(
               (tmpCount) =>
                 tmpCount + Math.round((1 / group?.data.length) * 100) / 100
@@ -94,6 +102,9 @@ export default function RouterProvider() {
         }
       }
       if (isHaveRecord) {
+        if (isToday) {
+          paramLabels.pop();
+        }
         paramLabels.push(lastUpdate);
 
         initData(paramPrices, paramLabels, lastUpdate);
@@ -120,7 +131,7 @@ export default function RouterProvider() {
         console.log(response);
 
         if (response.prices) {
-          setPrices(response.prices);
+          initData(response.prices, response.labels ?? [], 0);
           await handleFetch(response.prices, response.labels ?? []);
         }
       } catch (error) {
@@ -148,6 +159,7 @@ export default function RouterProvider() {
               paddingLeft: 20,
               paddingRight: 20,
               borderRight: '1px solid #ccc',
+              height: '100vh',
               width: '20%',
             }}
           >
@@ -160,9 +172,10 @@ export default function RouterProvider() {
             >
               <button
                 disabled={!prices}
-                onClick={() => {
-                  if (prices) {
-                    handleFetch(prices, labels);
+                onClick={async () => {
+                  const response = await getFirebasePrices();
+                  if (response.prices && response.labels) {
+                    handleFetch(response.prices, response.labels);
                   }
                 }}
                 className="btn btn-primary"
@@ -176,6 +189,7 @@ export default function RouterProvider() {
             <Route path="/" element={<Homepage />} />
             <Route path="/home" element={<Homepage />} />
             <Route path="/add" element={<AddWebsite />} />
+            <Route path="/setting" element={<SettingScreen />} />
           </Routes>
 
           <Loading

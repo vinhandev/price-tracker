@@ -57,6 +57,9 @@ export default function Sidebar() {
           <MenuItem active={pathname === '/add'} component={<Link to="/add" />}>
             Add Shop
           </MenuItem>
+          <MenuItem active={pathname === '/setting'} component={<Link to="/setting" />}>
+            Setting
+          </MenuItem>
         </Menu>
       </RNSidebar>
     </div>

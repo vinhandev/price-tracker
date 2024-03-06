@@ -48,17 +48,20 @@ export default function HorizonShopSelector() {
   const handleDelete = async () => {
     setLoading(true);
     try {
-      const tmpPrices = prices.filter((item) => {
+      const tmpPrices = prices.map((item) => {
         if (item.label === product) {
+          const tmpShop = item.data.filter((subItem) => {
+            return subItem.name !== selectedShop;
+          });
+
           return {
-            ...item,
-            data: item.data.filter((subItem) => {
-              return subItem.name !== selectedShop;
-            }),
+            label: item.label,
+            data: tmpShop,
           };
         }
         return item;
       });
+
       await updateFirebasePrices({
         labels,
         prices: tmpPrices,
