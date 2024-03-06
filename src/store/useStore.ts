@@ -14,6 +14,8 @@ export type Store = {
   setProgressValue: (value: number) => void;
   selectedProduct: string;
   setSelectedProduct: (value: string) => void;
+  selectedShop: string;
+  setSelectedShop: (value: string) => void;
   labels: number[];
   setLabels: (labels: number[]) => void;
   lastUpdate: number;
@@ -44,4 +46,6 @@ export const useStore = create<Store>((set) => ({
   setLastUpdate: (value: number) => set({ lastUpdate: value }),
   initData: (prices: GroupPriceProps[], labels: number[], lastUpdate: number) =>
     set({ prices, labels, lastUpdate }),
+  selectedShop: '',
+  setSelectedShop: (value: string) => set({ selectedShop: value }),
 }));

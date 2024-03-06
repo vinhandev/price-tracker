@@ -7,6 +7,8 @@ import { useMemo } from 'react';
 import { useStore } from '../store/useStore';
 import HorizonSelector from '../components/HorizonSelector/HorizonSelector';
 import { useEffect } from 'react';
+import ShopRecords from '../components/Records/ShopRecords';
+import HorizonShopSelector from '../components/HorizonShopSelector/HorizonSelector';
 
 export default function Homepage() {
   const setOpenSidebar = useStore((state) => state.setOpenSidebar);
@@ -17,6 +19,7 @@ export default function Homepage() {
   const selectedProduct = useStore((state) => state.selectedProduct);
   const product = useStore((state) => state.selectedProduct);
   const setProduct = useStore((state) => state.setSelectedProduct);
+  const setSelectedShop = useStore((state) => state.setSelectedShop);
 
   const lowestPrice = useMemo(() => {
     if (prices && selectedProduct) {
@@ -126,10 +129,11 @@ export default function Homepage() {
   ];
 
   useEffect(() => {
-    if (prices && product === '') {
+    if (prices.length > 0 && product === '') {
       console.log('prices', prices, prices?.[0]?.label);
 
       setProduct(prices?.[0]?.label);
+      setSelectedShop(prices?.[0]?.data[0].name);
     }
   }, [prices, product, setProduct]);
 
@@ -222,20 +226,22 @@ export default function Homepage() {
               ]}
             />
           </div>
-          <div
-            style={{
-              padding: 20,
-            }}
-            className="d-none d-md-block"
-          >
+          <div className="d-none d-md-block">
+            <HorizonShopSelector />
             <div
               style={{
-                fontWeight: 'bold',
+                padding: 20,
               }}
             >
-              Records
+              <div
+                style={{
+                  fontWeight: 'bold',
+                }}
+              >
+                Records
+              </div>
+              <ShopRecords />
             </div>
-            <Records />
           </div>
         </div>
       </div>

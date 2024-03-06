@@ -2,44 +2,56 @@ import { useStore } from '../../store/useStore';
 import { updateFirebasePrices } from '../../utils/firebase';
 import { showError } from '../../utils/helper';
 
-export default function HorizonSelector() {
+export default function HorizonShopSelector() {
   const prices = useStore((state) => state.prices);
-  const setSelectedProduct = useStore((state) => state.setSelectedProduct);
-  const setSelectedShop = useStore((state) => state.setSelectedShop);
   const product = useStore((state) => state.selectedProduct);
-  const setLoading = useStore((state) => state.setLoading);
   const labels = useStore((state) => state.labels);
+  const setSelectedShop = useStore((state) => state.setSelectedShop);
+  const selectedShop = useStore((state) => state.selectedShop);
+  const setLoading = useStore((state) => state.setLoading);
 
-  const handleChangeProductName = async () => {
-    const text = prompt('Change product name', product);
-    setLoading(true);
-    try {
-      if (text) {
+  const handleChangeShopName = async () => {
+    const text = prompt('Change shop name', selectedShop);
+    if (text) {
+      setLoading(true);
+      try {
         const tmpPrices = prices.map((item) => {
           if (item.label === product) {
             return {
               ...item,
-              label: text,
+              data: item.data.map((subItem) => {
+                if (subItem.name === selectedShop) {
+                  return {
+                    ...subItem,
+                    name: text,
+                  };
+                }
+                return subItem;
+              }),
             };
           }
           return item;
         });
         await updateFirebasePrices({
-          prices: tmpPrices,
           labels,
+          prices: tmpPrices,
           lastUpdate: new Date().getTime(),
         });
         window.location.reload();
+      } catch (error) {
+        showError(error);
       }
-    } catch (error) {
-      showError(error);
+      setLoading(false);
     }
-    setLoading(false);
   };
 
+  const shopList = prices
+    .find((item) => item.label === product)
+    ?.data.map((item) => item.name);
   return (
     <div
       style={{
+        paddingTop: 20,
         paddingLeft: 20,
         paddingRight: 20,
       }}
@@ -49,7 +61,7 @@ export default function HorizonSelector() {
           fontWeight: 'bold',
         }}
       >
-        Products
+        Shops
       </div>
 
       <div
@@ -61,27 +73,24 @@ export default function HorizonSelector() {
           flexWrap: 'wrap',
         }}
       >
-        {prices?.map((item) => (
+        {shopList?.map((item) => (
           <div
-            key={item.label}
+            key={item}
             style={{
-              color: product === item.label ? 'white' : 'black',
+              color: selectedShop === item ? 'white' : 'black',
               cursor: 'pointer',
               padding: 10,
               borderRadius: 10,
-              background: product === item.label ? '#7EB9FF' : '#F5F5F5',
+              background: selectedShop === item ? '#7EB9FF' : '#F5F5F5',
               display: 'flex',
-              justifyContent: 'space-between',
+              alignItems: 'center', 
             }}
-            onClick={() => {
-              setSelectedProduct(item.label);
-              setSelectedShop(item.data[0].name);
-            }}
+            onClick={() => setSelectedShop(item)}
           >
-            {item.label}
-            {product === item.label && (
+            {item}
+            {selectedShop === item && (
               <div
-                onClick={handleChangeProductName}
+                onClick={handleChangeShopName}
                 style={{
                   color: 'black',
                   borderRadius: 5,
