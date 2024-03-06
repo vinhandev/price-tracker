@@ -36,7 +36,23 @@ export default function HorizonSelector() {
     }
     setLoading(false);
   };
-
+  const handleDeleteProduct = async () => {
+    setLoading(true);
+    try {
+      const tmpPrices = prices.filter((item) => {
+        return item.label !== product;
+      });
+      await updateFirebasePrices({
+        prices: tmpPrices,
+        labels,
+        lastUpdate: new Date().getTime(),
+      });
+      window.location.reload();
+    } catch (error) {
+      showError(error);
+    }
+    setLoading(false);
+  };
   return (
     <div
       style={{
@@ -90,6 +106,19 @@ export default function HorizonSelector() {
                 }}
               >
                 Edit name
+              </div>
+            )}
+            {product === item.label && (
+              <div
+                onClick={handleDeleteProduct}
+                style={{
+                  color: 'black',
+                  borderRadius: 5,
+                  marginLeft: 10,
+                  textDecoration: 'underline',
+                }}
+              >
+                Delete
               </div>
             )}
           </div>

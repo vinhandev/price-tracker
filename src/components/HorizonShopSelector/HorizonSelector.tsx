@@ -45,6 +45,32 @@ export default function HorizonShopSelector() {
     }
   };
 
+  const handleDelete = async () => {
+    setLoading(true);
+    try {
+      const tmpPrices = prices.filter((item) => {
+        if (item.label === product) {
+          return {
+            ...item,
+            data: item.data.filter((subItem) => {
+              return subItem.name !== selectedShop;
+            }),
+          };
+        }
+        return item;
+      });
+      await updateFirebasePrices({
+        labels,
+        prices: tmpPrices,
+        lastUpdate: new Date().getTime(),
+      });
+      window.location.reload();
+    } catch (error) {
+      showError(error);
+    }
+    setLoading(false);
+  };
+
   const shopList = prices
     .find((item) => item.label === product)
     ?.data.map((item) => item.name);
@@ -83,7 +109,7 @@ export default function HorizonShopSelector() {
               borderRadius: 10,
               background: selectedShop === item ? '#7EB9FF' : '#F5F5F5',
               display: 'flex',
-              alignItems: 'center', 
+              alignItems: 'center',
             }}
             onClick={() => setSelectedShop(item)}
           >
@@ -99,6 +125,19 @@ export default function HorizonShopSelector() {
                 }}
               >
                 Edit name
+              </div>
+            )}
+            {selectedShop === item && (
+              <div
+                onClick={handleDelete}
+                style={{
+                  color: 'black',
+                  borderRadius: 5,
+                  marginLeft: 10,
+                  textDecoration: 'underline',
+                }}
+              >
+                Delete
               </div>
             )}
           </div>
