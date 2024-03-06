@@ -53,3 +53,9 @@ export function extractDomainName(url: string): string | null {
     return null;
   }
 }
+export const isSameDay = (date1: Date, date2: Date) => {
+  const isSameDayTime = date1.getDate() === date2.getDate();
+  const isSameMonth = date1.getMonth() === date2.getMonth();
+  const isSameYear = date1.getFullYear() === date2.getFullYear();
+  return isSameDayTime && isSameMonth && isSameYear;
+};
