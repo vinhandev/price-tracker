@@ -31,9 +31,11 @@ export default function Loading({
       }}
     >
       <div className="spinner-border" role="status" />
-      <div>{currentProduct}</div>
-      <div>{currentShop}</div>
-      <div>{((count * 100) / prices?.length).toFixed(2)}%</div>
+      {currentProduct && <div>{currentProduct}</div>}
+      {currentShop && <div>{currentShop}</div>}
+      {prices.length > 0 && count > 0 && (
+        <div>{((count * 100) / prices?.length).toFixed(2)}%</div>
+      )}
     </div>
   );
 }

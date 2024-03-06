@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AddWebsite from '../screens/AddWebsite';
-import Introduction from '../screens/Introduction';
 import Homepage from '../screens/Homepage';
 import { Sidebar } from '../components';
 import Loading from '../components/Loading/Loading';
@@ -8,25 +7,33 @@ import { useStore } from '../store/useStore';
 import Logo from '../components/Logo/Logo';
 
 import { useEffect, useState } from 'react';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from '../services/firebase';
 import { GroupPriceProps } from '../types/prices';
-import { convertStringToNumber } from '../utils/helper';
+import { convertStringToNumber, showError } from '../utils/helper';
+import { getFirebasePrices, updateFirebasePrices } from '../utils/firebase';
 
 export default function RouterProvider() {
   const [count, setCount] = useState(0);
   const [currentProduct, setCurrentProduct] = useState('');
   const [currentShop, setCurrentShop] = useState('');
+  const labels = useStore((state) => state.labels);
   const prices = useStore((state) => state.prices);
   const isDarkMode = useStore((state) => state.isDarkMode);
 
-  const setPrices = useStore((state) => state.setPrices);
   const setLoading = useStore((state) => state.setLoading);
+  const initData = useStore((state) => state.initData);
+  const setPrices = useStore((state) => state.setPrices);
 
-  async function handleFetch(paramPrices: GroupPriceProps[]) {
+  async function handleFetch(
+    paramPrices: GroupPriceProps[],
+    paramLabels: number[]
+  ) {
+    const lastUpdate = new Date().getTime();
+    let isHaveRecord = false;
+
     setCount(0);
     setLoading(true);
     try {
+      if (paramPrices?.length === 0) throw new Error('Prices not found');
       for (let index = 0; index < paramPrices.length; index++) {
         const group = paramPrices[index];
         setCurrentProduct(() => group.label);
@@ -55,22 +62,18 @@ export default function RouterProvider() {
                 element.data = [
                   {
                     price: number,
-                    date: new Date().getTime(),
+                    date: lastUpdate,
                   },
                 ];
               } else {
                 element.data?.push({
                   price: number,
-                  date: new Date().getTime(),
+                  date: lastUpdate,
                 });
               }
-              console.log(
-                group.label,
-                element.name,
-                count,
-                1 / group?.data.length,
-                count + Math.round((1 / group?.data.length) * 100) / 100
-              );
+              if (!isHaveRecord) {
+                isHaveRecord = true;
+              }
               setCount(
                 (tmpCount) =>
                   tmpCount + Math.round((1 / group?.data.length) * 100) / 100
@@ -81,7 +84,7 @@ export default function RouterProvider() {
           } catch (error) {
             element.data?.push({
               price: -1,
-              date: new Date().getTime(),
+              date: lastUpdate,
             });
             setCount(
               (tmpCount) =>
@@ -90,27 +93,40 @@ export default function RouterProvider() {
           }
         }
       }
-      setPrices(paramPrices);
-      await setDoc(doc(db, 'Prices', 'vinhan'), { data: paramPrices });
+      if (isHaveRecord) {
+        paramLabels.push(lastUpdate);
+
+        initData(paramPrices, paramLabels, lastUpdate);
+
+        await updateFirebasePrices({
+          prices: paramPrices,
+          labels: paramLabels,
+          lastUpdate,
+        });
+      } else {
+        throw new Error('No record to fetch');
+      }
     } catch (error) {
-      console.error(error);
+      showError(error);
     }
     setLoading(false);
   }
 
   useEffect(() => {
     async function getData() {
-      const response = await getDoc(doc(db, 'Prices', 'vinhan'));
+      setLoading(true);
+      try {
+        const response = await getFirebasePrices();
+        console.log(response);
 
-      if (response.exists()) {
-        if (response.data().data?.length > 0) {
-          setPrices(response.data().data as GroupPriceProps[]);
-          await handleFetch(response.data().data as GroupPriceProps[]);
-        } else {
-          setPrices([]);
-          await handleFetch([]);
+        if (response.prices) {
+          setPrices(response.prices);
+          await handleFetch(response.prices, response.labels ?? []);
         }
+      } catch (error) {
+        showError(error);
       }
+      setLoading(false);
     }
     getData();
   }, []);
@@ -146,7 +162,7 @@ export default function RouterProvider() {
                 disabled={!prices}
                 onClick={() => {
                   if (prices) {
-                    handleFetch(prices);
+                    handleFetch(prices, labels);
                   }
                 }}
                 className="btn btn-primary"
@@ -157,7 +173,7 @@ export default function RouterProvider() {
           </div>
 
           <Routes>
-            <Route path="/" element={<Introduction />} />
+            <Route path="/" element={<Homepage />} />
             <Route path="/home" element={<Homepage />} />
             <Route path="/add" element={<AddWebsite />} />
           </Routes>

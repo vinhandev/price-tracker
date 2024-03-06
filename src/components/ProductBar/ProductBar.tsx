@@ -1,23 +1,18 @@
 import { Selector } from '../Inputs/Selector/Selector';
 import { Colors } from '../../assets/colors';
 import { useStore } from '../../store/useStore';
-import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 export default function ProductBar() {
   const product = useStore((state) => state.selectedProduct);
   const setProduct = useStore((state) => state.setSelectedProduct);
   const prices = useStore((state) => state.prices);
-
-  useEffect(() => {
-    if (prices && product === '') {
-      setProduct(prices?.[0]?.label);
-    }
-  }, [prices, product, setProduct]);
+  const location = useLocation();
 
   return (
     <div
       style={{
-        display: 'flex',
+        display: location.pathname === '/home' ? 'flex' : 'none',
         flexDirection: 'column',
 
         alignItems: 'center',

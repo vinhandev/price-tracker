@@ -55,7 +55,7 @@ export default function Sidebar() {
             Price Tracker
           </MenuItem>
           <MenuItem active={pathname === '/add'} component={<Link to="/add" />}>
-            Add Product
+            Add Shop
           </MenuItem>
         </Menu>
       </RNSidebar>

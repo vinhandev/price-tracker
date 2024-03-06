@@ -27,6 +27,7 @@ export default function HighLight({ data }: Props) {
       {data.map((item) => {
         return (
           <div
+            key={item.label}
             onClick={() => onPress(item.link)}
             style={{
               flexGrow: 1,

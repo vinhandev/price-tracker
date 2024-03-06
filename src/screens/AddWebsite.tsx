@@ -1,25 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import { convertStringToNumber, formatMoney } from '../utils/helper';
+import React, { useEffect } from 'react';
+import {
+  convertStringToNumber,
+  extractDomainName,
+  formatMoney,
+  showSuccess,
+} from '../utils/helper';
 import { Selector } from '../components/Inputs/Selector/Selector';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from '../services/firebase';
 import { GroupPriceProps } from '../types/prices';
+import { useStore } from '../store/useStore';
+import { updateFirebasePrices } from '../utils/firebase';
+import { IconButton } from '../components';
 
 export default function AddWebsite() {
-  const [value, setValue] = React.useState('');
-  const [from, setFrom] = React.useState('');
-  const [selector, setSelector] = React.useState('');
-  const [to, setTo] = React.useState('');
-  const [price1, setPrice1] = React.useState('');
-  const [price2, setPrice2] = React.useState('');
+  const [websiteLink, setWebsiteLink] = React.useState('');
+  const [beforeCharacters, setBeforeCharacters] = React.useState('');
+  const [afterCharacters, setAfterCharacters] = React.useState('<');
+
+  const [selectedProduct, setSelectedProduct] = React.useState('');
+
+  const [websiteSourceCode, setWebsiteSourceCode] = React.useState('');
+  const [websiteRemoveAllCharacters, setWebsiteRemoveAllCharacters] =
+    React.useState('');
   const [price, setPrice] = React.useState(0);
-  const [isLoading, setLoading] = React.useState(false);
-  const [prices, setPrices] = useState<GroupPriceProps[]>([]);
+
+  const prices = useStore((state) => state.prices);
+  const labels = useStore((state) => state.labels);
+  const setLoading = useStore((state) => state.setLoading);
+  const setOpenSidebar = useStore((state) => state.setOpenSidebar);
 
   async function handlePriceChange() {
     setLoading(true);
     try {
-      const response = await fetch(value);
+      const response = await fetch(websiteLink);
       const data = (await response.text())
         .replace(/\n/g, ' ')
         .replace(/\r/g, ' ')
@@ -29,189 +41,227 @@ export default function AddWebsite() {
         .split(' ')
         .join('');
 
-      const tmpPrice = data?.split(from.split(' ').join(''))[1] ?? '0';
-      const price1 = tmpPrice?.split(to.split(' ').join(''))[0] ?? '0';
+      const tmpPrice =
+        data?.split(beforeCharacters.split(' ').join(''))[1] ?? '0';
+      const price1 =
+        tmpPrice?.split(afterCharacters.split(' ').join(''))[0] ?? '0';
       const number = convertStringToNumber(price1) ?? 0;
-      console.log('price', from, to, price, price1, number);
 
       setPrice(number);
-      setPrice1(() => tmpPrice);
-      setPrice2(() => price1);
+      setWebsiteSourceCode(() => tmpPrice);
+      setWebsiteRemoveAllCharacters(() => price1);
     } catch (error) {
       console.log(error);
     }
     setLoading(false);
   }
 
-  function handleAddNewProduct() {
-    const text = prompt('Input new product');
+  async function handleAddNewProduct() {
+    const text = prompt('Add new product');
     if (text) {
-      setPrices((prev) => [
-        ...prev,
-        {
+      setLoading(true);
+      try {
+        prices.push({
           label: text,
           data: [],
-        },
-      ]);
-      alert('success');
+        });
+        await updateFirebasePrices({
+          prices,
+          labels,
+          lastUpdate: new Date().getTime(),
+        });
+        showSuccess();
+        window.location.reload();
+      } catch (error) {
+        console.error(error);
+      }
+      setLoading(false);
     }
   }
   async function handleAddWebsite() {
+    const defaultText = extractDomainName(websiteLink);
     const text = prompt(
-      `Add new name for website:  \n + Website: ${value} \n + Product: ${selector} \n + Price: ${formatMoney(
+      `Add new name for website:  \n + Website: ${websiteLink} \n + Product: ${selectedProduct} \n + Price: ${formatMoney(
         price
-      )}`
+      )}`,
+      defaultText ?? ''
     );
     if (text) {
-      const tmpPrices: GroupPriceProps[] = prices.map((item) => {
-        if (item.label === selector) {
-          return {
-            ...item,
-            data: [
-              ...item.data,
-              {
-                color: '',
-                link: value,
-                first: from,
-                last: to,
-                name: text,
-                data: [],
-              },
-            ],
-          };
-        }
-        return item;
-      });
-      await setDoc(doc(db, 'Prices', 'vinhan'), { data: tmpPrices });
-      setPrices(tmpPrices);
-      alert('success');
-      window.location.href = 'home';
+      setLoading(true);
+      try {
+        const tmpPrices: GroupPriceProps[] = prices.map((item) => {
+          console.log('hello', item, selectedProduct);
+
+          if (item.label === selectedProduct) {
+            return {
+              ...item,
+              data: [
+                ...item.data,
+                {
+                  color: '',
+                  link: websiteLink,
+                  first: beforeCharacters,
+                  last: afterCharacters,
+                  name: text,
+                  data: labels.map((date) => ({
+                    price: -1,
+                    date,
+                  })),
+                },
+              ],
+            };
+          }
+          return item;
+        });
+        console.log(
+          'tmpPrices',
+          tmpPrices[0].data,
+          prices[0].data,
+          tmpPrices[0].data
+        );
+
+        await updateFirebasePrices({
+          prices: tmpPrices,
+          labels,
+          lastUpdate: new Date().getTime(),
+        });
+        setLoading(false);
+
+        alert('success');
+        window.location.reload();
+      } catch (error) {
+        setLoading(false);
+
+        console.log(error);
+      }
     }
   }
 
   useEffect(() => {
-    async function getData() {
-      const response = await getDoc(doc(db, 'Prices', 'vinhan'));
-      console.log('prices', response.data());
-      if (response.exists()) {
-        if (response.data().data?.length > 0) {
-          console.log('prices', response.data().data);
-
-          setPrices(response.data().data as GroupPriceProps[]);
-        }
-      }
-    }
-    getData();
-  }, []);
-
-  useEffect(() => {
-    if (prices.length > 0) {
-      setDoc(doc(db, 'Prices', 'vinhan'), { data: prices });
+    if (prices && selectedProduct === '') {
+      setSelectedProduct(prices[0]?.label ?? '');
     }
   }, [prices]);
 
   return (
     <div
-      className="row d-flex justify-content-center"
       style={{
         padding: 20,
-        height: '100vh',
-        width: '100%',
+        overflow: 'hidden',
       }}
+      className="container-fluid"
     >
-      <div
-        className="col-4 gap-3"
-        style={{
-          gap: 10,
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        <div>Products</div>
-        <Selector
-          data={prices.map((item) => ({
-            label: item.label,
-            value: item.label,
-          }))}
-          value={selector}
-          onChange={setSelector}
-        />
-        <button onClick={handleAddNewProduct} className="btn btn-primary">
-          Add New Product
-        </button>
-        <div>Website</div>
-        <input
-          className="form-control"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
-        <div>First</div>
-        <input
-          className="form-control"
-          value={from}
-          onChange={(e) => setFrom(e.target.value)}
-        />
-        <div>Last</div>
-        <input
-          className="form-control"
-          value={to}
-          onChange={(e) => setTo(e.target.value)}
-        />
-
-        <button onClick={handlePriceChange} className="btn btn-primary">
-          Preview Website
-        </button>
+      <div>
+        <IconButton onClick={setOpenSidebar} variant="menu" />
       </div>
-      <div className="col-8 gap-3 d-flex flex-column">
-        {isLoading && <div>Loading</div>}
-        <div>Price</div>
+      <div className="row">
         <div
+          className="item col-12 col-lg-4 gap-3"
           style={{
-            border: 'solid 1px black',
-            height: 100,
-            marginTop: 10,
-            overflowY: 'auto',
+            padding: 10,
+            gap: 10,
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <div className="fs-5">Products</div>
+          <div className="d-flex flex-row gap-3">
+            <Selector
+              data={
+                prices?.map((item) => ({
+                  label: item.label,
+                  value: item.label,
+                })) ?? []
+              }
+              value={selectedProduct}
+              onChange={setSelectedProduct}
+            />
+            <button onClick={handleAddNewProduct} className="btn btn-primary">
+              +
+            </button>
+          </div>
+          <div className="fs-5">Website</div>
+          <input
+            className="form-control"
+            value={websiteLink}
+            onChange={(e) => setWebsiteLink(e.target.value)}
+          />
+          <div className="fs-5">First</div>
+          <input
+            className="form-control"
+            value={beforeCharacters}
+            onChange={(e) => setBeforeCharacters(e.target.value)}
+          />
+          <div className="fs-5">Last</div>
+          <input
+            className="form-control"
+            value={afterCharacters}
+            onChange={(e) => setAfterCharacters(e.target.value)}
+          />
+
+          <button onClick={handlePriceChange} className="btn btn-primary">
+            Preview Website
+          </button>
+        </div>
+        <div
+          className="item col-12 col-lg-8 gap-3 d-flex flex-column"
+          style={{
             padding: 10,
           }}
         >
-          {price1}
+          <div className="fs-5">Price remove before characters</div>
+          <div
+            className="form-control"
+            style={{
+              height: 100,
+              overflow: 'auto',
+              padding: 10,
+            }}
+          >
+            <div>{websiteSourceCode}</div>
+          </div>
+          <div className="fs-5">Price remove after characters</div>
+          <div
+            className="form-control"
+            style={{
+              height: 100,
+              overflowY: 'auto',
+              width: '100%',
+
+              padding: 10,
+            }}
+          >
+            {websiteRemoveAllCharacters}
+          </div>
+          <div className="fs-5">Price only numbers</div>
+          <div
+            className="form-control"
+            style={{
+              height: 100,
+              overflowY: 'auto',
+              width: '100%',
+
+              padding: 10,
+            }}
+          >
+            {price}
+          </div>
+          <div className="fs-5">Formatted file</div>
+          <div
+            className="form-control"
+            style={{
+              height: 100,
+              overflowY: 'auto',
+              width: '100%',
+              padding: 10,
+            }}
+          >
+            {formatMoney(price)}
+          </div>
+          <button onClick={handleAddWebsite} className="btn btn-primary">
+            Submit
+          </button>
         </div>
-        <div
-          style={{
-            border: 'solid 1px black',
-            height: 100,
-            marginTop: 10,
-            overflowY: 'auto',
-            padding: 10,
-          }}
-        >
-          {price2}
-        </div>
-        <div
-          style={{
-            border: 'solid 1px black',
-            height: 100,
-            marginTop: 10,
-            overflowY: 'auto',
-            padding: 10,
-          }}
-        >
-          {price}
-        </div>
-        <div
-          style={{
-            border: 'solid 1px black',
-            height: 100,
-            marginTop: 10,
-            overflowY: 'auto',
-            padding: 10,
-          }}
-        >
-          {formatMoney(price)}
-        </div>
-        <button onClick={handleAddWebsite} className="btn btn-primary">
-          Submit
-        </button>
       </div>
     </div>
   );

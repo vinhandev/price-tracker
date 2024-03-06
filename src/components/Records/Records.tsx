@@ -100,7 +100,7 @@ export default function Records() {
         </thead>
         <tbody>
           {priceList.map((item, index) => (
-            <tr>
+            <tr key={index}>
               <th
                 scope="row"
                 style={{
