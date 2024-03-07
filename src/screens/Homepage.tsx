@@ -156,7 +156,13 @@ export default function Homepage() {
         >
           <IconButton onClick={setOpenSidebar} variant="menu" />
 
-          <ProductBar />
+          <div
+            style={{
+              width: '75%',
+            }}
+          >
+            <ProductBar />
+          </div>
           <DarkModeButton />
         </div>
         <div
