@@ -113,6 +113,7 @@ export default function HorizonShopSelector() {
               background: selectedShop === item ? '#7EB9FF' : '#F5F5F5',
               display: 'flex',
               alignItems: 'center',
+              transition: 'width 0.2s ease-in-out',
             }}
             onClick={() => setSelectedShop(item)}
           >

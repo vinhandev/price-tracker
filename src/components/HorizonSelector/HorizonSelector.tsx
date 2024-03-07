@@ -88,6 +88,7 @@ export default function HorizonSelector() {
               background: product === item.label ? '#7EB9FF' : '#F5F5F5',
               display: 'flex',
               justifyContent: 'space-between',
+              transition: 'width 0.2s ease-in-out',
             }}
             onClick={() => {
               setSelectedProduct(item.label);

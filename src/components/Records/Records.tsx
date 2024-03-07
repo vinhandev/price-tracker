@@ -19,19 +19,22 @@ export default function Records() {
       ?.filter((item) => item.label === selectedProduct)
       .map((item) => {
         item.data.map((subItem) => {
+          console.log(subItem.data);
+          
           subItem?.data?.map((subSubItem) => {
-            if (subSubItem.price !== -1) {
-              tmpList.push({
-                label: subItem.name,
-                date: subSubItem.date,
-                price: subSubItem.price,
-              });
-            }
+            tmpList.push({
+              label: subItem.name,
+              date: subSubItem.date,
+              price: subSubItem.price,
+            });
           });
         });
       });
     return tmpList.sort((a, b) => b.date - a.date);
   }, [prices, selectedProduct]);
+
+  console.log(priceList);
+  
   return (
     <div>
       <table
@@ -140,7 +143,7 @@ export default function Records() {
                   color: isDarkMode ? '#fff' : '#000',
                 }}
               >
-                {formatMoney(item.price)}
+                {item.price === -1 ? 'No data' : formatMoney(item.price)}
               </td>
             </tr>
           ))}

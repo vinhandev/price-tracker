@@ -21,7 +21,7 @@ export default function ShopRecords() {
       .map((item) => {
         item.data.map((subItem) => {
           subItem?.data?.map((subSubItem) => {
-            if (subSubItem.price !== -1 && subItem.name === selectedShop) {
+            if (subItem.name === selectedShop) {
               tmpList.push({
                 label: subItem.name,
                 date: subSubItem.date,
@@ -139,7 +139,7 @@ export default function ShopRecords() {
                   color: isDarkMode ? '#fff' : '#000',
                 }}
               >
-                {formatMoney(item.price)}
+                {item.price === -1 ? 'No Data' : formatMoney(item.price)}
               </td>
             </tr>
           ))}
