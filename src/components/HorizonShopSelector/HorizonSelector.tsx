@@ -45,6 +45,15 @@ export default function HorizonShopSelector() {
     }
   };
 
+  const handleOpenLink = () => {
+    const url = prices
+      .find((item) => item.label === product)
+      ?.data.find((item) => item.name === selectedShop)?.link;
+    if (url) {
+      window.open(url);
+    }
+  };
+
   const handleDelete = async () => {
     setLoading(true);
     try {
@@ -118,6 +127,19 @@ export default function HorizonShopSelector() {
             onClick={() => setSelectedShop(item)}
           >
             {item}
+            {selectedShop === item && (
+              <div
+                onClick={handleOpenLink}
+                style={{
+                  color: 'black',
+                  borderRadius: 5,
+                  marginLeft: 10,
+                  textDecoration: 'underline',
+                }}
+              >
+                Open Link
+              </div>
+            )}
             {selectedShop === item && (
               <div
                 onClick={handleChangeShopName}
