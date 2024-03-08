@@ -11,6 +11,7 @@ import { GroupPriceProps } from '../types/prices';
 import { convertStringToNumber, isSameDay, showError } from '../utils/helper';
 import { getFirebasePrices, updateFirebasePrices } from '../utils/firebase';
 import SettingScreen from '../screens/Setting';
+import UpdateWebsite from '../screens/UpdateWebsite';
 
 export default function RouterProvider() {
   const [count, setCount] = useState(0);
@@ -189,6 +190,7 @@ export default function RouterProvider() {
             <Route path="/" element={<Homepage />} />
             <Route path="/home" element={<Homepage />} />
             <Route path="/add" element={<AddWebsite />} />
+            <Route path="/update" element={<UpdateWebsite />} />
             <Route path="/setting" element={<SettingScreen />} />
           </Routes>
 

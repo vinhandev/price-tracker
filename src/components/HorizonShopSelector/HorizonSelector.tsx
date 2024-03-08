@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useStore } from '../../store/useStore';
 import { updateFirebasePrices } from '../../utils/firebase';
 import { showError } from '../../utils/helper';
@@ -127,6 +128,19 @@ export default function HorizonShopSelector() {
             onClick={() => setSelectedShop(item)}
           >
             {item}
+            {selectedShop === item && (
+              <Link
+                to="/update"
+                style={{
+                  color: 'black',
+                  borderRadius: 5,
+                  marginLeft: 10,
+                  textDecoration: 'underline',
+                }}
+              >
+                Edit Link
+              </Link>
+            )}
             {selectedShop === item && (
               <div
                 onClick={handleOpenLink}
