@@ -14,7 +14,7 @@ export default function ProductBar() {
       style={{
         display: location.pathname === '/home' ? 'flex' : 'none',
         flexDirection: 'column',
-
+        
         alignItems: 'center',
       }}
     >
