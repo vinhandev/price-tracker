@@ -1,6 +1,6 @@
-import { useStore } from '../store/useStore';
-import { updateFirebasePrices } from '../utils/firebase';
-import { showError } from '../utils/helper';
+import { useStore } from '../../store/useStore';
+import { updateFirebasePrices } from '../../utils/firebase';
+import { showError } from '../../utils/helper';
 
 export default function SettingScreen() {
   const prices = useStore((state) => state.prices);

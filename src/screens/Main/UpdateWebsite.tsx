@@ -3,35 +3,43 @@ import {
   convertStringToNumber,
   extractDomainName,
   formatMoney,
-  showSuccess,
-} from '../utils/helper';
-import { Selector } from '../components/Inputs/Selector/Selector';
-import { GroupPriceProps } from '../types/prices';
-import { useStore } from '../store/useStore';
-import { updateFirebasePrices } from '../utils/firebase';
-import { IconButton } from '../components';
+} from '../../utils/helper';
+import { GroupPriceProps } from '../../types/prices';
+import { useStore } from '../../store/useStore';
+import { updateFirebasePrices } from '../../utils/firebase';
+import { IconButton } from '../../components';
 
-export default function AddWebsite() {
-  const [websiteLink, setWebsiteLink] = React.useState('');
-  const [beforeCharacters, setBeforeCharacters] = React.useState('<body><');
+export default function UpdateWebsite() {
+  const [beforeCharacters, setBeforeCharacters] = React.useState('');
   const [afterCharacters, setAfterCharacters] = React.useState('<');
 
-  const [selectedProduct, setSelectedProduct] = React.useState('');
-
+  const [websiteRemoveBeforeCharacters, setWebsiteRemoveBeforeCharacters] =
+    React.useState('');
   const [websiteSourceCode, setWebsiteSourceCode] = React.useState('');
-  const [websiteRemoveBeforeCharacters, setWebsiteRemoveBeforeCharacters] = React.useState('');
   const [websiteRemoveAllCharacters, setWebsiteRemoveAllCharacters] =
     React.useState('');
   const [price, setPrice] = React.useState(0);
 
   const prices = useStore((state) => state.prices);
+
+  const selectedShop = useStore((state) => state.selectedShop);
+  const selectedProduct = useStore((state) => state.selectedProduct);
+
+  const selectedProductProps = prices.find(
+    (item) => item.label === selectedProduct
+  );
+  const selectedShopProps = selectedProductProps?.data.find(
+    (item) => item.name === selectedShop
+  );
+  const websiteLink = selectedShopProps?.link;
   const labels = useStore((state) => state.labels);
   const setLoading = useStore((state) => state.setLoading);
   const setOpenSidebar = useStore((state) => state.setOpenSidebar);
 
-  async function handlePriceChange() {
+  async function handlePreview() {
     setLoading(true);
     try {
+      if (!websiteLink) return;
       const response = await fetch(websiteLink);
       const data = (await response.text())
         .replace(/\n/g, ' ')
@@ -42,7 +50,7 @@ export default function AddWebsite() {
         .split(' ')
         .join('');
 
-      const tmpRemoved =
+      const beforeRemoveCharacters =
         data?.split(beforeCharacters.split(' ').join(''))[0] ?? '0';
       const tmpPrice =
         data?.split(beforeCharacters.split(' ').join(''))[1] ?? '0';
@@ -51,7 +59,7 @@ export default function AddWebsite() {
       const number = convertStringToNumber(price1) ?? 0;
 
       setPrice(number);
-      setWebsiteRemoveBeforeCharacters(() => tmpRemoved);
+      setWebsiteRemoveBeforeCharacters(() => beforeRemoveCharacters);
       setWebsiteSourceCode(() => tmpPrice);
       setWebsiteRemoveAllCharacters(() => price1);
     } catch (error) {
@@ -60,29 +68,8 @@ export default function AddWebsite() {
     setLoading(false);
   }
 
-  async function handleAddNewProduct() {
-    const text = prompt('Add new product');
-    if (text) {
-      setLoading(true);
-      try {
-        prices.push({
-          label: text,
-          data: [],
-        });
-        await updateFirebasePrices({
-          prices,
-          labels,
-          lastUpdate: new Date().getTime(),
-        });
-        showSuccess();
-        window.location.reload();
-      } catch (error) {
-        console.error(error);
-      }
-      setLoading(false);
-    }
-  }
-  async function handleAddWebsite() {
+  async function handleUpdateWebsite() {
+    if (!websiteLink) return;
     const defaultText = extractDomainName(websiteLink);
     const text = prompt(
       `Add new name for website:  \n + Website: ${websiteLink} \n + Product: ${selectedProduct} \n + Price: ${formatMoney(
@@ -94,35 +81,23 @@ export default function AddWebsite() {
       setLoading(true);
       try {
         const tmpPrices: GroupPriceProps[] = prices.map((item) => {
-          console.log('hello', item, selectedProduct);
-
           if (item.label === selectedProduct) {
             return {
-              ...item,
-              data: [
-                ...item.data,
-                {
-                  color: '',
-                  link: websiteLink,
-                  first: beforeCharacters,
-                  last: afterCharacters,
-                  name: text,
-                  data: labels.map((date) => ({
-                    price: -1,
-                    date,
-                  })),
-                },
-              ],
+              label: item.label,
+              data: item.data.map((subItem) => {
+                if (subItem.name === selectedShop) {
+                  return {
+                    ...subItem,
+                    first: beforeCharacters,
+                    last: afterCharacters,
+                  };
+                }
+                return subItem;
+              }),
             };
           }
           return item;
         });
-        console.log(
-          'tmpPrices',
-          tmpPrices[0].data,
-          prices[0].data,
-          tmpPrices[0].data
-        );
 
         await updateFirebasePrices({
           prices: tmpPrices,
@@ -132,7 +107,7 @@ export default function AddWebsite() {
         setLoading(false);
 
         alert('success');
-        window.location.reload();
+        window.location.href = '/home';
       } catch (error) {
         setLoading(false);
 
@@ -142,10 +117,19 @@ export default function AddWebsite() {
   }
 
   useEffect(() => {
-    if (prices && selectedProduct === '') {
-      setSelectedProduct(prices[0]?.label ?? '');
+    if (selectedProduct && selectedShop) {
+      setAfterCharacters(selectedShopProps?.last ?? '<');
+      setBeforeCharacters(selectedShopProps?.first ?? '');
     }
-  }, [prices]);
+  }, [selectedProduct, selectedShop]);
+
+  useEffect(() => {
+    handlePreview();
+  }, [beforeCharacters, afterCharacters]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
 
   return (
     <div
@@ -170,26 +154,10 @@ export default function AddWebsite() {
         >
           <div className="fs-5">Products</div>
           <div className="d-flex flex-row gap-3">
-            <Selector
-              data={
-                prices?.map((item) => ({
-                  label: item.label,
-                  value: item.label,
-                })) ?? []
-              }
-              value={selectedProduct}
-              onChange={setSelectedProduct}
-            />
-            <button onClick={handleAddNewProduct} className="btn btn-primary">
-              +
-            </button>
+            <input className="form-control" value={selectedProduct} disabled />
           </div>
           <div className="fs-5">Website</div>
-          <input
-            className="form-control"
-            value={websiteLink}
-            onChange={(e) => setWebsiteLink(e.target.value)}
-          />
+          <input className="form-control" value={websiteLink} disabled />
           <div className="fs-5">First</div>
           <input
             className="form-control"
@@ -203,7 +171,7 @@ export default function AddWebsite() {
             onChange={(e) => setAfterCharacters(e.target.value)}
           />
 
-          <button onClick={handlePriceChange} className="btn btn-primary">
+          <button onClick={handlePreview} className="btn btn-primary">
             Preview Website
           </button>
         </div>
@@ -213,7 +181,7 @@ export default function AddWebsite() {
             padding: 10,
           }}
         >
-           <div className="fs-5">Removed before characters</div>
+          <div className="fs-5">Removed characters</div>
           <div
             className="form-control"
             style={{
@@ -273,8 +241,8 @@ export default function AddWebsite() {
           >
             {formatMoney(price)}
           </div>
-          <button onClick={handleAddWebsite} className="btn btn-primary">
-            Submit
+          <button onClick={handleUpdateWebsite} className="btn btn-primary">
+            Update Website Link
           </button>
         </div>
       </div>

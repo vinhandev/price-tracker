@@ -1,5 +1,5 @@
-import MainProvider from './routes';
+import RouterProvider from './routes/RouterProvider';
 
 export default function App() {
-  return <MainProvider />;
+  return <RouterProvider />;
 }

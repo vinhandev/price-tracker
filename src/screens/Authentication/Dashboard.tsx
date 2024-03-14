@@ -1,20 +1,18 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import AddWebsite from '../screens/AddWebsite';
-import Homepage from '../screens/Homepage';
-import { Sidebar } from '../components';
-import Loading from '../components/Loading/Loading';
-import { useStore } from '../store/useStore';
-import Logo from '../components/Logo/Logo';
+import { Outlet } from 'react-router-dom';
+import Loading from '../../components/Loading/Loading';
+import { useState, useEffect } from 'react';
+import Logo from '../../components/Logo/Logo';
+import { GroupPriceProps } from '../../types/prices';
+import { updateFirebasePrices, getFirebasePrices } from '../../utils/firebase';
+import {
+  isSameDay,
+  convertStringToNumber,
+  showError,
+} from '../../utils/helper';
+import { useStore } from '../../store/useStore';
+import { Sidebar } from '../../components';
 
-import { useEffect, useState } from 'react';
-import { GroupPriceProps } from '../types/prices';
-import { convertStringToNumber, isSameDay, showError } from '../utils/helper';
-import { getFirebasePrices, updateFirebasePrices } from '../utils/firebase';
-import SettingScreen from '../screens/Setting';
-import UpdateWebsite from '../screens/UpdateWebsite';
-import Authentication from '../screens/Authentication';
-
-export default function MainProvider() {
+export default function Dashboard() {
   const [count, setCount] = useState(0);
   const [currentProduct, setCurrentProduct] = useState('');
   const [currentShop, setCurrentShop] = useState('');
@@ -144,65 +142,54 @@ export default function MainProvider() {
     getData();
   }, []);
   return (
-    <div>
-      <BrowserRouter>
+    <div
+      style={{
+        backgroundColor: isDarkMode ? '#000' : '#ffffff',
+      }}
+      className="d-flex flex-row"
+    >
+      <div className="d-block d-md-none">
+        <Sidebar />
+      </div>
+      <div
+        className="d-none d-md-block"
+        style={{
+          paddingLeft: 20,
+          paddingRight: 20,
+          borderRight: '1px solid #ccc',
+          height: '100vh',
+          width: '20%',
+        }}
+      >
+        <Logo />
+        <Sidebar />
         <div
           style={{
-            backgroundColor: isDarkMode ? '#000' : '#ffffff',
+            paddingTop: 20,
           }}
-          className="d-flex flex-row"
         >
-          <div className="d-block d-md-none">
-            <Sidebar />
-          </div>
-          <div
-            className="d-none d-md-block"
-            style={{
-              paddingLeft: 20,
-              paddingRight: 20,
-              borderRight: '1px solid #ccc',
-              height: '100vh',
-              width: '20%',
+          <button
+            disabled={!prices}
+            onClick={async () => {
+              const response = await getFirebasePrices();
+              if (response.prices && response.labels) {
+                handleFetch(response.prices, response.labels);
+              }
             }}
+            className="btn btn-primary"
           >
-            <Logo />
-            <Sidebar />
-            <div
-              style={{
-                paddingTop: 20,
-              }}
-            >
-              <button
-                disabled={!prices}
-                onClick={async () => {
-                  const response = await getFirebasePrices();
-                  if (response.prices && response.labels) {
-                    handleFetch(response.prices, response.labels);
-                  }
-                }}
-                className="btn btn-primary"
-              >
-                Reload database
-              </button>
-            </div>
-          </div>
-
-          <Routes>
-            <Route path="/" element={<Homepage />} />
-            <Route path="/home" element={<Homepage />} />
-            <Route path="/add" element={<AddWebsite />} />
-            <Route path="/update" element={<UpdateWebsite />} />
-            <Route path="/setting" element={<SettingScreen />} />
-            <Route path="/authentication" element={<Authentication />} />
-          </Routes>
-
-          <Loading
-            count={count}
-            currentProduct={currentProduct}
-            currentShop={currentShop}
-          />
+            Reload database
+          </button>
         </div>
-      </BrowserRouter>
+      </div>
+
+      <Outlet />
+
+      <Loading
+        count={count}
+        currentProduct={currentProduct}
+        currentShop={currentShop}
+      />
     </div>
   );
 }
