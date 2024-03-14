@@ -1,14 +1,14 @@
-import { Chart, DarkModeButton, IconButton, ProductBar } from '../components';
-import HighLight from '../components/HighLight/HighLight';
-import Layout from '../components/Layout';
-import Records from '../components/Records/Records';
-import Tabs from '../components/Tabs/Tabs';
+import { Chart, DarkModeButton, IconButton, ProductBar } from '../../components';
+import HighLight from '../../components/HighLight/HighLight';
+import Layout from '../../components/Layout';
+import Records from '../../components/Records/Records';
+import Tabs from '../../components/Tabs/Tabs';
 import { useMemo } from 'react';
-import { useStore } from '../store/useStore';
-import HorizonSelector from '../components/HorizonSelector/HorizonSelector';
+import { useStore } from '../../store/useStore';
+import HorizonSelector from '../../components/HorizonSelector/HorizonSelector';
 import { useEffect } from 'react';
-import ShopRecords from '../components/Records/ShopRecords';
-import HorizonShopSelector from '../components/HorizonShopSelector/HorizonSelector';
+import ShopRecords from '../../components/Records/ShopRecords';
+import HorizonShopSelector from '../../components/HorizonShopSelector/HorizonSelector';
 
 export default function Homepage() {
   const setOpenSidebar = useStore((state) => state.setOpenSidebar);
