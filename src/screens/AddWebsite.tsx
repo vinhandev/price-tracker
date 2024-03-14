@@ -13,12 +13,13 @@ import { IconButton } from '../components';
 
 export default function AddWebsite() {
   const [websiteLink, setWebsiteLink] = React.useState('');
-  const [beforeCharacters, setBeforeCharacters] = React.useState('');
+  const [beforeCharacters, setBeforeCharacters] = React.useState('<body><');
   const [afterCharacters, setAfterCharacters] = React.useState('<');
 
   const [selectedProduct, setSelectedProduct] = React.useState('');
 
   const [websiteSourceCode, setWebsiteSourceCode] = React.useState('');
+  const [websiteRemoveBeforeCharacters, setWebsiteRemoveBeforeCharacters] = React.useState('');
   const [websiteRemoveAllCharacters, setWebsiteRemoveAllCharacters] =
     React.useState('');
   const [price, setPrice] = React.useState(0);
@@ -41,6 +42,8 @@ export default function AddWebsite() {
         .split(' ')
         .join('');
 
+      const tmpRemoved =
+        data?.split(beforeCharacters.split(' ').join(''))[0] ?? '0';
       const tmpPrice =
         data?.split(beforeCharacters.split(' ').join(''))[1] ?? '0';
       const price1 =
@@ -48,6 +51,7 @@ export default function AddWebsite() {
       const number = convertStringToNumber(price1) ?? 0;
 
       setPrice(number);
+      setWebsiteRemoveBeforeCharacters(() => tmpRemoved);
       setWebsiteSourceCode(() => tmpPrice);
       setWebsiteRemoveAllCharacters(() => price1);
     } catch (error) {
@@ -209,6 +213,17 @@ export default function AddWebsite() {
             padding: 10,
           }}
         >
+           <div className="fs-5">Removed before characters</div>
+          <div
+            className="form-control"
+            style={{
+              height: 100,
+              overflow: 'auto',
+              padding: 10,
+            }}
+          >
+            <div>{websiteRemoveBeforeCharacters}</div>
+          </div>
           <div className="fs-5">Price remove before characters</div>
           <div
             className="form-control"
