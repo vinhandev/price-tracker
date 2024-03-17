@@ -20,17 +20,14 @@ export default function Login() {
   return (
     <Box
       sx={{
-        // background: 'red',
-
         display: 'flex',
         flexDirection: 'column',
 
         height: '100vh',
 
         justifyContent: 'center',
-        // padding: 2,
-
-        background: `linear-gradient(0deg, white 65%, ${Colors.primary}88 100%)`,
+        alignItems: 'center',
+        background: `linear-gradient(0deg, ${Colors.primary}55 65%, white 100%)`,
       }}
     >
       <Box
@@ -40,12 +37,38 @@ export default function Login() {
 
           justifyContent: 'center',
 
-          flex: 1,
+          borderRadius: {
+            xs: 0,
+            md: 4,
+          },
+
+          border: {
+            xs: 0,
+            md: 'solid 5px #fff',
+          },
+
+          width: {
+            xs: '100%',
+            md: 600,
+          },
+
+          flex: {
+            xs: 1,
+            md: 0,
+          },
+
+          transition: 'all 0.3s ease',
 
           gap: 6,
-          paddingY: 2,
-          paddingX: 6,
-          // backdropFilter: 'blur(200px)',
+          paddingY: {
+            xs: 2,
+            md: 10,
+          },
+          paddingX: {
+            xs: 6,
+            md: 8,
+          },
+          background: `linear-gradient(0deg, white 65%, ${Colors.primary}88 100%)`,
         }}
       >
         <Box
@@ -127,9 +150,9 @@ export default function Login() {
                 fontWeight: '600',
                 color: Colors.primary,
                 textDecorationLine: 'none',
-                ":hover":{
+                ':hover': {
                   textDecorationLine: 'underline',
-                }
+                },
               }}
             >
               {' '}
