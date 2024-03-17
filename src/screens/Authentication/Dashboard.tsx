@@ -11,6 +11,7 @@ import {
 } from '../../utils/helper';
 import { useStore } from '../../store/useStore';
 import { Sidebar } from '../../components';
+import { Box } from '@mui/material';
 
 export default function Dashboard() {
   const [count, setCount] = useState(0);
@@ -161,7 +162,9 @@ export default function Dashboard() {
           width: '20%',
         }}
       >
-        <Logo />
+        <Box className="d-none d-md-block">
+          <Logo />
+        </Box>
         <Sidebar />
         <div
           style={{

@@ -23,5 +23,6 @@ export const colors = [
 export const Colors = {
   background: '#fff',
   text: '#000',
-  border: '#ccc',
+  border: '#eeeeee',
+  primary:'#40679E'
 };
