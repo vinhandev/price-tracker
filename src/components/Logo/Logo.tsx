@@ -1,27 +1,17 @@
-import logo from '../../assets/logo.png';
-import logo2 from '../../assets/logo2.png';
-import { useStore } from '../../store/useStore';
-
+import { Box } from '@mui/material';
 export default function Logo() {
-  const isDarkMode = useStore((state) => state.isDarkMode);
   return (
-    <div
-      className="d-none d-md-block"
-      style={{
-        width: '100%',
-        height: undefined,
-        aspectRatio: 2,
-        paddingLeft: 20,
+    <Box
+      sx={{
+        borderRadius: 1000,
       }}
     >
       <img
-        style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'contain',
-        }}
-        src={isDarkMode ? logo2 : logo}
+        width="80"
+        height="80"
+        src="https://img.icons8.com/office/80/price-tag-euro.png"
+        alt="price-tag-euro"
       />
-    </div>
+    </Box>
   );
 }
