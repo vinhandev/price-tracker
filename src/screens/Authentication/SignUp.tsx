@@ -1,23 +1,33 @@
-import { Box, Link, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import FormInput from '../../components/FormInput/FormInput';
 import { useForm } from 'react-hook-form';
-import Logo from '../../components/Logo/Logo';
 import { Button } from '../../components/Buttons';
 import { Colors } from '../../assets/colors';
-import { useSignIn } from '../../hooks';
+import { useSignUp } from '../../hooks';
 
-export default function Login() {
-  const { mutation } = useSignIn();
-  const { control, handleSubmit } = useForm({
+export default function SignUp() {
+  const { mutation } = useSignUp();
+  const { control, handleSubmit, setError } = useForm({
     defaultValues: {
       username: '',
       password: '',
+      confirm: '',
     },
   });
 
-  const onSubmit = async (data: { username: string; password: string }) => {
-    await mutation(data.username, data.password);
-    window.location.href = '/';
+  const onSubmit = async (data: {
+    username: string;
+    password: string;
+    confirm: string;
+  }) => {
+    if (data.password === data.confirm) {
+      await mutation(data.username, data.password);
+    } else {
+      setError('confirm', {
+        type: 'confirm',
+        message: 'Passwords do not match',
+      });
+    }
   };
 
   return (
@@ -84,29 +94,12 @@ export default function Login() {
             textAlign: 'center',
           }}
         >
-          <Box
-            sx={{
-              // background: 'red',
-              borderRadius: 1000,
-
-              width: 200,
-              aspectRatio: 2,
-
-              margin: 'auto',
-
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Logo />
-          </Box>
           <h3
             style={{
               fontFamily: 'Roboto',
             }}
           >
-            Welcome back !
+            Sign up
           </h3>
         </Box>
         <Box
@@ -130,39 +123,17 @@ export default function Login() {
             control={control}
             label="Password"
           />
+          <FormInput
+            variant="password"
+            name="confirm"
+            placeholder="Enter password again"
+            control={control}
+            label="Confirm Password"
+          />
         </Box>
         <Button variant="contained" onClick={handleSubmit(onSubmit)}>
-          Sign in
+          Sign up
         </Button>
-        <Box>
-          <Typography
-            sx={{
-              fontSize: 14,
-              fontWeight: '300',
-              textAlign: 'center',
-              fontFamily: 'Roboto',
-            }}
-          >
-            Don&apos;t have an account?
-            <Link
-              onClick={() => {
-                window.location.href = '/sign_up';
-              }}
-              sx={{
-                cursor: 'pointer',
-                fontWeight: '600',
-                color: Colors.primary,
-                textDecorationLine: 'none',
-                ':hover': {
-                  textDecorationLine: 'underline',
-                },
-              }}
-            >
-              {' '}
-              Sign up
-            </Link>
-          </Typography>
-        </Box>
       </Box>
     </Box>
   );

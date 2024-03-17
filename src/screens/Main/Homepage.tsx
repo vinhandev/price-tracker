@@ -133,7 +133,7 @@ export default function Homepage() {
       console.log('prices', prices, prices?.[0]?.label);
 
       setProduct(prices?.[0]?.label);
-      setSelectedShop(prices?.[0]?.data[0].name);
+      setSelectedShop(prices?.[0]?.data?.[0]?.name);
     }
   }, [prices, product, setProduct]);
 

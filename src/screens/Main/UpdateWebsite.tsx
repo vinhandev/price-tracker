@@ -8,6 +8,7 @@ import { GroupPriceProps } from '../../types/prices';
 import { useStore } from '../../store/useStore';
 import { updateFirebasePrices } from '../../utils/firebase';
 import { IconButton } from '../../components';
+import { useUser } from '../../store/useUser';
 
 export default function UpdateWebsite() {
   const [beforeCharacters, setBeforeCharacters] = React.useState('');
@@ -19,6 +20,8 @@ export default function UpdateWebsite() {
   const [websiteRemoveAllCharacters, setWebsiteRemoveAllCharacters] =
     React.useState('');
   const [price, setPrice] = React.useState(0);
+
+  const user = useUser((state) => state.user);
 
   const prices = useStore((state) => state.prices);
 
@@ -77,7 +80,7 @@ export default function UpdateWebsite() {
       )}`,
       defaultText ?? ''
     );
-    if (text) {
+    if (text && user) {
       setLoading(true);
       try {
         const tmpPrices: GroupPriceProps[] = prices.map((item) => {
@@ -99,7 +102,7 @@ export default function UpdateWebsite() {
           return item;
         });
 
-        await updateFirebasePrices({
+        await updateFirebasePrices(user.uid, {
           prices: tmpPrices,
           labels,
           lastUpdate: new Date().getTime(),

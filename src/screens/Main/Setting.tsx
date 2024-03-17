@@ -1,8 +1,11 @@
 import { useStore } from '../../store/useStore';
+import { useUser } from '../../store/useUser';
 import { updateFirebasePrices } from '../../utils/firebase';
 import { showError } from '../../utils/helper';
 
 export default function SettingScreen() {
+  const user = useUser((state) => state.user);
+
   const prices = useStore((state) => state.prices);
   const setLoading = useStore((state) => state.setLoading);
 
@@ -10,7 +13,7 @@ export default function SettingScreen() {
     setLoading(true);
     try {
       const confirm = window.confirm('Are you sure?');
-      if (confirm) {
+      if (confirm && user) {
         const tmpPrices = prices.map((item) => {
           const tmpProduct = item.data.map((subItem) => {
             return {
@@ -24,7 +27,7 @@ export default function SettingScreen() {
           };
         });
 
-        await updateFirebasePrices({
+        await updateFirebasePrices(user?.uid, {
           prices: tmpPrices,
           labels: [],
           lastUpdate: new Date().getTime(),
@@ -39,17 +42,19 @@ export default function SettingScreen() {
   }
 
   const onDeleteAllData = async () => {
-    setLoading(true);
-    try {
-      await updateFirebasePrices({
-        prices: [],
-        labels: [],
-        lastUpdate: new Date().getTime(),
-      });
-    } catch (error) {
-      showError(error);
+    if (user) {
+      setLoading(true);
+      try {
+        await updateFirebasePrices(user.uid, {
+          prices: [],
+          labels: [],
+          lastUpdate: new Date().getTime(),
+        });
+      } catch (error) {
+        showError(error);
+      }
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
