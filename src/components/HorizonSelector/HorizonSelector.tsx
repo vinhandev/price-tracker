@@ -1,8 +1,11 @@
 import { useStore } from '../../store/useStore';
+import { useUser } from '../../store/useUser';
 import { updateFirebasePrices } from '../../utils/firebase';
 import { showError } from '../../utils/helper';
 
 export default function HorizonSelector() {
+  const user = useUser((state) => state.user);
+
   const prices = useStore((state) => state.prices);
   const setSelectedProduct = useStore((state) => state.setSelectedProduct);
   const setSelectedShop = useStore((state) => state.setSelectedShop);
@@ -14,7 +17,7 @@ export default function HorizonSelector() {
     const text = prompt('Change product name', product);
     setLoading(true);
     try {
-      if (text) {
+      if (text && user) {
         const tmpPrices = prices.map((item) => {
           if (item.label === product) {
             return {
@@ -24,7 +27,7 @@ export default function HorizonSelector() {
           }
           return item;
         });
-        await updateFirebasePrices({
+        await updateFirebasePrices(user?.uid, {
           prices: tmpPrices,
           labels,
           lastUpdate: new Date().getTime(),
@@ -39,15 +42,17 @@ export default function HorizonSelector() {
   const handleDeleteProduct = async () => {
     setLoading(true);
     try {
-      const tmpPrices = prices.filter((item) => {
-        return item.label !== product;
-      });
-      await updateFirebasePrices({
-        prices: tmpPrices,
-        labels,
-        lastUpdate: new Date().getTime(),
-      });
-      window.location.reload();
+      if (user) {
+        const tmpPrices = prices.filter((item) => {
+          return item.label !== product;
+        });
+        await updateFirebasePrices(user?.uid, {
+          prices: tmpPrices,
+          labels,
+          lastUpdate: new Date().getTime(),
+        });
+        window.location.reload();
+      }
     } catch (error) {
       showError(error);
     }

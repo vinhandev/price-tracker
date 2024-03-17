@@ -1,7 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import Loading from '../../components/Loading/Loading';
 import { useState, useEffect } from 'react';
-import Logo from '../../components/Logo/Logo';
 import { GroupPriceProps } from '../../types/prices';
 import { updateFirebasePrices, getFirebasePrices } from '../../utils/firebase';
 import {
@@ -12,11 +11,17 @@ import {
 import { useStore } from '../../store/useStore';
 import { Sidebar } from '../../components';
 import { Box } from '@mui/material';
+import { auth } from '../../services/firebase';
+import LogoHorizontal from '../../components/LogoHorizontal/LogoHorizontal';
+import { useUser } from '../../store/useUser';
 
 export default function Dashboard() {
   const [count, setCount] = useState(0);
   const [currentProduct, setCurrentProduct] = useState('');
   const [currentShop, setCurrentShop] = useState('');
+
+  const user = useUser((state) => state.user);
+
   const prices = useStore((state) => state.prices);
   const isDarkMode = useStore((state) => state.isDarkMode);
 
@@ -110,11 +115,13 @@ export default function Dashboard() {
 
         initData(paramPrices, paramLabels, lastUpdate);
 
-        await updateFirebasePrices({
-          prices: paramPrices,
-          labels: paramLabels,
-          lastUpdate,
-        });
+        if (user) {
+          await updateFirebasePrices(user.uid, {
+            prices: paramPrices,
+            labels: paramLabels,
+            lastUpdate,
+          });
+        }
       } else {
         throw new Error('No record to fetch');
       }
@@ -128,12 +135,14 @@ export default function Dashboard() {
     async function getData() {
       setLoading(true);
       try {
-        const response = await getFirebasePrices();
-        console.log(response);
+        if (user) {
+          const response = await getFirebasePrices(user.uid);
+          console.log(response);
 
-        if (response.prices) {
-          initData(response.prices, response.labels ?? [], 0);
-          await handleFetch(response.prices, response.labels ?? []);
+          if (response.prices) {
+            initData(response.prices, response.labels ?? [], 0);
+            await handleFetch(response.prices, response.labels ?? []);
+          }
         }
       } catch (error) {
         showError(error);
@@ -163,7 +172,7 @@ export default function Dashboard() {
         }}
       >
         <Box className="d-none d-md-block">
-          <Logo />
+          <LogoHorizontal />
         </Box>
         <Sidebar />
         <div
@@ -174,14 +183,32 @@ export default function Dashboard() {
           <button
             disabled={!prices}
             onClick={async () => {
-              const response = await getFirebasePrices();
-              if (response.prices && response.labels) {
-                handleFetch(response.prices, response.labels);
+              if (user) {
+                const response = await getFirebasePrices(user.uid);
+                if (response.prices && response.labels) {
+                  handleFetch(response.prices, response.labels);
+                }
               }
             }}
             className="btn btn-primary"
           >
             Reload database
+          </button>
+        </div>
+        <div
+          style={{
+            paddingTop: 20,
+          }}
+        >
+          <button
+            disabled={!prices}
+            onClick={async () => {
+              await auth.signOut();
+              window.location.reload();
+            }}
+            className="btn btn-danger"
+          >
+            Sign Out
           </button>
         </div>
       </div>

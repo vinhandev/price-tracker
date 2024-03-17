@@ -1,9 +1,10 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: import.meta.env.API_KEY,
+  apiKey: 'AIzaSyAsLvojKfrupGEeBf2_RRPRYOCDc71_o28',
   authDomain: 'pricetracker-8da04.firebaseapp.com',
   projectId: 'pricetracker-8da04',
   storageBucket: 'pricetracker-8da04.appspot.com',
@@ -12,5 +13,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
+export const auth = getAuth(app);
 
 export const db = getFirestore(app);

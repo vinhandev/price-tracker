@@ -2,8 +2,10 @@ import { Link } from 'react-router-dom';
 import { useStore } from '../../store/useStore';
 import { updateFirebasePrices } from '../../utils/firebase';
 import { showError } from '../../utils/helper';
+import { useUser } from '../../store/useUser';
 
 export default function HorizonShopSelector() {
+  const user = useUser((state) => state.user);
   const prices = useStore((state) => state.prices);
   const product = useStore((state) => state.selectedProduct);
   const labels = useStore((state) => state.labels);
@@ -13,7 +15,7 @@ export default function HorizonShopSelector() {
 
   const handleChangeShopName = async () => {
     const text = prompt('Change shop name', selectedShop);
-    if (text) {
+    if (text && user) {
       setLoading(true);
       try {
         const tmpPrices = prices.map((item) => {
@@ -33,7 +35,7 @@ export default function HorizonShopSelector() {
           }
           return item;
         });
-        await updateFirebasePrices({
+        await updateFirebasePrices(user?.uid, {
           labels,
           prices: tmpPrices,
           lastUpdate: new Date().getTime(),
@@ -56,32 +58,34 @@ export default function HorizonShopSelector() {
   };
 
   const handleDelete = async () => {
-    setLoading(true);
-    try {
-      const tmpPrices = prices.map((item) => {
-        if (item.label === product) {
-          const tmpShop = item.data.filter((subItem) => {
-            return subItem.name !== selectedShop;
-          });
+    if (user) {
+      setLoading(true);
+      try {
+        const tmpPrices = prices.map((item) => {
+          if (item.label === product) {
+            const tmpShop = item.data.filter((subItem) => {
+              return subItem.name !== selectedShop;
+            });
 
-          return {
-            label: item.label,
-            data: tmpShop,
-          };
-        }
-        return item;
-      });
+            return {
+              label: item.label,
+              data: tmpShop,
+            };
+          }
+          return item;
+        });
 
-      await updateFirebasePrices({
-        labels,
-        prices: tmpPrices,
-        lastUpdate: new Date().getTime(),
-      });
-      window.location.reload();
-    } catch (error) {
-      showError(error);
+        await updateFirebasePrices(user?.uid, {
+          labels,
+          prices: tmpPrices,
+          lastUpdate: new Date().getTime(),
+        });
+        window.location.reload();
+      } catch (error) {
+        showError(error);
+      }
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const shopList = prices

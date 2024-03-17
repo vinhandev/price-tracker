@@ -10,6 +10,7 @@ import { GroupPriceProps } from '../../types/prices';
 import { useStore } from '../../store/useStore';
 import { updateFirebasePrices } from '../../utils/firebase';
 import { IconButton } from '../../components';
+import { useUser } from '../../store/useUser';
 
 export default function AddWebsite() {
   const [websiteLink, setWebsiteLink] = React.useState('');
@@ -19,10 +20,13 @@ export default function AddWebsite() {
   const [selectedProduct, setSelectedProduct] = React.useState('');
 
   const [websiteSourceCode, setWebsiteSourceCode] = React.useState('');
-  const [websiteRemoveBeforeCharacters, setWebsiteRemoveBeforeCharacters] = React.useState('');
+  const [websiteRemoveBeforeCharacters, setWebsiteRemoveBeforeCharacters] =
+    React.useState('');
   const [websiteRemoveAllCharacters, setWebsiteRemoveAllCharacters] =
     React.useState('');
   const [price, setPrice] = React.useState(0);
+
+  const user = useUser((state) => state.user);
 
   const prices = useStore((state) => state.prices);
   const labels = useStore((state) => state.labels);
@@ -62,14 +66,14 @@ export default function AddWebsite() {
 
   async function handleAddNewProduct() {
     const text = prompt('Add new product');
-    if (text) {
+    if (text && user) {
       setLoading(true);
       try {
         prices.push({
           label: text,
           data: [],
         });
-        await updateFirebasePrices({
+        await updateFirebasePrices(user?.uid, {
           prices,
           labels,
           lastUpdate: new Date().getTime(),
@@ -124,11 +128,13 @@ export default function AddWebsite() {
           tmpPrices[0].data
         );
 
-        await updateFirebasePrices({
-          prices: tmpPrices,
-          labels,
-          lastUpdate: new Date().getTime(),
-        });
+        if (user) {
+          await updateFirebasePrices(user.uid, {
+            prices: tmpPrices,
+            labels,
+            lastUpdate: new Date().getTime(),
+          });
+        }
         setLoading(false);
 
         alert('success');
@@ -213,7 +219,7 @@ export default function AddWebsite() {
             padding: 10,
           }}
         >
-           <div className="fs-5">Removed before characters</div>
+          <div className="fs-5">Removed before characters</div>
           <div
             className="form-control"
             style={{
