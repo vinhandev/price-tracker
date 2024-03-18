@@ -1,8 +1,12 @@
-export { default as Layout } from './Layout';
-export { default as Sidebar } from './Sidebar/Sidebar';
+export * from './atoms/Buttons';
 
-export { default as IconButton } from './Buttons/IconButton/IconButton';
+export { default as Layout } from './layouts/MainLayout/MainLayout';
+export { default as Sidebar } from './molecules/Homepage/Sidebar/Sidebar';
 
-export { default as DarkModeButton } from './DarkModeButton/DarkModeButton';
-export { default as ProductBar } from './ProductBar/ProductBar';
-export { default as Chart } from './Chart/Chart'
+export { default as Logo } from './atoms/Logos/Logo/Logo';
+
+export { default as ProductBar } from './molecules/Homepage/ProductBar/ProductBar';
+export { default as Chart } from './atoms/Chart/Chart';
+
+export { default as FormInput } from './atoms/FormInput/FormInput';
+

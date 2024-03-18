@@ -5,7 +5,7 @@ import {
   formatMoney,
   showSuccess,
 } from '../../utils/helper';
-import { Selector } from '../../components/Inputs/Selector/Selector';
+import { Selector } from '../../components/atoms/Inputs/Selector/Selector';
 import { GroupPriceProps } from '../../types/prices';
 import { useStore } from '../../store/useStore';
 import { updateFirebasePrices } from '../../utils/firebase';

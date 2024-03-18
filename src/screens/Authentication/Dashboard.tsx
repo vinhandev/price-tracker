@@ -1,19 +1,14 @@
 import { Outlet } from 'react-router-dom';
-import Loading from '../../components/Loading/Loading';
 import { useState, useEffect } from 'react';
-import { GroupPriceProps } from '../../types/prices';
-import { updateFirebasePrices, getFirebasePrices } from '../../utils/firebase';
-import {
-  isSameDay,
-  convertStringToNumber,
-  showError,
-} from '../../utils/helper';
-import { useStore } from '../../store/useStore';
-import { Sidebar } from '../../components';
+
 import { Box } from '@mui/material';
-import { auth } from '../../services/firebase';
-import LogoHorizontal from '../../components/LogoHorizontal/LogoHorizontal';
-import { useUser } from '../../store/useUser';
+import { GroupPriceProps } from '@/types';
+import { convertStringToNumber, getFirebasePrices, isSameDay, showError, updateFirebasePrices } from '@/utils';
+import { LogoHorizontal } from '@/components/atoms/Logos';
+import { auth } from '@/services';
+import { useStore, useUser } from '@/store';
+import { Sidebar } from 'react-pro-sidebar';
+import Loading from '../Helper/Loading';
 
 export default function Dashboard() {
   const [count, setCount] = useState(0);

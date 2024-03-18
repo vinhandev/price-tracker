@@ -1,14 +1,14 @@
 import { Chart, DarkModeButton, IconButton, ProductBar } from '../../components';
-import HighLight from '../../components/HighLight/HighLight';
-import Layout from '../../components/Layout';
-import Records from '../../components/Records/Records';
-import Tabs from '../../components/Tabs/Tabs';
+import HighLight from '../../components/atoms/HighLight/HighLight';
+import Layout from '../../components/layouts/MainLayout/MainLayout';
+import Records from '../../components/molecules/Homepage/Records/Records';
+import Tabs from '../../components/molecules/Homepage/Tabs/Tabs';
 import { useMemo } from 'react';
 import { useStore } from '../../store/useStore';
-import HorizonSelector from '../../components/HorizonSelector/HorizonSelector';
+import HorizonSelector from '../../components/molecules/Homepage/HorizonSelector/HorizonSelector';
 import { useEffect } from 'react';
-import ShopRecords from '../../components/Records/ShopRecords';
-import HorizonShopSelector from '../../components/HorizonShopSelector/HorizonSelector';
+import ShopRecords from '../../components/molecules/Homepage/Records/ShopRecords';
+import HorizonShopSelector from '../../components/molecules/Homepage/HorizonShopSelector/HorizonSelector';
 
 export default function Homepage() {
   const setOpenSidebar = useStore((state) => state.setOpenSidebar);
