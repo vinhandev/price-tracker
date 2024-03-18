@@ -1,21 +1,20 @@
-import { Box, Link, Typography } from '@mui/material';
-import FormInput from '../../components/FormInput/FormInput';
 import { useForm } from 'react-hook-form';
-import Logo from '../../components/Logo/Logo';
-import { Button } from '../../components/Buttons';
-import { Colors } from '../../assets/colors';
-import { useSignIn } from '../../hooks';
+import { Box, Link, Typography } from '@mui/material';
+
+import { LoginFormData, useSignIn } from '@/hooks';
+import { Colors } from '@/assets/colors';
+import { Button, FormInput, Logo } from '@/components';
 
 export default function Login() {
   const { mutation } = useSignIn();
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit } = useForm<LoginFormData>({
     defaultValues: {
       username: '',
       password: '',
     },
   });
 
-  const onSubmit = async (data: { username: string; password: string }) => {
+  const onSubmit = async (data: LoginFormData) => {
     await mutation(data.username, data.password);
     window.location.href = '/';
   };

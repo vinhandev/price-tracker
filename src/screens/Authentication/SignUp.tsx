@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
-import FormInput from '../../components/FormInput/FormInput';
+import FormInput from '../../components/atoms/FormInput/FormInput';
 import { useForm } from 'react-hook-form';
-import { Button } from '../../components/Buttons';
+import { Button } from '../../components/atoms/Buttons';
 import { Colors } from '../../assets/colors';
 import { useSignUp } from '../../hooks';
 

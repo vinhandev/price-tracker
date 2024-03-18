@@ -1,7 +1,7 @@
 import { create } from 'zustand';
-import { GroupPriceProps } from '../types/prices';
+import { GroupPriceProps } from '@/types';
 
-export type Store = {
+type Store = {
   isDarkMode: boolean;
   setDarkMode: () => void;
   openSidebar: boolean;

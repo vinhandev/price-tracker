@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { User } from 'firebase/auth';
 
-export type Store = {
+type Store = {
   user: User | null;
   setUser: (user: User) => void;
 };
