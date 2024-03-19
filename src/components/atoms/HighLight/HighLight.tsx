@@ -18,7 +18,7 @@ export default function HighLight({ data }: Props) {
   };
   return (
     <div
-      className="flex-column flex-md-row"
+      className="flex-column "
       style={{
         display: 'flex',
         gap: 10,

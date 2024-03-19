@@ -9,4 +9,3 @@ export { default as ProductBar } from './molecules/Homepage/ProductBar/ProductBa
 export { default as Chart } from './atoms/Chart/Chart';
 
 export { default as FormInput } from './atoms/FormInput/FormInput';
-
