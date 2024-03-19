@@ -1,3 +1,4 @@
+import { Colors } from '@/assets/colors';
 import { useStore } from '../../../store/useStore';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
@@ -9,7 +10,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         width: '100%',
 
         paddingBottom: 20,
-        backgroundColor: isDarkMode ? '#000' : '#ffffff',
+        backgroundColor: isDarkMode ? '#000' : Colors.background2,
         color: isDarkMode ? '#F6F5F5' : '#000000',
       }}
     >

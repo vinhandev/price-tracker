@@ -22,7 +22,8 @@ export const colors = [
 
 export const Colors = {
   background: '#fff',
+  background2: '#F8F8F8',
   text: '#000',
   border: '#eeeeee',
-  primary:'#40679E'
+  primary: '#40679E',
 };

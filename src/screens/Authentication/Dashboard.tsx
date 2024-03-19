@@ -1,23 +1,34 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 import { Box } from '@mui/material';
 import { GroupPriceProps } from '@/types';
-import { convertStringToNumber, getFirebasePrices, isSameDay, showError, updateFirebasePrices } from '@/utils';
+import {
+  convertStringToNumber,
+  getFirebasePrices,
+  isSameDay,
+  showError,
+  updateFirebasePrices,
+} from '@/utils';
 import { LogoHorizontal } from '@/components/atoms/Logos';
 import { auth } from '@/services';
 import { useStore, useUser } from '@/store';
-import { Sidebar } from 'react-pro-sidebar';
 import Loading from '../Helper/Loading';
+import { DarkModeButton, Sidebar } from '@/components';
+import { Colors } from '@/assets/colors';
+import { ContactUs, Header } from '@/components/molecules';
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { pathname } = location;
+
   const [count, setCount] = useState(0);
   const [currentProduct, setCurrentProduct] = useState('');
   const [currentShop, setCurrentShop] = useState('');
 
   const user = useUser((state) => state.user);
 
-  const prices = useStore((state) => state.prices);
   const isDarkMode = useStore((state) => state.isDarkMode);
 
   const setLoading = useStore((state) => state.setLoading);
@@ -146,69 +157,116 @@ export default function Dashboard() {
     }
     getData();
   }, []);
+
+  const NavBarList = [
+    [
+      {
+        label: 'Dashboard',
+        onClick: () => {
+          navigate('/home');
+        },
+        isActive: pathname === '/home',
+      },
+      {
+        label: 'Add Product',
+        onClick: () => {
+          navigate('/add');
+        },
+        isActive: pathname === '/add',
+      },
+    ],
+    [
+      {
+        label: 'Settings',
+        onClick: () => {
+          navigate('/setting');
+        },
+        isActive: pathname === '/setting',
+      },
+      {
+        label: 'Reload',
+        onClick: async () => {
+          if (user) {
+            setLoading(true);
+            const response = await getFirebasePrices(user.uid);
+            if (response.prices && response.labels) {
+              handleFetch(response.prices, response.labels);
+            }
+            setLoading(false);
+          }
+        },
+      },
+      {
+        label: 'Logout',
+        onClick: async () => {
+          await auth.signOut();
+          window.location.reload();
+        },
+      },
+    ],
+  ];
+
   return (
     <div
       style={{
-        backgroundColor: isDarkMode ? '#000' : '#ffffff',
+        position: 'relative',
+        paddingTop: 30,
+        paddingBottom: 30,
+        height: '100vh',
+        overflow: 'hidden',
+        backgroundColor: isDarkMode ? '#000' : Colors.background2,
       }}
       className="d-flex flex-row"
     >
       <div className="d-block d-md-none">
-        <Sidebar />
+        <Sidebar navBarList={NavBarList} />
       </div>
       <div
-        className="d-none d-md-block"
+        className="d-none d-md-flex"
         style={{
-          paddingLeft: 20,
-          paddingRight: 20,
-          borderRight: '1px solid #ccc',
-          height: '100vh',
+          top: 0,
+          position: 'sticky',
+
           width: '20%',
+          justifyContent: 'space-between',
+          flexDirection: 'column',
         }}
       >
-        <Box className="d-none d-md-block">
+        <Box
+          sx={{
+            width: 200,
+            paddingLeft: '30px',
+          }}
+          className="d-none d-md-block"
+        >
           <LogoHorizontal />
         </Box>
-        <Sidebar />
-        <div
-          style={{
-            paddingTop: 20,
+        <Box
+          sx={{
+            paddingTop: 3,
+            flex: 1,
           }}
         >
-          <button
-            disabled={!prices}
-            onClick={async () => {
-              if (user) {
-                const response = await getFirebasePrices(user.uid);
-                if (response.prices && response.labels) {
-                  handleFetch(response.prices, response.labels);
-                }
-              }
-            }}
-            className="btn btn-primary"
-          >
-            Reload database
-          </button>
-        </div>
-        <div
-          style={{
-            paddingTop: 20,
-          }}
-        >
-          <button
-            disabled={!prices}
-            onClick={async () => {
-              await auth.signOut();
-              window.location.reload();
-            }}
-            className="btn btn-danger"
-          >
-            Sign Out
-          </button>
-        </div>
+          <Sidebar navBarList={NavBarList} />
+        </Box>
+        <Box sx={{ paddingLeft: '30px' }}>
+          <DarkModeButton />
+        </Box>
+        <Box sx={{ paddingX: '30px', marginTop: '20px' }}>
+          <ContactUs />
+        </Box>
       </div>
 
-      <Outlet />
+      <Box
+        sx={{
+          height: '100vh',
+          overflow: 'hidden',
+          flex: 1,
+        }}
+      >
+        <Header/>
+        <Outlet />
+      </Box>
 
       <Loading
         count={count}

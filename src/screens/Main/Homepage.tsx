@@ -1,4 +1,9 @@
-import { Chart, DarkModeButton, IconButton, ProductBar } from '../../components';
+import {
+  Chart,
+  DarkModeButton,
+  IconButton,
+  ProductBar,
+} from '../../components';
 import HighLight from '../../components/atoms/HighLight/HighLight';
 import Layout from '../../components/layouts/MainLayout/MainLayout';
 import Records from '../../components/molecules/Homepage/Records/Records';
@@ -9,11 +14,10 @@ import HorizonSelector from '../../components/molecules/Homepage/HorizonSelector
 import { useEffect } from 'react';
 import ShopRecords from '../../components/molecules/Homepage/Records/ShopRecords';
 import HorizonShopSelector from '../../components/molecules/Homepage/HorizonShopSelector/HorizonSelector';
+import { Box } from '@mui/material';
 
 export default function Homepage() {
   const setOpenSidebar = useStore((state) => state.setOpenSidebar);
-
-  const isDarkMode = useStore((state) => state.isDarkMode);
 
   const prices = useStore((state) => state.prices);
   const selectedProduct = useStore((state) => state.selectedProduct);
@@ -139,57 +143,46 @@ export default function Homepage() {
 
   return (
     <Layout>
-      <div>
-        <div
-          className="d-flex d-md-none"
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-
-            padding: 20,
-
-            position: 'fixed',
-            backgroundColor: isDarkMode ? 'black' : 'white',
-            width: '100%',
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+        }}
+      >
+        <Box
+          sx={{
+            flexGrow: 1,
           }}
         >
-          <IconButton onClick={setOpenSidebar} variant="menu" />
-
           <div
+            className="d-none d-md-block"
             style={{
-              width: '75%',
+              fontWeight: 'bold',
+              paddingBottom: 5,
+              paddingLeft: 20,
             }}
           >
-            <ProductBar />
+            Graphs
           </div>
-          <DarkModeButton />
-        </div>
-        <div
-          style={{
-            padding: 20,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-          className="d-none d-md-flex"
-        >
-          <div>
-            <h3 className="text">Price Tracker</h3>
+          <Chart />
+          <div className="d-none d-md-block">
+            <div
+              style={{
+                padding: 20,
+              }}
+            >
+              <div
+                style={{
+                  fontWeight: 'bold',
+                }}
+              >
+                Records
+              </div>
+              <ShopRecords />
+            </div>
           </div>
-          <div>
-            <DarkModeButton />
-          </div>
-        </div>
-        <div className="d-none d-md-block">
-          <HorizonSelector />
-        </div>
-        <div
-          style={{
-            height: '100%',
-            flex: 1,
-          }}
-        >
+        </Box>
+        <div>
           <div
             style={{
               padding: 20,
@@ -206,48 +199,6 @@ export default function Homepage() {
             </div>
 
             <HighLight data={highlightData} />
-          </div>
-          <div
-            className="d-none d-md-block"
-            style={{
-              fontWeight: 'bold',
-              paddingBottom: 5,
-              paddingLeft: 20,
-            }}
-          >
-            Graphs
-          </div>
-          <Chart />
-          <div className="d-block d-md-none">
-            <Tabs
-              data={[
-                {
-                  label: 'Highlight',
-                  tab: <HighLight data={highlightData} />,
-                },
-                {
-                  label: 'Records',
-                  tab: <Records />,
-                },
-              ]}
-            />
-          </div>
-          <div className="d-none d-md-block">
-            <HorizonShopSelector />
-            <div
-              style={{
-                padding: 20,
-              }}
-            >
-              <div
-                style={{
-                  fontWeight: 'bold',
-                }}
-              >
-                Records
-              </div>
-              <ShopRecords />
-            </div>
           </div>
         </div>
       </div>
