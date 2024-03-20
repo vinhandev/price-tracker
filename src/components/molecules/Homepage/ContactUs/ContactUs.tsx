@@ -1,7 +1,8 @@
-import { Colors } from '@/assets/colors';
+import { useColors } from '@/hooks';
 import { useUser } from '@/store';
 import { Box, Button, Typography } from '@mui/material';
 export default function ContactUs() {
+  const colors = useColors();
   const user = useUser((state) => state.user);
   const subject = `[price-tracker] User ${user?.email} need a support`;
   const body = ``;
@@ -24,7 +25,7 @@ export default function ContactUs() {
       <Box
         sx={{
           borderRadius: 3,
-          background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 30%, ${Colors.text} 100%)`,
+          background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 30%, ${colors.text} 100%)`,
           height: '100%',
           padding: 4,
 
@@ -38,8 +39,7 @@ export default function ContactUs() {
           sx={{
             color: 'white',
             fontWeight: '700',
-            fontSize: 40,
-            lineHeight: '50px',
+            fontSize: '2.5vw',
           }}
         >
           NEED SUPPORT?

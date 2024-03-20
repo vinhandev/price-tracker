@@ -1,16 +1,16 @@
 import { useForm } from 'react-hook-form';
 import { Box, Link, Typography } from '@mui/material';
 
-import { LoginFormData, useSignIn } from '@/hooks';
-import { Colors } from '@/assets/colors';
+import { LoginFormData, useColors, useSignIn } from '@/hooks';
 import { Button, FormInput, Logo } from '@/components';
 
 export default function Login() {
+  const colors = useColors();
   const { mutation } = useSignIn();
   const { control, handleSubmit } = useForm<LoginFormData>({
     defaultValues: {
-      username: '',
-      password: '',
+      username: 'vinhan.dev@gmail.com',
+      password: '123456',
     },
   });
 
@@ -29,7 +29,7 @@ export default function Login() {
 
         justifyContent: 'center',
         alignItems: 'center',
-        background: `linear-gradient(0deg, ${Colors.primary}55 65%, white 100%)`,
+        background: `linear-gradient(0deg, ${colors.primary}55 65%, white 100%)`,
       }}
     >
       <Box
@@ -70,7 +70,7 @@ export default function Login() {
             xs: 6,
             md: 8,
           },
-          background: `linear-gradient(0deg, white 65%, ${Colors.primary}88 100%)`,
+          background: `linear-gradient(0deg, white 65%, ${colors.primary}88 100%)`,
         }}
       >
         <Box
@@ -150,7 +150,7 @@ export default function Login() {
               sx={{
                 cursor: 'pointer',
                 fontWeight: '600',
-                color: Colors.primary,
+                color: colors.primary,
                 textDecorationLine: 'none',
                 ':hover': {
                   textDecorationLine: 'underline',

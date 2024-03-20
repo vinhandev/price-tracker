@@ -14,11 +14,12 @@ import { LogoHorizontal } from '@/components/atoms/Logos';
 import { auth } from '@/services';
 import { useStore, useUser } from '@/store';
 import Loading from '../Helper/Loading';
-import { DarkModeButton, Sidebar } from '@/components';
-import { Colors } from '@/assets/colors';
-import { ContactUs, Header } from '@/components/molecules';
+import { Sidebar } from '@/components';
+import { Header } from '@/components/molecules';
+import { useColors } from '@/hooks';
 
 export default function Dashboard() {
+  const colors = useColors();
   const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = location;
@@ -28,8 +29,6 @@ export default function Dashboard() {
   const [currentShop, setCurrentShop] = useState('');
 
   const user = useUser((state) => state.user);
-
-  const isDarkMode = useStore((state) => state.isDarkMode);
 
   const setLoading = useStore((state) => state.setLoading);
   const initData = useStore((state) => state.initData);
@@ -214,7 +213,7 @@ export default function Dashboard() {
         paddingBottom: 30,
         height: '100vh',
         overflow: 'hidden',
-        backgroundColor: isDarkMode ? '#000' : Colors.background2,
+        backgroundColor: colors.background2,
       }}
       className="d-flex flex-row"
     >
@@ -224,9 +223,6 @@ export default function Dashboard() {
       <div
         className="d-none d-md-flex"
         style={{
-          top: 0,
-          position: 'sticky',
-
           width: '20%',
           justifyContent: 'space-between',
           flexDirection: 'column',
@@ -245,26 +241,22 @@ export default function Dashboard() {
           sx={{
             paddingTop: 3,
             flex: 1,
+            background:colors.background2,
           }}
         >
           <Sidebar navBarList={NavBarList} />
-        </Box>
-        <Box sx={{ paddingLeft: '30px' }}>
-          <DarkModeButton />
-        </Box>
-        <Box sx={{ paddingX: '30px', marginTop: '20px' }}>
-          <ContactUs />
         </Box>
       </div>
 
       <Box
         sx={{
-          height: '100vh',
-          overflow: 'hidden',
+          display: 'flex',
           flex: 1,
+          flexDirection: 'column',
+          overflow: 'auto',
         }}
       >
-        <Header/>
+        <Header />
         <Outlet />
       </Box>
 

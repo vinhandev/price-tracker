@@ -1,7 +1,8 @@
 import { ButtonProps, Button as RButton } from '@mui/material';
-import { Colors } from '../../../../assets/colors';
+import { useColors } from '@/hooks';
 
 export default function Button(props: ButtonProps) {
+  const colors = useColors();
   return (
     <RButton
       {...props}
@@ -9,11 +10,11 @@ export default function Button(props: ButtonProps) {
       sx={{
         paddingY: 2,
         paddingX: 4,
-        background: Colors.primary,
-        color: 'white',
+        background: colors.background,
+        color: colors.text2,
         fontSize: 14,
         ':hover': {
-          color: Colors.primary,
+          color: colors.primary,
         },
       }}
     />

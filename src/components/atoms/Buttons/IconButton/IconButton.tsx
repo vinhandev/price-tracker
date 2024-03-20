@@ -1,11 +1,12 @@
-import { Colors } from '@/assets/colors';
 import Icon, { IconVariants } from '../../Icon/Icon';
 import './IconButton.css';
+import { useColors } from '@/hooks';
 type Props = {
   onClick?: () => void;
   variant: IconVariants;
 };
 export default function IconButton({ variant, onClick }: Props) {
+  const colors = useColors();
   return (
     <div
       onClick={onClick}
@@ -20,7 +21,7 @@ export default function IconButton({ variant, onClick }: Props) {
         alignItems: 'center',
 
         border: 'solid 1px',
-        borderColor: Colors.border,
+        borderColor: colors.border,
         borderRadius: 10,
       }}
     >

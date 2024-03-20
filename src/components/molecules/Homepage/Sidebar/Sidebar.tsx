@@ -5,8 +5,10 @@ import {
   sidebarClasses,
 } from 'react-pro-sidebar';
 import { useStore } from '../../../../store/useStore';
-import { Colors } from '@/assets/colors';
 import { Box } from '@mui/material';
+import { DarkModeButton } from '@/components';
+import { ContactUs } from '../..';
+import { useColors } from '@/hooks';
 
 type Props = {
   navBarList: {
@@ -16,17 +18,38 @@ type Props = {
   }[][];
 };
 export default function Sidebar({ navBarList }: Props) {
+  const colors = useColors();
   const isDarkMode = useStore((state) => state.isDarkMode);
   const openSidebar = useStore((state) => state.openSidebar);
   const setOpenSidebar = useStore((state) => state.setOpenSidebar);
   return (
-    <div>
+    <Box
+      sx={{
+        display: 'flex',
+        flex: 1,
+        height: '100%',
+        background: colors.background2,
+      }}
+    >
       <RNSidebar
         rootStyles={{
-          [`.${sidebarClasses.container}`]: {
-            color: isDarkMode ? 'white' : 'black',
-          },
+          height: '100%',
+          width: '100%',
+          paddingRight: '30px',
+          background: colors.background2,
+
           borderWidth: 0,
+
+          [`.${sidebarClasses.container}`]: {
+            margin: 0,
+            padding: 0,
+
+            color: colors.text,
+
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          },
         }}
         toggled={openSidebar}
         breakPoint="md"
@@ -35,6 +58,7 @@ export default function Sidebar({ navBarList }: Props) {
         <Menu
           menuItemStyles={{
             button: {
+              background: colors.background2,
               marginLeft: 30,
               paddingLeft: 0,
               paddingRight: 30,
@@ -46,52 +70,68 @@ export default function Sidebar({ navBarList }: Props) {
               transition: 'all 0.3s ease',
 
               [`&.ps-active`]: {
-                color: Colors.text,
+                color: colors.text,
                 fontWeight: '500',
-                borderBottom: '2px solid ' + Colors.primary,
+                borderBottom: '2px solid ' + colors.primary,
               },
               [`&.ps-active:hover`]: {
-                color: Colors.text,
-                background: Colors.background2,
+                color: colors.text,
+                background: colors.background2,
               },
               [`&:hover`]: {
                 color: isDarkMode ? 'white' : 'black',
-                background: Colors.background2,
-                borderBottom: '2px solid ' + Colors.primary,
+                background: colors.background2,
+                borderBottom: '2px solid ' + colors.primary,
               },
             },
           }}
         >
-          {navBarList.map((item, index) => {
-            return (
-              <div>
-                {index !== 0 && (
-                  <Box
-                    sx={{
-                      marginLeft: '30px',
-                      height: '1px',
-                      width: '100%',
-                      backgroundColor: Colors.border,
-                      marginY: 1,
-                    }}
-                  />
-                )}
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            {navBarList.map((item, index) => {
+              return (
+                <div>
+                  {index !== 0 && (
+                    <Box
+                      sx={{
+                        marginLeft: '30px',
+                        height: '1px',
+                        width: '100%',
+                        backgroundColor: colors.border,
+                        marginY: 1,
+                      }}
+                    />
+                  )}
 
-                {item.map((item) => {
-                  return (
-                    <MenuItem
-                      active={item.isActive}
-                      component={<div onClick={item.onClick} />}
-                    >
-                      {item.label}
-                    </MenuItem>
-                  );
-                })}
-              </div>
-            );
-          })}
+                  {item.map((item) => {
+                    return (
+                      <MenuItem
+                        active={item.isActive}
+                        component={<div onClick={item.onClick} />}
+                      >
+                        {item.label}
+                      </MenuItem>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </Box>
         </Menu>
+        <Box>
+          <Box sx={{ paddingLeft: '30px' }}>
+            <DarkModeButton key={new Date().toString()} />
+          </Box>
+          <Box sx={{ paddingLeft: '30px', paddingTop: '20px' }}>
+            <ContactUs />
+          </Box>
+        </Box>
       </RNSidebar>
-    </div>
+    </Box>
   );
 }
