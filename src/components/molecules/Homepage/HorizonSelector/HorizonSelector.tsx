@@ -21,7 +21,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import { useNavigate } from 'react-router-dom';
+import { useColors } from '@/hooks';
 export default function HorizonSelector() {
+  const colors = useColors();
   const navigation = useNavigate();
   const [tempSelectedShop, setTempSelectedShop] = React.useState('');
 
@@ -226,6 +228,7 @@ export default function HorizonSelector() {
               noWrap={false}
               onClick={handleOpenLink}
               sx={{
+                color: colors.text,
                 lineHeight: '20px',
                 fontSize: 10,
                 fontWeight: '300',
@@ -242,6 +245,7 @@ export default function HorizonSelector() {
               variant="h6"
               onClick={handleOpenLink}
               sx={{
+                color: colors.text,
                 lineHeight: '20px',
                 cursor: 'pointer',
                 '&:hover': {
@@ -253,8 +257,9 @@ export default function HorizonSelector() {
             </Typography>
             <Typography
               noWrap={false}
-              variant='body1'
+              variant="body1"
               sx={{
+                color: colors.text,
                 lineHeight: '20px',
                 fontSize: 10,
                 fontWeight: '300',
@@ -276,12 +281,13 @@ export default function HorizonSelector() {
         >
           <Button
             onClick={handleChangeShopName}
-            sx={{ flex: 1, flexDirection: 'column' }}
+            sx={{ flex: 1, flexDirection: 'column', color: colors.text }}
           >
             <DriveFileRenameOutlineIcon />
             <Typography
               sx={{
                 fontSize: 10,
+                color: colors.text,
               }}
             >
               Edit Name
@@ -291,11 +297,12 @@ export default function HorizonSelector() {
             onClick={() => {
               navigation('/update');
             }}
-            sx={{ flex: 1, flexDirection: 'column' }}
+            sx={{ flex: 1, flexDirection: 'column', color: colors.text }}
           >
             <EditIcon />
             <Typography
               sx={{
+                color: colors.text,
                 fontSize: 10,
               }}
             >
@@ -304,7 +311,7 @@ export default function HorizonSelector() {
           </Button>
           <Button
             onClick={handleDelete}
-            sx={{ flex: 1, flexDirection: 'column' }}
+            sx={{ flex: 1, flexDirection: 'column', color: colors.text }}
           >
             <DeleteIcon />
             <Typography
@@ -322,11 +329,22 @@ export default function HorizonSelector() {
               fontSize: 14,
               fontWeight: '300',
               lineHeight: '20px',
+              color: colors.text,
             }}
           >
             Product
           </Typography>
           <Select
+            sx={{
+              color: colors.text,
+              '.MuiOutlinedInput-notchedOutline': {
+                borderColor: 'rgba(228, 219, 233, 0.25)',
+              },
+              '.MuiSelect-icon': {
+                color: colors.text,
+              },
+              borderColor: colors.text,
+            }}
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={selectedProduct}
@@ -350,6 +368,7 @@ export default function HorizonSelector() {
               fontSize: 14,
               fontWeight: '300',
               lineHeight: '20px',
+              color: colors.text,
             }}
           >
             Shop
@@ -359,6 +378,16 @@ export default function HorizonSelector() {
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={tempSelectedShop}
+            sx={{
+              color: colors.text,
+              '.MuiOutlinedInput-notchedOutline': {
+                borderColor: 'rgba(228, 219, 233, 0.25)',
+              },
+              '.MuiSelect-icon': {
+                color: colors.text,
+              },
+              borderColor: colors.text,
+            }}
           >
             {productSelectedData?.data?.map((item) => {
               return (

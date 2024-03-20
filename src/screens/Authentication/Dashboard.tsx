@@ -206,26 +206,33 @@ export default function Dashboard() {
   ];
 
   return (
-    <div
+    <Box
       style={{
+        display: 'flex',
+
         position: 'relative',
+
+        width: '100%',
+        height: '100vh',
+
         paddingTop: 30,
         paddingBottom: 30,
-        height: '100vh',
+
         overflow: 'hidden',
+
         backgroundColor: colors.background2,
       }}
-      className="d-flex flex-row"
     >
-      <div className="d-block d-md-none">
-        <Sidebar navBarList={NavBarList} />
-      </div>
-      <div
-        className="d-none d-md-flex"
+      <Box
         style={{
+          display: 'flex',
           width: '20%',
+
           justifyContent: 'space-between',
           flexDirection: 'column',
+
+          height: '100%',
+          overflow: 'hidden',
         }}
       >
         <Box
@@ -233,7 +240,6 @@ export default function Dashboard() {
             width: 200,
             paddingLeft: '30px',
           }}
-          className="d-none d-md-block"
         >
           <LogoHorizontal />
         </Box>
@@ -241,30 +247,29 @@ export default function Dashboard() {
           sx={{
             paddingTop: 3,
             flex: 1,
-            background:colors.background2,
+            background: colors.background2,
           }}
         >
           <Sidebar navBarList={NavBarList} />
         </Box>
-      </div>
+      </Box>
 
       <Box
         sx={{
           display: 'flex',
-          flex: 1,
           flexDirection: 'column',
-          overflow: 'auto',
+          flexGrow: 1,
         }}
       >
         <Header />
         <Outlet />
       </Box>
 
-      <Loading
+      {/* <Loading
         count={count}
         currentProduct={currentProduct}
         currentShop={currentShop}
-      />
-    </div>
+      /> */}
+    </Box>
   );
 }

@@ -27,6 +27,7 @@ export default function Tab({ title, children, noPadding = false }: Props) {
           paddingTop: noPadding ? '20px' : 0,
           paddingX: noPadding ? '20px' : 0,
           fontWeight: '700',
+          color:colors.text
         }}
       >
         {title}

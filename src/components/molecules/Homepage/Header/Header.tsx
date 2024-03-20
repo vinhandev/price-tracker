@@ -1,8 +1,10 @@
 import { Box, Typography } from '@mui/material';
 import SearchBar from './components/SearchBar/SearchBar';
 import { useUser } from '@/store';
+import { useColors } from '@/hooks';
 
 export default function Header() {
+  const colors = useColors();
   const user = useUser((state) => state.user);
 
   return (
@@ -28,6 +30,7 @@ export default function Header() {
         <Typography
           sx={{
             fontSize: 14,
+            color: colors.text,
             fontWeight: '300',
           }}
         >
