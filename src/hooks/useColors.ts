@@ -8,7 +8,7 @@ export function useColors() {
     background2: isDarkMode ? Colors.black : Colors.white2,
     text: isDarkMode ? Colors.white : Colors.black,
     text2: isDarkMode ? Colors.black : Colors.white,
-    primary: Colors.blue,
+    primary: isDarkMode ? Colors.blue2 : Colors.blue,
     border: Colors.grey,
   };
 }

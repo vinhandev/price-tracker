@@ -27,4 +27,5 @@ export const Colors = {
   black2:'#191919',
   grey: '#eeeeee',
   blue: '#40679E',
+  blue2: '#BAD7E9',
 };

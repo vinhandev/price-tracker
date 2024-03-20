@@ -37,7 +37,7 @@ export default function ContactUs() {
       >
         <Typography
           sx={{
-            color: 'white',
+            color: colors.text2,
             fontWeight: '700',
             fontSize: '2.5vw',
           }}
@@ -46,8 +46,8 @@ export default function ContactUs() {
         </Typography>
         <Button
           sx={{
-            background: `#FFFFFF55`,
-            backdropFilter: 'blur(5px)',
+            background: colors.primary,
+            color: colors.text2,
             transition: 'all 0.5s ease',
           }}
           variant="contained"

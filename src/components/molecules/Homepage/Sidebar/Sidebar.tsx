@@ -35,12 +35,13 @@ export default function Sidebar({ navBarList }: Props) {
         rootStyles={{
           height: '100%',
           width: '100%',
-          paddingRight: '30px',
           background: colors.background2,
 
           borderWidth: 0,
 
           [`.${sidebarClasses.container}`]: {
+            background: colors.background2,
+
             margin: 0,
             padding: 0,
 
@@ -55,80 +56,84 @@ export default function Sidebar({ navBarList }: Props) {
         breakPoint="md"
         onBackdropClick={() => setOpenSidebar()}
       >
-        <Menu
-          menuItemStyles={{
-            button: {
-              background: colors.background2,
-              marginLeft: 30,
-              paddingLeft: 0,
-              paddingRight: 30,
-              height: 40,
-              marginBottom: 10,
-
-              fontWeight: '300',
-
-              transition: 'all 0.3s ease',
-
-              [`&.ps-active`]: {
-                color: colors.text,
-                fontWeight: '500',
-                borderBottom: '2px solid ' + colors.primary,
-              },
-              [`&.ps-active:hover`]: {
-                color: colors.text,
-                background: colors.background2,
-              },
-              [`&:hover`]: {
-                color: isDarkMode ? 'white' : 'black',
-                background: colors.background2,
-                borderBottom: '2px solid ' + colors.primary,
-              },
-            },
+        <Box
+          sx={{
+            background: colors.background2,
+            paddingRight: '30px',
           }}
         >
-          <Box
-            sx={{
-              flexGrow: 1,
-              display: 'flex',
-              flexDirection: 'column',
+          <Menu
+            menuItemStyles={{
+              button: {
+                background: colors.background2,
+                marginLeft: 30,
+                paddingLeft: 0,
+                paddingRight: 30,
+                height: 40,
+                marginBottom: 10,
+
+                fontWeight: '300',
+
+                [`&.ps-active`]: {
+                  color: colors.text,
+                  fontWeight: '500',
+                  borderBottom: '2px solid ' + colors.primary,
+                },
+                [`&.ps-active:hover`]: {
+                  color: colors.text,
+                  background: colors.background2,
+                },
+                [`&:hover`]: {
+                  color: isDarkMode ? 'white' : 'black',
+                  background: colors.background2,
+                  borderBottom: '2px solid ' + colors.primary,
+                },
+              },
             }}
           >
-            {navBarList.map((item, index) => {
-              return (
-                <div>
-                  {index !== 0 && (
-                    <Box
-                      sx={{
-                        marginLeft: '30px',
-                        height: '1px',
-                        width: '100%',
-                        backgroundColor: colors.border,
-                        marginY: 1,
-                      }}
-                    />
-                  )}
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              {navBarList.map((item, index) => {
+                return (
+                  <div>
+                    {index !== 0 && (
+                      <Box
+                        sx={{
+                          marginLeft: '30px',
+                          height: '1px',
+                          backgroundColor: colors.border,
+                          marginY: 1,
+                        }}
+                      />
+                    )}
 
-                  {item.map((item) => {
-                    return (
-                      <MenuItem
-                        active={item.isActive}
-                        component={<div onClick={item.onClick} />}
-                      >
-                        {item.label}
-                      </MenuItem>
-                    );
-                  })}
-                </div>
-              );
-            })}
-          </Box>
-        </Menu>
-        <Box>
-          <Box sx={{ paddingLeft: '30px' }}>
-            <DarkModeButton key={new Date().toString()} />
-          </Box>
-          <Box sx={{ paddingLeft: '30px', paddingTop: '20px' }}>
-            <ContactUs />
+                    {item.map((item) => {
+                      return (
+                        <MenuItem
+                          active={item.isActive}
+                          component={<div onClick={item.onClick} />}
+                        >
+                          {item.label}
+                        </MenuItem>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+            </Box>
+          </Menu>
+          <Box>
+            <Box sx={{ paddingLeft: '30px' }}>
+              <DarkModeButton key={new Date().toString()} />
+            </Box>
+            <Box sx={{ paddingLeft: '30px', paddingTop: '20px' }}>
+              <ContactUs />
+            </Box>
           </Box>
         </Box>
       </RNSidebar>

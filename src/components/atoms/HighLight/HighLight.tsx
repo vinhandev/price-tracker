@@ -34,6 +34,8 @@ export default function HighLight({ data }: Props) {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'flex-end',
+
+                overflow:'hidden'
               }}
             >
               <Box
@@ -52,6 +54,7 @@ export default function HighLight({ data }: Props) {
                 <Typography
                   style={{
                     fontWeight: '700',
+                    color: colors.text,
                   }}
                 >
                   {item.label}
@@ -60,6 +63,7 @@ export default function HighLight({ data }: Props) {
                   style={{
                     fontSize: 25,
                     fontWeight: 'bold',
+                    color: colors.text,
                   }}
                 >
                   {formatMoney(item.price)}
@@ -73,7 +77,7 @@ export default function HighLight({ data }: Props) {
                   sx={{
                     fontSize: 15,
                     fontWeight: 'bold',
-                    color:colors.primary,
+                    color: colors.primary,
                     cursor: 'pointer',
                     ':hover': {
                       textDecoration: 'underline',
