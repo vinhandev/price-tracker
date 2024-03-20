@@ -1,60 +1,103 @@
-import { useStore } from '../../../store/useStore';
-import { formatMoney } from '../../../utils/helper';
+import { Box, Typography } from '@mui/material';
+import { HightLightType } from '@/screens/Main/Homepage';
+import HighLightChart from '../HighLightChart/HighLightChart';
+import { formatMoney } from '@/utils';
+import { useColors } from '@/hooks';
 
 type Props = {
-  data: {
-    label: string;
-    price: number;
-    where: string;
-    link: string;
-  }[];
+  data: HightLightType[];
 };
 export default function HighLight({ data }: Props) {
-  const isDarkMode = useStore((state) => state.isDarkMode);
-  const onPress = (link: string) => {
-    if (link) {
-      window.open(link, '_blank');
-    }
-  };
+  const colors = useColors();
   return (
     <div
-      className="flex-column "
       style={{
         display: 'flex',
-        gap: 10,
+        flexDirection: 'column',
+        gap: '5px',
+        flex: 1,
       }}
     >
       {data.map((item) => {
         return (
-          <div
-            key={item.label}
-            onClick={() => onPress(item.link)}
-            style={{
-              flexGrow: 1,
-              borderRadius: 10,
-              background: isDarkMode ? '#191919' : '#EEEEEE',
-              padding: 20,
-            }}
-          >
-            <div>{item.label}</div>
-            <div
-              style={{
-                fontSize: 30,
-                fontWeight: 'bold',
+          <Box sx={{ width: '100%', flex: 1, display: 'flex' }}>
+            <Box
+              sx={{
+                background: colors.background,
+                borderRadius: 2,
+
+                flex: 1,
+                width: '100%',
+
+                position: 'relative',
+                height: '120px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-end',
               }}
             >
-              {formatMoney(item.price)}
-            </div>
-            <div
-              style={{
-                fontSize: 15,
-                fontWeight: 'bold',
-                color: '#7EB9FF',
-              }}
-            >
-              {item.where}
-            </div>
-          </div>
+              <Box
+                sx={{
+                  position: 'absolute',
+                  right: 0,
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  zIndex: 1,
+                  borderRadius: 1,
+                  // backdropFilter: 'blur(5px)',
+                  padding: '20px',
+                }}
+              >
+                <Typography
+                  style={{
+                    fontWeight: '700',
+                  }}
+                >
+                  {item.label}
+                </Typography>
+                <Typography
+                  style={{
+                    fontSize: 25,
+                    fontWeight: 'bold',
+                  }}
+                >
+                  {formatMoney(item.price)}
+                </Typography>
+                <Typography
+                  onClick={() => {
+                    if (item.link) {
+                      window.open(item.link);
+                    }
+                  }}
+                  sx={{
+                    fontSize: 15,
+                    fontWeight: 'bold',
+                    color:colors.primary,
+                    cursor: 'pointer',
+                    ':hover': {
+                      textDecoration: 'underline',
+                    },
+
+                    display: '-webkit-box',
+                    overflow: 'hidden',
+                    WebkitBoxOrient: 'vertical',
+                    WebkitLineClamp: 1,
+                  }}
+                >
+                  {item.name}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  height: '100%',
+                  width: '100%',
+                }}
+              >
+                <HighLightChart colors={[item.color]} data={item.data} />
+              </Box>
+            </Box>
+          </Box>
         );
       })}
     </div>

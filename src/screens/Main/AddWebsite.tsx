@@ -157,7 +157,8 @@ export default function AddWebsite() {
     <div
       style={{
         padding: 20,
-        overflow: 'hidden',
+        overflow: 'auto',
+        width:600
       }}
       className="container-fluid"
     >

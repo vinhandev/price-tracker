@@ -1,20 +1,23 @@
-import { Colors } from '@/assets/colors';
-import { useStore } from '../../../store/useStore';
+import { Box } from '@mui/material';
+import { useColors } from '@/hooks';
 
-export default function MainLayout({ children }: { children: React.ReactNode }) {
-  const isDarkMode = useStore((state) => state.isDarkMode);
+export default function MainLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const colors = useColors();
   return (
-    <div
+    <Box
       style={{
-        height: '100%',
+        display: 'flex',
+        flex: 1,
         width: '100%',
-
-        paddingBottom: 20,
-        backgroundColor: isDarkMode ? '#000' : Colors.background2,
-        color: isDarkMode ? '#F6F5F5' : '#000000',
+        backgroundColor:colors.background,
+        color: colors.text,
       }}
     >
       {children}
-    </div>
+    </Box>
   );
 }

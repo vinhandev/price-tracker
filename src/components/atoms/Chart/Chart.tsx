@@ -35,7 +35,8 @@ export default function Chart() {
       <div
         style={{
           width: '100%',
-          height: 500,
+          height: '100%',
+
           justifyContent: 'center',
           alignItems: 'center',
           display: 'flex',
@@ -49,13 +50,23 @@ export default function Chart() {
     <div
       style={{
         width: '100%',
-        height: 500,
+        height: '90%',
         paddingLeft: 20,
         paddingRight: 20,
       }}
     >
       <Line
         options={{
+          plugins: {
+            legend: {
+              display: false,
+            },
+          },
+          elements: {
+            line: {
+              tension: 0.4,
+            },
+          },
           responsive: true,
           maintainAspectRatio: false,
           onClick: (_, elements) => {

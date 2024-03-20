@@ -21,9 +21,10 @@ export const colors = [
 ];
 
 export const Colors = {
-  background: '#fff',
-  background2: '#F8F8F8',
-  text: '#000',
-  border: '#eeeeee',
-  primary: '#40679E',
+  white: '#fff',
+  white2: '#F8F8F8',
+  black: '#000',
+  black2:'#191919',
+  grey: '#eeeeee',
+  blue: '#40679E',
 };

@@ -34,7 +34,6 @@ export default function Header() {
           {user?.email}
         </Typography>
         <Box
-          className="shadow"
           sx={{
             borderRadius: 1000,
             width: '50px',
