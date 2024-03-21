@@ -14,8 +14,8 @@ export default function HighLight({ data }: Props) {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '5px',
         flex: 1,
+        gap: '5px',
       }}
     >
       {data.map((item) => {

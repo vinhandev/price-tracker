@@ -1,4 +1,4 @@
-export const colors = [
+export const chartColors = [
   '#FC6736',
   '#EA906C',
   '#C2D9FF',

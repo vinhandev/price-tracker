@@ -5,7 +5,7 @@ import {
   sidebarClasses,
 } from 'react-pro-sidebar';
 import { useStore } from '../../../../store/useStore';
-import { Box } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { DarkModeButton } from '@/components';
 import { ContactUs } from '../..';
 import { useColors } from '@/hooks';
@@ -46,10 +46,6 @@ export default function Sidebar({ navBarList }: Props) {
             padding: 0,
 
             color: colors.text,
-
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
           },
         }}
         toggled={openSidebar}
@@ -58,15 +54,20 @@ export default function Sidebar({ navBarList }: Props) {
       >
         <Box
           sx={{
+            height: '100%',
+
             background: colors.background2,
             paddingRight: '30px',
+
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
           }}
         >
           <Menu
             menuItemStyles={{
               button: {
                 background: colors.background2,
-                marginLeft: 30,
                 paddingLeft: 0,
                 paddingRight: 30,
                 height: 40,
@@ -104,7 +105,6 @@ export default function Sidebar({ navBarList }: Props) {
                     {index !== 0 && (
                       <Box
                         sx={{
-                          marginLeft: '30px',
                           height: '1px',
                           backgroundColor: colors.border,
                           marginY: 1,
@@ -127,14 +127,18 @@ export default function Sidebar({ navBarList }: Props) {
               })}
             </Box>
           </Menu>
-          <Box>
-            <Box sx={{ paddingLeft: '30px' }}>
+          <Grid sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px',
+          }}>
+            <Box>
               <DarkModeButton key={new Date().toString()} />
             </Box>
-            <Box sx={{ paddingLeft: '30px', paddingTop: '20px' }}>
+            <Box>
               <ContactUs />
             </Box>
-          </Box>
+          </Grid>
         </Box>
       </RNSidebar>
     </Box>

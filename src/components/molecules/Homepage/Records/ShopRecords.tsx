@@ -1,6 +1,17 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useStore } from '../../../../store/useStore';
 import { formatMoney } from '../../../../utils/helper';
+import {
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Box,
+  TablePagination,
+} from '@mui/material';
+import { useColors } from '@/hooks';
 
 type RecordType = {
   label: string;
@@ -9,8 +20,10 @@ type RecordType = {
 };
 
 export default function ShopRecords() {
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const colors = useColors();
   const prices = useStore((state) => state.prices);
-  const isDarkMode = useStore((state) => state.isDarkMode);
   const selectedProduct = useStore((state) => state.selectedProduct);
   const selectedShop = useStore((state) => state.selectedShop);
 
@@ -34,117 +47,90 @@ export default function ShopRecords() {
     return tmpList.sort((a, b) => b.date - a.date);
   }, [prices, selectedProduct, selectedShop]);
   return (
-    <div>
-      <table
-        className="table"
-        style={{
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+        paddingX: '20px',
+      }}
+    >
+      <TableContainer
+        sx={{
           flex: 1,
-          background: isDarkMode ? '#000' : '#fff',
-          color: isDarkMode ? '#fff' : '#000',
+          background: colors.background,
+          color: colors.text,
         }}
       >
-        <thead
-          style={{
-            flex: 1,
-            background: isDarkMode ? '#000' : '#fff',
-            color: isDarkMode ? '#fff' : '#000',
+        <Table
+          stickyHeader
+          sx={{
+            '.MuiTableCell-root': {
+              color: colors.text,
+              background: colors.background,
+            },
           }}
+          aria-label="simple table"
         >
-          <tr
-            style={{
-              flex: 1,
-              background: isDarkMode ? '#000' : '#fff',
-              color: isDarkMode ? '#fff' : '#000',
-            }}
-          >
-            <th
-              scope="col"
-              style={{
-                flex: 1,
-                background: isDarkMode ? '#000' : '#fff',
-                color: isDarkMode ? '#fff' : '#000',
-              }}
-            >
-              #
-            </th>
-            <th
-              scope="col"
-              style={{
-                flex: 1,
-                background: isDarkMode ? '#000' : '#fff',
-                color: isDarkMode ? '#fff' : '#000',
-              }}
-            >
-              Date
-            </th>
-            <th
-              scope="col"
-              style={{
-                flex: 1,
-                background: isDarkMode ? '#000' : '#fff',
-                color: isDarkMode ? '#fff' : '#000',
-              }}
-            >
-              Shop
-            </th>
-            <th
-              scope="col"
-              style={{
-                flex: 1,
-                background: isDarkMode ? '#000' : '#fff',
-                color: isDarkMode ? '#fff' : '#000',
-              }}
-            >
-              Price
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {priceList.map((item, index) => (
-            <tr key={index}>
-              <th
-                scope="row"
-                style={{
-                  flex: 1,
-                  background: isDarkMode ? '#000' : '#fff',
-                  color: isDarkMode ? '#fff' : '#000',
-                }}
-              >
-                {index}
-              </th>
-              <td
-                style={{
-                  flex: 1,
-                  background: isDarkMode ? '#000' : '#fff',
-                  color: isDarkMode ? '#fff' : '#000',
-                }}
-              >
-                {`${new Date(item.date).getHours()}:${new Date(
-                  item.date
-                ).getMinutes()} ${new Date(item.date).toDateString()}`}
-              </td>
-              <td
-                style={{
-                  flex: 1,
-                  background: isDarkMode ? '#000' : '#fff',
-                  color: isDarkMode ? '#fff' : '#000',
-                }}
-              >
-                {item.label}
-              </td>
-              <td
-                style={{
-                  flex: 1,
-                  background: isDarkMode ? '#000' : '#fff',
-                  color: isDarkMode ? '#fff' : '#000',
-                }}
-              >
-                {item.price === -1 ? 'No Data' : formatMoney(item.price)}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          <TableHead>
+            <TableRow>
+              <TableCell>#</TableCell>
+              <TableCell>Date</TableCell>
+              <TableCell>Shop</TableCell>
+              <TableCell>Price</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {priceList
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((item, index) => (
+                <TableRow key={item.date}>
+                  <TableCell component="th" scope="row">
+                    {index + 1 + page * rowsPerPage}
+                  </TableCell>
+                  <TableCell>
+                    {' '}
+                    {`${new Date(item.date).getHours()}:${new Date(
+                      item.date
+                    ).getMinutes()} ${new Date(item.date).toDateString()}`}
+                  </TableCell>
+                  <TableCell>{item.label}</TableCell>
+                  <TableCell>
+                    {item.price === -1 ? 'No Data' : formatMoney(item.price)}
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 20]}
+        component="div"
+        sx={{
+          background: colors.background,
+          color: colors.text,
+          '.MuiTablePagination-displayedRows': {
+            'margin-top': '1em',
+            'margin-bottom': '1em',
+          },
+          '.MuiTablePagination-displayedRows, .MuiTablePagination-selectLabel':
+            {
+              'margin-top': '1em',
+              'margin-bottom': '1em',
+            },
+        }}
+        count={priceList.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={(_, page) => {
+          setPage(page);
+        }}
+        onRowsPerPageChange={(event) => {
+          setRowsPerPage(parseInt(event.target.value, 10));
+          setPage(0);
+        }}
+      />
+    </Box>
   );
 }

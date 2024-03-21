@@ -14,12 +14,11 @@ export default function Tab({ title, children, noPadding = false }: Props) {
         display: 'flex',
         flexDirection: 'column',
         background: colors.background,
-        borderRadius: 2,
+        borderRadius: 3,
         padding: noPadding ? 0 : '20px',
 
-        flex: 1,
         width: '100%',
-        overflow: 'scroll',
+        height: '100%',
       }}
     >
       <Typography
@@ -27,7 +26,7 @@ export default function Tab({ title, children, noPadding = false }: Props) {
           paddingTop: noPadding ? '20px' : 0,
           paddingX: noPadding ? '20px' : 0,
           fontWeight: '700',
-          color:colors.text
+          color: colors.text,
         }}
       >
         {title}
