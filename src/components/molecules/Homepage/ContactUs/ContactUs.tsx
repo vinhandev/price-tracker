@@ -39,7 +39,7 @@ export default function ContactUs() {
           sx={{
             color: colors.text2,
             fontWeight: '700',
-            fontSize: '2.5vw',
+            fontSize: '1.5vw',
           }}
         >
           NEED SUPPORT?

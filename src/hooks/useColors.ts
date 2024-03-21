@@ -1,4 +1,4 @@
-import { Colors } from '@/assets/colors';
+import { Colors, chartColors } from '@/assets/colors';
 import { useStore } from '@/store';
 
 export function useColors() {
@@ -10,5 +10,6 @@ export function useColors() {
     text2: isDarkMode ? Colors.black : Colors.white,
     primary: isDarkMode ? Colors.blue2 : Colors.blue,
     border: Colors.grey,
+    chartColors,
   };
 }

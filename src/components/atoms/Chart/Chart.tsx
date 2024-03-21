@@ -21,10 +21,12 @@ ChartJS.register(
 
 import { Line } from 'react-chartjs-2';
 import { useStore } from '../../../store/useStore';
-import { colors } from '../../../assets/colors';
 import { formatDate } from '../../../utils/helper';
+import { useColors } from '@/hooks';
+import { Box, Typography } from '@mui/material';
 
 export default function Chart() {
+  const colors = useColors();
   const labels = useStore((state) => state.labels);
   const prices = useStore((state) => state.prices);
   const product = useStore((state) => state.selectedProduct);
@@ -32,30 +34,51 @@ export default function Chart() {
 
   if (!item)
     return (
-      <div
+      <Box
         style={{
           width: '100%',
           height: '100%',
 
+          background: colors.background,
+          borderRadius: 3,
+          padding: '20px',
+
           justifyContent: 'center',
           alignItems: 'center',
           display: 'flex',
+          flex: 1,
         }}
       >
         No data
-      </div>
+      </Box>
     );
 
   return (
-    <div
+    <Box
       style={{
         width: '100%',
-        height: '90%',
-        paddingLeft: 20,
-        paddingRight: 20,
+        height: '100%',
+
+        background: colors.background,
+        borderRadius: 10,
+        overflow: 'hidden',
+        padding: '20px',
+
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'column',
       }}
     >
+      <Typography
+        sx={{
+          fontWeight: '700',
+          color: colors.text,
+        }}
+      >
+        Chart
+      </Typography>
       <Line
+        style={{ paddingBottom: '20px' }}
         options={{
           plugins: {
             legend: {
@@ -94,11 +117,11 @@ export default function Chart() {
                 }
                 return subItem.price;
               }) ?? [],
-            borderColor: colors[subIndex],
-            backgroundColor: `${colors[subIndex]}55`,
+            borderColor: colors.chartColors[subIndex],
+            backgroundColor: `${colors.chartColors[subIndex]}55`,
           })),
         }}
       />
-    </div>
+    </Box>
   );
 }

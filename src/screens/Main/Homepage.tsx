@@ -192,46 +192,37 @@ export default function Homepage() {
   return (
     <Box
       style={{
+        height: '100%',
+
         display: 'flex',
-        width: '100%',
         flexDirection: 'row',
-
-        paddingRight: '20px',
-
-        height: '100vh',
-        overflow: 'hidden',
         gap: '10px',
       }}
     >
       <Box
         sx={{
-          flexGrow: 1,
-
           display: 'flex',
           flexDirection: 'column',
+          flexGrow: 1,
           gap: '10px',
         }}
       >
         <Box
           sx={{
-            display: 'flex',
-            flex: 1,
+            height: 'calc( 50% - 5px )',
           }}
         >
-          <Tab title="Chart">
-            <Chart />
+          <Chart />
+        </Box>
+        <Box
+          sx={{
+            height: 'calc( 50% - 5px )',
+          }}
+        >
+          <Tab noPadding title="Records">
+            <ShopRecords />
           </Tab>
         </Box>
-        <Tab title="Records">
-          <Box
-            sx={{
-              height: '100%',
-              overflow: 'scroll',
-            }}
-          >
-            <ShopRecords />
-          </Box>
-        </Tab>
       </Box>
       <Box
         style={{
@@ -246,14 +237,13 @@ export default function Homepage() {
             display: 'flex',
             flex: 1,
           }}
-          className="d-none d-md-flex"
         >
           <HighLight data={highlightData} />
         </Box>
         <Box
           sx={{
             display: 'flex',
-            flexGrow: 1,
+            flex: 1,
           }}
         >
           <Tab title="Filters">

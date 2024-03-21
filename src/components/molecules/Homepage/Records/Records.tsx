@@ -20,7 +20,7 @@ export default function Records() {
       .map((item) => {
         item.data.map((subItem) => {
           console.log(subItem.data);
-          
+
           subItem?.data?.map((subSubItem) => {
             tmpList.push({
               label: subItem.name,
@@ -34,14 +34,14 @@ export default function Records() {
   }, [prices, selectedProduct]);
 
   console.log(priceList);
-  
+
   return (
     <div>
       <table
         className="table"
         style={{
           flex: 1,
-          background: isDarkMode ? '#000' : '#fff',
+          background: 'red',
           color: isDarkMode ? '#fff' : '#000',
         }}
       >

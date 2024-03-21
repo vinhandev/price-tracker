@@ -18,7 +18,7 @@ import { Sidebar } from '@/components';
 import { Header } from '@/components/molecules';
 import { useColors } from '@/hooks';
 
-export default function Dashboard() {
+export default function Main() {
   const colors = useColors();
   const navigate = useNavigate();
   const location = useLocation();
@@ -208,68 +208,77 @@ export default function Dashboard() {
   return (
     <Box
       style={{
-        display: 'flex',
-
-        position: 'relative',
-
-        width: '100%',
         height: '100vh',
 
-        paddingTop: 30,
-        paddingBottom: 30,
+        overflow: 'scroll',
 
-        overflow: 'hidden',
+        padding: '30px',
 
-        backgroundColor: colors.background2,
+        background: colors.background2,
       }}
     >
       <Box
         style={{
-          display: 'flex',
-          width: '20%',
-
-          justifyContent: 'space-between',
-          flexDirection: 'column',
-
           height: '100%',
-          overflow: 'hidden',
-        }}
-      >
-        <Box
-          sx={{
-            width: 200,
-            paddingLeft: '30px',
-          }}
-        >
-          <LogoHorizontal />
-        </Box>
-        <Box
-          sx={{
-            paddingTop: 3,
-            flex: 1,
-            background: colors.background2,
-          }}
-        >
-          <Sidebar navBarList={NavBarList} />
-        </Box>
-      </Box>
+          width: '100%',
 
-      <Box
-        sx={{
           display: 'flex',
-          flexDirection: 'column',
-          flexGrow: 1,
+          flexDirection: 'row',
         }}
       >
-        <Header />
-        <Outlet />
-      </Box>
+        <Box
+          style={{
+            width: '15%',
+            height: '100%',
 
-      {/* <Loading
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexDirection: 'column',
+            gap:'20px'
+          }}
+        >
+          <Box
+            sx={{
+              width: 200,
+            }}
+          >
+            <LogoHorizontal />
+          </Box>
+          <Box
+            sx={{
+              flex: 1,
+              background: colors.background2,
+            }}
+          >
+            <Sidebar navBarList={NavBarList} />
+          </Box>
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
+            height: '100%',
+          }}
+        >
+          <Header />
+          <Box
+            sx={{
+              flex: 1,
+              overflow: 'hidden',
+            }}
+          >
+            <Outlet />
+          </Box>
+        </Box>
+
+        {/* <Loading
         count={count}
         currentProduct={currentProduct}
         currentShop={currentShop}
       /> */}
+      </Box>
     </Box>
   );
 }

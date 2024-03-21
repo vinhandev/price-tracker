@@ -105,9 +105,20 @@ export default function HighLightChart({ data, colors }: Props) {
                   return subItem.price;
                 }) ?? [],
               backgroundColor: (context) => {
-                const { ctx } = context.chart;
-                const gradientBg = ctx.createLinearGradient(0, 0, 0, 300);
-                gradientBg.addColorStop(0, `${colors[0]}AA`);
+                const { ctx, chartArea } = context.chart;
+                if (!chartArea) {
+                  // This case happens on initial chart load
+                  return;
+                }
+                const gradientBg = ctx.createLinearGradient(
+                  0,
+                  chartArea.top,
+                  0,
+                  chartArea.bottom
+                );
+                gradientBg.addColorStop(0, `${colors[0]}`);
+                gradientBg.addColorStop(0.5, `${colors[0]}AA`);
+                gradientBg.addColorStop(0.75, `${colors[0]}55`);
                 gradientBg.addColorStop(1, '#ffffff00');
                 return gradientBg;
               },
