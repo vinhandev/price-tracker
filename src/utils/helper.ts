@@ -59,3 +59,7 @@ export const isSameDay = (date1: Date, date2: Date) => {
   const isSameYear = date1.getFullYear() === date2.getFullYear();
   return isSameDayTime && isSameMonth && isSameYear;
 };
+
+export function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}

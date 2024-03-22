@@ -9,15 +9,17 @@ import { Box, Grid } from '@mui/material';
 import { DarkModeButton } from '@/components';
 import { ContactUs } from '../..';
 import { useColors } from '@/hooks';
+import ReloadButton from '@/components/atoms/Buttons/ReloadButton/ReloadButton';
 
 type Props = {
+  onReload: () => void;
   navBarList: {
     label: string;
     onClick: () => void;
     isActive?: boolean;
   }[][];
 };
-export default function Sidebar({ navBarList }: Props) {
+export default function Sidebar({ navBarList, onReload }: Props) {
   const colors = useColors();
   const isDarkMode = useStore((state) => state.isDarkMode);
   const openSidebar = useStore((state) => state.openSidebar);
@@ -29,19 +31,19 @@ export default function Sidebar({ navBarList }: Props) {
         flex: 1,
         height: '100%',
         background: colors.background2,
+        transition: 'background 1s ease',
       }}
     >
       <RNSidebar
         rootStyles={{
           height: '100%',
           width: '100%',
-          background: colors.background2,
+          background: colors.transparent,
 
           borderWidth: 0,
 
           [`.${sidebarClasses.container}`]: {
-            background: colors.background2,
-
+            background: colors.transparent,
             margin: 0,
             padding: 0,
 
@@ -54,10 +56,8 @@ export default function Sidebar({ navBarList }: Props) {
       >
         <Box
           sx={{
+            background: colors.transparent,
             height: '100%',
-
-            background: colors.background2,
-            paddingRight: '30px',
 
             display: 'flex',
             flexDirection: 'column',
@@ -67,18 +67,22 @@ export default function Sidebar({ navBarList }: Props) {
           <Menu
             menuItemStyles={{
               button: {
-                background: colors.background2,
-                paddingLeft: 0,
-                paddingRight: 30,
-                height: 40,
-                marginBottom: 10,
+                background: colors.transparent,
 
+                paddingLeft: 0,
+                paddingRight: '30px',
+                paddingBottom: '5px',
+                marginBottom: 10,
+                height: 'auto',
+                fontFamily: 'Roboto',
                 fontWeight: '300',
+                fontSize: '15px',
+                borderBottom: '2px solid #00000000',
+                transition: 'all 0.3s ease',
 
                 [`&.ps-active`]: {
                   color: colors.text,
                   fontWeight: '500',
-                  borderBottom: '2px solid ' + colors.primary,
                 },
                 [`&.ps-active:hover`]: {
                   color: colors.text,
@@ -87,7 +91,7 @@ export default function Sidebar({ navBarList }: Props) {
                 [`&:hover`]: {
                   color: isDarkMode ? 'white' : 'black',
                   background: colors.background2,
-                  borderBottom: '2px solid ' + colors.primary,
+                  paddingLeft: '5px',
                 },
               },
             }}
@@ -119,6 +123,16 @@ export default function Sidebar({ navBarList }: Props) {
                           component={<div onClick={item.onClick} />}
                         >
                           {item.label}
+                          {
+                            <Box
+                              sx={{
+                                width: item.isActive ? '100%' : 0,
+                                height: '2px',
+                                background: colors.primary,
+                                transition: 'width 0.3s ease',
+                              }}
+                            />
+                          }
                         </MenuItem>
                       );
                     })}
@@ -127,15 +141,31 @@ export default function Sidebar({ navBarList }: Props) {
               })}
             </Box>
           </Menu>
-          <Grid sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px',
-          }}>
-            <Box>
+          <Grid
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px',
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'flex-end',
+                gap: '10px',
+                paddingRight: '30px',
+              }}
+            >
               <DarkModeButton key={new Date().toString()} />
+              <ReloadButton onClick={onReload} />
             </Box>
-            <Box>
+            <Box
+              sx={{
+                paddingRight: '30px',
+              }}
+            >
               <ContactUs />
             </Box>
           </Grid>

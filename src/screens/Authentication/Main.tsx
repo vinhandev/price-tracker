@@ -33,6 +33,20 @@ export default function Main() {
   const setLoading = useStore((state) => state.setLoading);
   const initData = useStore((state) => state.initData);
 
+  async function handleReload() {
+    setLoading(true);
+    try {
+      if (user) {
+        const response = await getFirebasePrices(user.uid);
+        if (response.prices && response.labels) {
+          await handleFetch(response.prices, response.labels);
+        }
+      }
+    } catch (error) {
+      showError(error);
+    }
+    setLoading(false);
+  }
   async function handleFetch(
     paramPrices: GroupPriceProps[],
     paramLabels: number[]
@@ -183,19 +197,6 @@ export default function Main() {
         isActive: pathname === '/setting',
       },
       {
-        label: 'Reload',
-        onClick: async () => {
-          if (user) {
-            setLoading(true);
-            const response = await getFirebasePrices(user.uid);
-            if (response.prices && response.labels) {
-              handleFetch(response.prices, response.labels);
-            }
-            setLoading(false);
-          }
-        },
-      },
-      {
         label: 'Logout',
         onClick: async () => {
           await auth.signOut();
@@ -209,12 +210,13 @@ export default function Main() {
     <Box
       style={{
         height: '100vh',
-
-        overflow: 'scroll',
+        width: '100vw',
+        overflow: 'hidden',
 
         padding: '30px',
 
         background: colors.background2,
+        transition: 'background 1s ease',
       }}
     >
       <Box
@@ -234,7 +236,7 @@ export default function Main() {
             display: 'flex',
             justifyContent: 'space-between',
             flexDirection: 'column',
-            gap:'20px'
+            gap: '20px',
           }}
         >
           <Box
@@ -250,7 +252,7 @@ export default function Main() {
               background: colors.background2,
             }}
           >
-            <Sidebar navBarList={NavBarList} />
+            <Sidebar navBarList={NavBarList} onReload={handleReload} />
           </Box>
         </Box>
 
@@ -258,14 +260,15 @@ export default function Main() {
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            flexGrow: 1,
             height: '100%',
+            width: '85%',
           }}
         >
           <Header />
           <Box
             sx={{
               flex: 1,
+
               overflow: 'hidden',
             }}
           >
@@ -273,11 +276,11 @@ export default function Main() {
           </Box>
         </Box>
 
-        {/* <Loading
-        count={count}
-        currentProduct={currentProduct}
-        currentShop={currentShop}
-      /> */}
+        <Loading
+          count={count}
+          currentProduct={currentProduct}
+          currentShop={currentShop}
+        />
       </Box>
     </Box>
   );

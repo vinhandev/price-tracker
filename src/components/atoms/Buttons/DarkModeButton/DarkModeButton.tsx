@@ -3,17 +3,15 @@ import { useStore } from '../../../../store/useStore';
 import './DarkModeButton.css';
 
 function DarkModeButton() {
-  const setDarkMode = useStore((state) => state.setDarkMode);
   const isDarkMode = useStore((state) => state.isDarkMode);
-
-  console.log('isDarkMode', isDarkMode);
+  const setDarkMode = useStore((state) => state.setDarkMode);
 
   return (
     <Box>
       <input
         className="input"
         value={isDarkMode ? 'checked' : undefined}
-        onChange={() => setDarkMode()}
+        onChange={setDarkMode}
         type="checkbox"
         id="darkmode-toggle"
       />
@@ -29,7 +27,8 @@ function DarkModeButton() {
           boxShadow:
             'inset 0px 5px 15px rgba(0, 0, 0, 0.4), inset 0px -5px 15px rgba(255, 255, 255, 0.4)',
           cursor: 'pointer',
-          transition: '1s',
+          transition: 'all 0.5s ease',
+
           '::after': {
             left: isDarkMode ? 'calc(100% - 5px)' : '5px',
             background: isDarkMode
@@ -44,7 +43,7 @@ function DarkModeButton() {
             top: '2px',
             borderRadius: '18px',
             boxShadow: '0px 5px 10px rgba(0, 0, 0, 0.2)',
-            transition: '0.5s',
+            transition: 'all 0.5s ease',
           },
           ':active': {
             '::after': {

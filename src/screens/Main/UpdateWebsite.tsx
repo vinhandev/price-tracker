@@ -137,14 +137,13 @@ export default function UpdateWebsite() {
   return (
     <div
       style={{
+        flex: 1,
         padding: 20,
-        overflow: 'hidden',
+        height: '100%',
+        overflow: 'auto',
       }}
       className="container-fluid"
     >
-      <div>
-        <IconButton onClick={setOpenSidebar} variant="menu" />
-      </div>
       <div className="row">
         <div
           className="item col-12 col-lg-4 gap-3"

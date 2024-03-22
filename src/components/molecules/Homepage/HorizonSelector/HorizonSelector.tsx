@@ -7,19 +7,11 @@ import {
   Box,
   Button,
   ButtonGroup,
-  FormControl,
-  InputLabel,
-  Link,
   MenuItem,
   Select,
-  ToggleButton,
-  ToggleButtonGroup,
   Typography,
 } from '@mui/material';
 import React, { useEffect } from 'react';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import { useNavigate } from 'react-router-dom';
 import { useColors } from '@/hooks';
 export default function HorizonSelector() {
@@ -121,51 +113,51 @@ export default function HorizonSelector() {
     }
   };
 
-  const handleChangeProductName = async () => {
-    const text = prompt('Change product name', product);
-    setLoading(true);
-    try {
-      if (text && user) {
-        const tmpPrices = prices.map((item) => {
-          if (item.label === product) {
-            return {
-              ...item,
-              label: text,
-            };
-          }
-          return item;
-        });
-        await updateFirebasePrices(user?.uid, {
-          prices: tmpPrices,
-          labels,
-          lastUpdate: new Date().getTime(),
-        });
-        window.location.reload();
-      }
-    } catch (error) {
-      showError(error);
-    }
-    setLoading(false);
-  };
-  const handleDeleteProduct = async () => {
-    setLoading(true);
-    try {
-      if (user) {
-        const tmpPrices = prices.filter((item) => {
-          return item.label !== product;
-        });
-        await updateFirebasePrices(user?.uid, {
-          prices: tmpPrices,
-          labels,
-          lastUpdate: new Date().getTime(),
-        });
-        window.location.reload();
-      }
-    } catch (error) {
-      showError(error);
-    }
-    setLoading(false);
-  };
+  // const handleChangeProductName = async () => {
+  //   const text = prompt('Change product name', product);
+  //   setLoading(true);
+  //   try {
+  //     if (text && user) {
+  //       const tmpPrices = prices.map((item) => {
+  //         if (item.label === product) {
+  //           return {
+  //             ...item,
+  //             label: text,
+  //           };
+  //         }
+  //         return item;
+  //       });
+  //       await updateFirebasePrices(user?.uid, {
+  //         prices: tmpPrices,
+  //         labels,
+  //         lastUpdate: new Date().getTime(),
+  //       });
+  //       window.location.reload();
+  //     }
+  //   } catch (error) {
+  //     showError(error);
+  //   }
+  //   setLoading(false);
+  // };
+  // const handleDeleteProduct = async () => {
+  //   setLoading(true);
+  //   try {
+  //     if (user) {
+  //       const tmpPrices = prices.filter((item) => {
+  //         return item.label !== product;
+  //       });
+  //       await updateFirebasePrices(user?.uid, {
+  //         prices: tmpPrices,
+  //         labels,
+  //         lastUpdate: new Date().getTime(),
+  //       });
+  //       window.location.reload();
+  //     }
+  //   } catch (error) {
+  //     showError(error);
+  //   }
+  //   setLoading(false);
+  // };
 
   const handleSelectProduct = (item: GroupPriceProps) => {
     setSelectedProduct(item.label);
@@ -208,21 +200,26 @@ export default function HorizonSelector() {
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
-            gap: '5px',
+            gap: '10px',
           }}
         >
           <Box
             sx={{
               height: 50,
-
+              padding: '5px',
               width: undefined,
               aspectRatio: 1,
               borderRadius: 1,
-              background: 'grey',
+              background: colors.border,
 
               marginY: 1,
             }}
-          ></Box>
+          >
+            <img
+              style={{ height: '100%', width: '100%' }}
+              src={shopSelectedData?.avatar ?? undefined}
+            />
+          </Box>
           <Box>
             <Typography
               noWrap={false}
@@ -232,6 +229,7 @@ export default function HorizonSelector() {
                 lineHeight: '20px',
                 fontSize: 10,
                 fontWeight: '300',
+                fontFamily: 'Roboto',
                 cursor: 'pointer',
                 '&:hover': {
                   textDecorationLine: 'underline',
@@ -245,6 +243,7 @@ export default function HorizonSelector() {
               variant="h6"
               onClick={handleOpenLink}
               sx={{
+                fontFamily: 'Roboto',
                 color: colors.text,
                 lineHeight: '20px',
                 cursor: 'pointer',
@@ -259,6 +258,7 @@ export default function HorizonSelector() {
               noWrap={false}
               variant="body1"
               sx={{
+                fontFamily: 'Roboto',
                 color: colors.text,
                 lineHeight: '20px',
                 fontSize: 10,
@@ -275,52 +275,53 @@ export default function HorizonSelector() {
           </Box>
         </Box>
         <ButtonGroup
-          color="inherit"
           variant="outlined"
           aria-label="Basic button group"
+          sx={{
+            height: '40px',
+            borderColor: colors.red,
+            '.MuiButtonGroup-root': {
+              borderColor: colors.red,
+            },
+          }}
         >
           <Button
             onClick={handleChangeShopName}
-            sx={{ flex: 1, flexDirection: 'column', color: colors.text }}
+            sx={{
+              flex: 1,
+              flexDirection: 'column',
+              color: colors.primary,
+              fontFamily: 'Roboto',
+              fontSize: '10px',
+            }}
           >
-            <DriveFileRenameOutlineIcon />
-            <Typography
-              sx={{
-                fontSize: 10,
-                color: colors.text,
-              }}
-            >
-              Edit Name
-            </Typography>
+            Edit Name
           </Button>
           <Button
             onClick={() => {
               navigation('/update');
             }}
-            sx={{ flex: 1, flexDirection: 'column', color: colors.text }}
+            sx={{
+              flex: 1,
+              flexDirection: 'column',
+              color: colors.primary,
+              fontFamily: 'Roboto',
+              fontSize: '10px',
+            }}
           >
-            <EditIcon />
-            <Typography
-              sx={{
-                color: colors.text,
-                fontSize: 10,
-              }}
-            >
-              Edit Link
-            </Typography>
+            Edit Link
           </Button>
           <Button
             onClick={handleDelete}
-            sx={{ flex: 1, flexDirection: 'column', color: colors.text }}
+            sx={{
+              flex: 1,
+              flexDirection: 'column',
+              color: colors.primary,
+              fontFamily: 'Roboto',
+              fontSize: '10px',
+            }}
           >
-            <DeleteIcon />
-            <Typography
-              sx={{
-                fontSize: 10,
-              }}
-            >
-              Delete Shop
-            </Typography>
+            Delete Shop
           </Button>
         </ButtonGroup>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
@@ -330,6 +331,7 @@ export default function HorizonSelector() {
               fontWeight: '300',
               lineHeight: '20px',
               color: colors.text,
+              fontFamily: 'Roboto',
             }}
           >
             Product
@@ -369,6 +371,7 @@ export default function HorizonSelector() {
               fontWeight: '300',
               lineHeight: '20px',
               color: colors.text,
+              fontFamily: 'Roboto',
             }}
           >
             Shop

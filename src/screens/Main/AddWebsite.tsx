@@ -14,8 +14,9 @@ import { useUser } from '../../store/useUser';
 
 export default function AddWebsite() {
   const [websiteLink, setWebsiteLink] = React.useState('');
-  const [beforeCharacters, setBeforeCharacters] = React.useState('<body><');
-  const [afterCharacters, setAfterCharacters] = React.useState('<');
+  const [image, setImage] = React.useState('');
+  const [beforeCharacters, setBeforeCharacters] = React.useState('<!');
+  const [afterCharacters, setAfterCharacters] = React.useState('</html>');
 
   const [selectedProduct, setSelectedProduct] = React.useState('');
 
@@ -111,6 +112,7 @@ export default function AddWebsite() {
                   first: beforeCharacters,
                   last: afterCharacters,
                   name: text,
+                  avatar: image,
                   data: labels.map((date) => ({
                     price: -1,
                     date,
@@ -156,9 +158,9 @@ export default function AddWebsite() {
   return (
     <div
       style={{
-        padding: 20,
+        height: '100%',
+        width: '100%',
         overflow: 'auto',
-        width:600
       }}
       className="container-fluid"
     >
@@ -197,6 +199,12 @@ export default function AddWebsite() {
             value={websiteLink}
             onChange={(e) => setWebsiteLink(e.target.value)}
           />
+          <div className="fs-5">Logo</div>
+          <input
+            className="form-control"
+            value={image}
+            onChange={(e) => setImage(e.target.value)}
+          />
           <div className="fs-5">First</div>
           <input
             className="form-control"
@@ -220,6 +228,16 @@ export default function AddWebsite() {
             padding: 10,
           }}
         >
+          <div className="fs-5">Logo</div>
+          <img
+            src={image}
+            style={{
+              height: 100,
+              width: 100,
+              overflow: 'auto',
+            }}
+          />
+
           <div className="fs-5">Removed before characters</div>
           <div
             className="form-control"

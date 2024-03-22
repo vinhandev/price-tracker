@@ -8,6 +8,7 @@ export type PriceProps = {
   first: string;
   last: string;
   color: string;
+  avatar: string;
 };
 
 export type GroupPriceProps = {

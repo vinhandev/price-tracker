@@ -41,7 +41,6 @@ export default function Records() {
         className="table"
         style={{
           flex: 1,
-          background: 'red',
           color: isDarkMode ? '#fff' : '#000',
         }}
       >

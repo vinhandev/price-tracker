@@ -10,7 +10,7 @@ export default function Button(props: ButtonProps) {
       sx={{
         paddingY: 2,
         paddingX: 4,
-        background: colors.background,
+        background: colors.primary,
         color: colors.text2,
         fontSize: 14,
         ':hover': {

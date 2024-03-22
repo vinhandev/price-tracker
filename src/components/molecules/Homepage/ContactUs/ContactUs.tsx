@@ -25,7 +25,7 @@ export default function ContactUs() {
       <Box
         sx={{
           borderRadius: 3,
-          background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 30%, ${colors.text} 100%)`,
+          background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 30%, ${colors.black} 100%)`,
           height: '100%',
           padding: 4,
 
@@ -37,7 +37,7 @@ export default function ContactUs() {
       >
         <Typography
           sx={{
-            color: colors.text2,
+            color: colors.white,
             fontWeight: '700',
             fontSize: '1.5vw',
           }}
@@ -46,7 +46,7 @@ export default function ContactUs() {
         </Typography>
         <Button
           sx={{
-            background: colors.primary,
+            background: colors.blue,
             color: colors.text2,
             transition: 'all 0.5s ease',
           }}

@@ -24,6 +24,7 @@ export default function HighLight({ data }: Props) {
             <Box
               sx={{
                 background: colors.background,
+                transition: 'background 1s ease',
                 borderRadius: 2,
 
                 flex: 1,
@@ -32,28 +33,29 @@ export default function HighLight({ data }: Props) {
                 position: 'relative',
                 height: '120px',
                 display: 'flex',
-                flexDirection: 'column',
+                flexDirection: 'row',
                 justifyContent: 'flex-end',
+                gap: '20px',
 
-                overflow:'hidden'
+                overflow: 'hidden',
+                padding: '20px',
               }}
             >
               <Box
                 sx={{
-                  position: 'absolute',
-                  right: 0,
-                  left: 0,
-                  top: 0,
-                  bottom: 0,
                   zIndex: 1,
                   borderRadius: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  width: 'calc(50% - 10px)',
+
                   // backdropFilter: 'blur(5px)',
-                  padding: '20px',
                 }}
               >
                 <Typography
                   style={{
                     fontWeight: '700',
+                    fontFamily: 'Roboto',
                     color: colors.text,
                   }}
                 >
@@ -62,8 +64,9 @@ export default function HighLight({ data }: Props) {
                 <Typography
                   style={{
                     fontSize: 25,
+                    fontFamily: 'Roboto',
                     fontWeight: 'bold',
-                    color: colors.text,
+                    color: colors.primary,
                   }}
                 >
                   {formatMoney(item.price)}
@@ -75,9 +78,10 @@ export default function HighLight({ data }: Props) {
                     }
                   }}
                   sx={{
-                    fontSize: 15,
-                    fontWeight: 'bold',
-                    color: colors.primary,
+                    fontSize: 12,
+                    fontWeight: '300',
+                    fontFamily: 'Roboto',
+                    color: colors.text,
                     cursor: 'pointer',
                     ':hover': {
                       textDecoration: 'underline',
@@ -95,7 +99,7 @@ export default function HighLight({ data }: Props) {
               <Box
                 sx={{
                   height: '100%',
-                  width: '100%',
+                  width: 'calc(50% - 10px)',
                 }}
               >
                 <HighLightChart colors={[item.color]} data={item.data} />

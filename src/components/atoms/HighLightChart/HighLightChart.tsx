@@ -24,6 +24,7 @@ ChartJS.register(
 import { Line } from 'react-chartjs-2';
 import { useStore } from '../../../store/useStore';
 import { formatDate } from '../../../utils/helper';
+import { getGradient } from '@/utils';
 
 type Props = {
   colors: string[];
@@ -73,9 +74,9 @@ export default function HighLightChart({ data, colors }: Props) {
               grid: {
                 display: false,
               },
-              border: {
-                display: false,
-              },
+              // border: {
+              //   display: false,
+              // },
             },
           },
           elements: {
@@ -104,24 +105,7 @@ export default function HighLightChart({ data, colors }: Props) {
                   }
                   return subItem.price;
                 }) ?? [],
-              backgroundColor: (context) => {
-                const { ctx, chartArea } = context.chart;
-                if (!chartArea) {
-                  // This case happens on initial chart load
-                  return;
-                }
-                const gradientBg = ctx.createLinearGradient(
-                  0,
-                  chartArea.top,
-                  0,
-                  chartArea.bottom
-                );
-                gradientBg.addColorStop(0, `${colors[0]}`);
-                gradientBg.addColorStop(0.5, `${colors[0]}AA`);
-                gradientBg.addColorStop(0.75, `${colors[0]}55`);
-                gradientBg.addColorStop(1, '#ffffff00');
-                return gradientBg;
-              },
+              backgroundColor: (context) => getGradient(context, colors[0]),
               borderColor: colors,
               borderWidth: 2,
               fill: true,

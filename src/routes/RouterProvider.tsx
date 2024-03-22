@@ -14,7 +14,7 @@ import {
   SettingScreen,
 } from '@/screens/Main';
 import { NotFound } from '@/screens/Helper';
-import { Box } from '@mui/material';
+import Tester from '@/screens/Helper/Tester';
 
 export default function RouterProvider() {
   const user = useUser((state) => state.user);
@@ -50,6 +50,7 @@ export default function RouterProvider() {
               <Route path="/sign_up" element={<SignUp />} />
             </>
           )}
+          <Route path="/test" element={<Tester />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

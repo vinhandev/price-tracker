@@ -1,9 +1,10 @@
 import { Selector } from '../../../atoms/Inputs/Selector/Selector';
-import { Colors } from '../../../../assets/colors';
 import { useStore } from '../../../../store/useStore';
 import { useLocation } from 'react-router-dom';
+import { useColors } from '@/hooks';
 
 export default function ProductBar() {
+  const colors = useColors();
   const product = useStore((state) => state.selectedProduct);
   const setProduct = useStore((state) => state.setSelectedProduct);
   const prices = useStore((state) => state.prices);
@@ -21,7 +22,7 @@ export default function ProductBar() {
       <div
         style={{
           fontWeight: '300',
-          color: Colors.border,
+          color: colors.border,
         }}
       >
         Products
