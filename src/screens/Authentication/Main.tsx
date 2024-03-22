@@ -208,12 +208,18 @@ export default function Main() {
 
   return (
     <Box
-      style={{
+      sx={{
         height: '100vh',
         width: '100vw',
-        overflow: 'hidden',
+        overflow: {
+          xs: 'scroll',
+          md: 'hidden',
+        },
 
-        padding: '30px',
+        padding: {
+          xs: '20px',
+          md: '30px',
+        },
 
         background: colors.background2,
         transition: 'background 1s ease',
@@ -229,11 +235,15 @@ export default function Main() {
         }}
       >
         <Box
-          style={{
-            width: '15%',
+          sx={{
+            width: '250px',
             height: '100%',
 
-            display: 'flex',
+            display: {
+              xs: 'none',
+              md: 'none',
+              lg: 'flex',
+            },
             justifyContent: 'space-between',
             flexDirection: 'column',
             gap: '20px',
@@ -261,15 +271,29 @@ export default function Main() {
             display: 'flex',
             flexDirection: 'column',
             height: '100%',
-            width: '85%',
+            width: {
+              xs: '100%',
+              md:'100%',
+              lg: 'calc(100% - 250px)',
+            },
           }}
         >
-          <Header />
           <Box
             sx={{
+              width: '100%',
+              display: {
+                xs: 'none',
+                md: 'flex',
+              },
+            }}
+          >
+            <Header />
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
               flex: 1,
-
-              overflow: 'hidden',
+              overflow: 'scroll',
             }}
           >
             <Outlet />

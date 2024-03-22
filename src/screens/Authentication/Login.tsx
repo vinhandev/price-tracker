@@ -29,7 +29,6 @@ export default function Login() {
 
         justifyContent: 'center',
         alignItems: 'center',
-        background: `linear-gradient(0deg, ${colors.primary}55 65%, white 100%)`,
       }}
     >
       <Box
@@ -46,7 +45,7 @@ export default function Login() {
 
           border: {
             xs: 0,
-            md: 'solid 5px #fff',
+            md: 'solid 1px' + colors.border,
           },
 
           width: {
@@ -70,7 +69,6 @@ export default function Login() {
             xs: 6,
             md: 8,
           },
-          background: `linear-gradient(0deg, white 65%, ${colors.primary}88 100%)`,
         }}
       >
         <Box
@@ -85,7 +83,6 @@ export default function Login() {
         >
           <Box
             sx={{
-              // background: 'red',
               borderRadius: 1000,
 
               width: 200,

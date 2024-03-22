@@ -7,7 +7,6 @@ import {
 import { GroupPriceProps } from '../../types/prices';
 import { useStore } from '../../store/useStore';
 import { updateFirebasePrices } from '../../utils/firebase';
-import { IconButton } from '../../components';
 import { useUser } from '../../store/useUser';
 
 export default function UpdateWebsite() {
@@ -37,7 +36,6 @@ export default function UpdateWebsite() {
   const websiteLink = selectedShopProps?.link;
   const labels = useStore((state) => state.labels);
   const setLoading = useStore((state) => state.setLoading);
-  const setOpenSidebar = useStore((state) => state.setOpenSidebar);
 
   async function handlePreview() {
     setLoading(true);
