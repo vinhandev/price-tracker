@@ -2,10 +2,10 @@ import { Box } from '@mui/material';
 import FormInput from '../../components/atoms/FormInput/FormInput';
 import { useForm } from 'react-hook-form';
 import { Button } from '../../components/atoms/Buttons';
-import { Colors } from '../../assets/colors';
-import { useSignUp } from '../../hooks';
+import { useColors, useSignUp } from '../../hooks';
 
 export default function SignUp() {
+  const colors = useColors()
   const { mutation } = useSignUp();
   const { control, handleSubmit, setError } = useForm({
     defaultValues: {
@@ -40,7 +40,7 @@ export default function SignUp() {
 
         justifyContent: 'center',
         alignItems: 'center',
-        background: `linear-gradient(0deg, ${Colors.primary}55 65%, white 100%)`,
+        background: `linear-gradient(0deg, ${colors.primary}55 65%, white 100%)`,
       }}
     >
       <Box
@@ -81,7 +81,7 @@ export default function SignUp() {
             xs: 6,
             md: 8,
           },
-          background: `linear-gradient(0deg, white 65%, ${Colors.primary}88 100%)`,
+          background: `linear-gradient(0deg, white 65%, ${colors.primary}88 100%)`,
         }}
       >
         <Box

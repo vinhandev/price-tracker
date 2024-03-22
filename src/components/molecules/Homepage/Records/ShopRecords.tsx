@@ -21,7 +21,7 @@ type RecordType = {
 
 export default function ShopRecords() {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(15);
   const colors = useColors();
   const prices = useStore((state) => state.prices);
   const selectedProduct = useStore((state) => state.selectedProduct);
@@ -52,6 +52,7 @@ export default function ShopRecords() {
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
+        paddingTop: '10px',
         paddingX: '20px',
       }}
     >
@@ -59,6 +60,7 @@ export default function ShopRecords() {
         sx={{
           flex: 1,
           background: colors.background,
+          transition: 'background 1s ease',
           color: colors.text,
         }}
       >
@@ -66,16 +68,30 @@ export default function ShopRecords() {
           stickyHeader
           sx={{
             '.MuiTableCell-root': {
-              color: colors.text,
+              color: colors.text3,
               background: colors.background,
+              transition: 'background 1s ease',
+              paddingY: '7px',
+              fontFamily: 'Roboto',
+              fontWeight: '400',
+              fontSize: '14px',
+            },
+            '.MuiTableCell-head': {
+              fontWeight: '700',
             },
           }}
           aria-label="simple table"
         >
           <TableHead>
             <TableRow>
-              <TableCell>#</TableCell>
-              <TableCell>Date</TableCell>
+              <TableCell
+                sx={{
+                  paddingLeft: 0,
+                }}
+              >
+                #
+              </TableCell>
+              <TableCell>Date & Time</TableCell>
               <TableCell>Shop</TableCell>
               <TableCell>Price</TableCell>
             </TableRow>
@@ -85,7 +101,13 @@ export default function ShopRecords() {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((item, index) => (
                 <TableRow key={item.date}>
-                  <TableCell component="th" scope="row">
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    sx={{
+                      paddingLeft: 0,
+                    }}
+                  >
                     {index + 1 + page * rowsPerPage}
                   </TableCell>
                   <TableCell>
@@ -105,11 +127,18 @@ export default function ShopRecords() {
       </TableContainer>
 
       <TablePagination
-        rowsPerPageOptions={[5, 10, 20]}
+        rowsPerPageOptions={[15, 20, 30]}
         component="div"
         sx={{
           background: colors.background,
+          transition: 'background 1s ease',
+
           color: colors.text,
+          fontSize: '12px',
+          fontFamily:'Roboto',
+          p: {
+            fontSize: '12px',
+          },
           '.MuiTablePagination-displayedRows': {
             'margin-top': '1em',
             'margin-bottom': '1em',

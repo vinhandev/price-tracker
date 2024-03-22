@@ -1,3 +1,4 @@
+import { Box, Typography } from '@mui/material';
 import { useStore } from '../../store/useStore';
 
 export default function Loading({
@@ -28,14 +29,46 @@ export default function Loading({
         zIndex: 9999,
         backgroundColor: 'rgba(0,0,0,0.5)',
         color: 'white',
+        backdropFilter: `blur(${100 - (100 * count) / prices.length}px)`,
+        transition: 'all 0.3s ease',
       }}
     >
-      <div className="spinner-border" role="status" />
-      {currentProduct && <div>{currentProduct}</div>}
-      {currentShop && <div>{currentShop}</div>}
-      {prices.length > 0 && count > 0 && (
-        <div>{((count * 100) / prices?.length).toFixed(2)}%</div>
-      )}
+      <Box>
+        {currentShop && (
+          <Typography
+            textAlign={'center'}
+            sx={{
+              fontWeight: '300',
+            }}
+          >
+            {currentProduct}
+          </Typography>
+        )}
+        {currentProduct && (
+          <Typography
+            textAlign={'center'}
+            sx={{
+              fontSize: '40px',
+            }}
+          >
+            {currentShop}
+          </Typography>
+        )}
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '10px',
+        }}
+      >
+        <div className="spinner-border" role="status" />
+        {prices.length > 0 && count > 0 && (
+          <div>{((count * 100) / prices?.length).toFixed(2)}%</div>
+        )}
+      </Box>
     </div>
   );
 }

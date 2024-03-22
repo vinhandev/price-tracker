@@ -16,6 +16,7 @@ export default function Tab({ title, children, noPadding = false }: Props) {
         background: colors.background,
         borderRadius: 3,
         padding: noPadding ? 0 : '20px',
+        transition: 'background 1s ease',
 
         width: '100%',
         height: '100%',
@@ -25,6 +26,7 @@ export default function Tab({ title, children, noPadding = false }: Props) {
         sx={{
           paddingTop: noPadding ? '20px' : 0,
           paddingX: noPadding ? '20px' : 0,
+          fontFamily: 'Roboto',
           fontWeight: '700',
           color: colors.text,
         }}
