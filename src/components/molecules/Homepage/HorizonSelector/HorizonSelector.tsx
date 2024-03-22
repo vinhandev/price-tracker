@@ -327,10 +327,10 @@ export default function HorizonSelector() {
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
           <Typography
             sx={{
-              fontSize: 14,
               fontWeight: '300',
               lineHeight: '20px',
               color: colors.text,
+              fontSize: '12px',
               fontFamily: 'Roboto',
             }}
           >
@@ -339,6 +339,9 @@ export default function HorizonSelector() {
           <Select
             sx={{
               color: colors.text,
+              fontSize: '14px',
+              fontFamily: 'Roboto',
+
               '.MuiOutlinedInput-notchedOutline': {
                 borderColor: 'rgba(228, 219, 233, 0.25)',
               },
@@ -367,7 +370,7 @@ export default function HorizonSelector() {
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
           <Typography
             sx={{
-              fontSize: 14,
+              fontSize: '12px',
               fontWeight: '300',
               lineHeight: '20px',
               color: colors.text,
@@ -383,6 +386,8 @@ export default function HorizonSelector() {
             value={tempSelectedShop}
             sx={{
               color: colors.text,
+              fontSize: '14px',
+              fontFamily: 'Roboto',
               '.MuiOutlinedInput-notchedOutline': {
                 borderColor: 'rgba(228, 219, 233, 0.25)',
               },

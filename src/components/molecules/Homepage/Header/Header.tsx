@@ -10,12 +10,12 @@ export default function Header() {
   return (
     <Box
       sx={{
+        width: '100%',
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingBottom: 2,
-        paddingRight: '20px',
       }}
     >
       <SearchBar />

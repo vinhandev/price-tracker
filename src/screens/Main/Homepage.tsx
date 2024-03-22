@@ -191,12 +191,15 @@ export default function Homepage() {
 
   return (
     <Box
-      style={{
+      sx={{
         height: '100%',
         width: '100%',
 
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: {
+          xs: 'column',
+          md: 'row',
+        },
         gap: '10px',
       }}
     >
@@ -210,14 +213,20 @@ export default function Homepage() {
       >
         <Box
           sx={{
-            height: 'calc( 50% - 5px )',
+            height: {
+              xs: '50vh',
+              md: 'calc( 50% - 5px )',
+            },
           }}
         >
           <Chart />
         </Box>
         <Box
           sx={{
-            height: 'calc( 50% - 5px )',
+            height: {
+              xs: '50vh',
+              md: 'calc( 50% - 5px )',
+            },
           }}
         >
           <Tab noPadding title="Records">
@@ -226,10 +235,17 @@ export default function Homepage() {
         </Box>
       </Box>
       <Box
-        style={{
-          width: '25%',
+        sx={{
+          width: {
+            xs: '100%',
+            md: '50%',
+            lg: '25%',
+          },
           display: 'flex',
-          flexDirection: 'column',
+          flexDirection: {
+            xs: 'column',
+            md: 'column',
+          },
           gap: '10px',
         }}
       >

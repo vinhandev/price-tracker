@@ -112,6 +112,7 @@ export default function Sidebar({ navBarList, onReload }: Props) {
                           height: '1px',
                           backgroundColor: colors.border,
                           marginY: 1,
+                          marginRight:'30px',
                         }}
                       />
                     )}

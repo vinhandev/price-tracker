@@ -11,6 +11,7 @@ import { useStore } from '../../store/useStore';
 import { updateFirebasePrices } from '../../utils/firebase';
 import { IconButton } from '../../components';
 import { useUser } from '../../store/useUser';
+import { Autocomplete, TextField } from '@mui/material';
 
 export default function AddWebsite() {
   const [websiteLink, setWebsiteLink] = React.useState('');
@@ -178,6 +179,20 @@ export default function AddWebsite() {
           }}
         >
           <div className="fs-5">Products</div>
+          <Autocomplete
+            options={prices}
+            getOptionLabel={(item) => item.label}
+            value={prices.find((item) => item.label === selectedProduct)}
+            onChange={(_, newValue) => {
+              if (newValue) {
+                setSelectedProduct(newValue.label);
+              }
+            }}
+            renderInput={(params) => (
+              <TextField {...params} variant="outlined" />
+            )}
+          />
+
           <div className="d-flex flex-row gap-3">
             <Selector
               data={
@@ -237,7 +252,6 @@ export default function AddWebsite() {
               overflow: 'auto',
             }}
           />
-
           <div className="fs-5">Removed before characters</div>
           <div
             className="form-control"
