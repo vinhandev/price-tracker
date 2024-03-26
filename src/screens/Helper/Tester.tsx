@@ -1,5 +1,3 @@
-import { Chart } from '@/components';
-import HorizonSelector from '@/components/molecules/Homepage/HorizonSelector/HorizonSelector';
 import Records from '@/components/molecules/Homepage/Records/Records';
 import { Box } from '@mui/material';
 

@@ -1,8 +1,8 @@
 import { useColors } from '@/hooks';
-import { Box, TextField, TextFieldProps, Typography } from '@mui/material';
+import { Box, TextField, TextFieldProps } from '@mui/material';
 import { Label } from '../..';
 
-export type TextInputProps = TextFieldProps & {
+export type TextInputProps = Omit<TextFieldProps, 'label' | 'onChange'> & {
   value: string;
   onChange: (value: string) => void;
   label: string;

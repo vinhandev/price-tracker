@@ -1,17 +1,9 @@
-import { GroupPriceProps } from '@/types';
 import { useStore } from '../../../../store/useStore';
 import { useUser } from '../../../../store/useUser';
 import { updateFirebasePrices } from '../../../../utils/firebase';
 import { showError } from '../../../../utils/helper';
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  MenuItem,
-  Select,
-  Typography,
-} from '@mui/material';
-import React, { useEffect } from 'react';
+import { Box, Button, ButtonGroup, Typography } from '@mui/material';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useColors } from '@/hooks';
 import { useForm } from 'react-hook-form';
@@ -175,16 +167,6 @@ export default function HorizonSelector() {
   //   }
   //   setLoading(false);
   // };
-
-  const handleSelectProduct = (item: GroupPriceProps) => {
-    setSelectedProduct(item.label);
-    setSelectedShop(item.data[0].name);
-    setTempSelectedShop(() => item.data[0].name);
-  };
-
-  const handleSelectShop = (item: string) => {
-    setSelectedShop(item);
-  };
 
   const watchProduct = watch('product');
   useEffect(() => {
