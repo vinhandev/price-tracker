@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useState } from 'react';
 import {
   convertStringToNumber,
   extractDomainName,
@@ -10,32 +10,31 @@ import { GroupPriceProps } from '../../types/prices';
 import { useStore } from '../../store/useStore';
 import { updateFirebasePrices } from '../../utils/firebase';
 import { useUser } from '../../store/useUser';
-import { Box, Button, IconButton, Typography } from '@mui/material';
+import { Box, Button, IconButton } from '@mui/material';
 import TextInput from '@/components/atoms/Inputs/TextInput/TextInput';
 import Tab from '@/HOCs/Tab';
 import AddIcon from '@mui/icons-material/Add';
 import { Label } from '@/components/atoms';
 export default function AddWebsite() {
-  const [websiteLink, setWebsiteLink] = React.useState('');
-  const [image, setImage] = React.useState('');
-  const [beforeCharacters, setBeforeCharacters] = React.useState('<!');
-  const [afterCharacters, setAfterCharacters] = React.useState('</html>');
+  const [websiteLink, setWebsiteLink] = useState<string>('');
+  const [image, setImage] = useState<string>('');
+  const [beforeCharacters, setBeforeCharacters] = useState<string>('<!');
+  const [afterCharacters, setAfterCharacters] = useState<string>('</html>');
 
-  const [selectedProduct, setSelectedProduct] = React.useState('');
+  const [selectedProduct, setSelectedProduct] = useState<string>('');
 
-  const [websiteSourceCode, setWebsiteSourceCode] = React.useState('');
+  const [websiteSourceCode, setWebsiteSourceCode] = useState<string>('');
   const [websiteRemoveBeforeCharacters, setWebsiteRemoveBeforeCharacters] =
-    React.useState('');
+    useState<string>('');
   const [websiteRemoveAllCharacters, setWebsiteRemoveAllCharacters] =
-    React.useState('');
-  const [price, setPrice] = React.useState(0);
+    useState<string>('');
+  const [price, setPrice] = useState<number>(0);
 
   const user = useUser((state) => state.user);
 
   const prices = useStore((state) => state.prices);
   const labels = useStore((state) => state.labels);
   const setLoading = useStore((state) => state.setLoading);
-  const setOpenSidebar = useStore((state) => state.setOpenSidebar);
 
   async function handlePriceChange() {
     setLoading(true);
@@ -249,7 +248,9 @@ export default function AddWebsite() {
                     disabled={selectedProduct === ''}
                     label={'Website'}
                     value={websiteLink}
-                    onChange={(value) => setWebsiteLink(value)}
+                    onChange={(value) => {
+                      setWebsiteLink(value);
+                    }}
                     errorText=""
                     isError={false}
                   />

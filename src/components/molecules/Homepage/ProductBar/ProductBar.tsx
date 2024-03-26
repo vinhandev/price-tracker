@@ -28,7 +28,6 @@ export default function ProductBar() {
         Products
       </div>
       <Selector
-        noBorder
         value={product}
         onChange={setProduct}
         data={
