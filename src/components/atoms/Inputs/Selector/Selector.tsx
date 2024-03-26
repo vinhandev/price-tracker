@@ -1,4 +1,5 @@
-import { useStore } from '../../../../store/useStore';
+import { Box, MenuItem, Select, Typography } from '@mui/material';
+import { useColors } from '@/hooks';
 
 type Props = {
   data: {
@@ -7,32 +8,66 @@ type Props = {
   }[];
   onChange: (value: string) => void;
   value: string;
-  noBorder?: boolean;
+  label?: string;
+  disabled?: boolean;
+  placeholder?: string;
 };
-export function Selector({ data, onChange, value, noBorder = false }: Props) {
-  const isDarkMode = useStore((state) => state.isDarkMode);
+export function Selector({
+  data,
+  onChange,
+  value,
+  label,
+  disabled,
+  placeholder,
+}: Props) {
+  const colors = useColors();
   return (
-    <select
-      className="form-select"
-      value={value}
-      onChange={(e) => {
-        onChange(e.target.value);
-      }}
-      style={{
-        background: isDarkMode ? '#000' : '#fff',
-        color: isDarkMode ? '#fff' : '#000',
-        borderWidth: noBorder ? 0 : 1,
-        fontSize: 15,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        lineHeight: 1,
-      }}
-    >
-      {data.map((d) => (
-        <option key={d.value} value={d.value}>
-          {d.label}
-        </option>
-      ))}
-    </select>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+      {label && (
+        <Typography
+          sx={{
+            fontSize: '12px',
+            fontWeight: '300',
+            lineHeight: '20px',
+            color: colors.text,
+            fontFamily: 'Roboto',
+          }}
+        >
+          {label}
+        </Typography>
+      )}
+
+      <Select
+        disabled={disabled}
+        placeholder={placeholder}
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={value}
+        sx={{
+          color: colors.text,
+          fontSize: '14px',
+          fontFamily: 'Roboto',
+          '.MuiOutlinedInput-notchedOutline': {
+            borderColor: 'rgba(228, 219, 233, 0.25)',
+          },
+          '.MuiSelect-icon': {
+            color: colors.text,
+          },
+          borderColor: colors.text,
+        }}
+      >
+        {data?.map((item) => {
+          return (
+            <MenuItem
+              key={item.label}
+              value={item.label}
+              onClick={() => onChange(item.value)}
+            >
+              {item.label}
+            </MenuItem>
+          );
+        })}
+      </Select>
+    </Box>
   );
 }

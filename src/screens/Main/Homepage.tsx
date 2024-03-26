@@ -207,8 +207,12 @@ export default function Homepage() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          flexGrow: 1,
           gap: '10px',
+          width: {
+            xs: '100%',
+            md: '60%',
+            lg: 'calc(100% - 380px)',
+          },
         }}
       >
         <Box
@@ -238,14 +242,11 @@ export default function Homepage() {
         sx={{
           width: {
             xs: '100%',
-            md: '50%',
-            lg: '25%',
+            md: '40%',
+            lg: '380px',
           },
           display: 'flex',
-          flexDirection: {
-            xs: 'column',
-            md: 'column',
-          },
+          flexDirection: 'column',
           gap: '10px',
         }}
       >
@@ -261,6 +262,7 @@ export default function Homepage() {
           sx={{
             display: 'flex',
             flex: 1,
+            width: '100%',
           }}
         >
           <Tab title="Filters">
