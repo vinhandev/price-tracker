@@ -11,6 +11,7 @@ export default function Tab({ title, children, noPadding = false }: Props) {
   return (
     <Box
       sx={{
+        position: 'relative',
         display: 'flex',
         flexDirection: 'column',
         background: colors.background,

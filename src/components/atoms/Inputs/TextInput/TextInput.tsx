@@ -1,4 +1,6 @@
+import { useColors } from '@/hooks';
 import { Box, TextField, TextFieldProps, Typography } from '@mui/material';
+import { Label } from '../..';
 
 export type TextInputProps = TextFieldProps & {
   value: string;
@@ -16,6 +18,7 @@ export default function TextInput({
   label,
   ...props
 }: TextInputProps) {
+  const colors = useColors();
   return (
     <Box
       sx={{
@@ -24,20 +27,25 @@ export default function TextInput({
         gap: 1,
       }}
     >
-      <Typography
-        sx={{
-          fontWeight: '400',
-          fontSize: 14,
-        }}
-      >
-        {label}
-      </Typography>
+      <Label label={label} />
       <TextField
         sx={{
           '.MuiInputBase-root': {
-            background: 'white',
-            borderRadius: 2,
+            borderColor: 'rgba(228, 219, 233, 0.25)',
           },
+          color: colors.text,
+          fontSize: '14px',
+          fontFamily: 'Roboto',
+          '.MuiOutlinedInput-notchedOutline': {
+            borderColor: 'rgba(228, 219, 233, 0.25)',
+          },
+          '.MuiSelect-icon': {
+            color: colors.text,
+          },
+          input: {
+            background: colors.transparent,
+          },
+          borderColor: colors.text,
         }}
         value={value}
         onChange={(e) => onChange(e.target.value)}

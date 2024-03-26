@@ -222,7 +222,7 @@ export default function Main() {
         },
 
         background: colors.background2,
-        transition: 'background 1s ease',
+        transition: 'all 1s ease',
       }}
     >
       <Box
@@ -236,7 +236,7 @@ export default function Main() {
       >
         <Box
           sx={{
-            width: '250px',
+            width: '300px',
             height: '100%',
 
             display: {
@@ -274,7 +274,7 @@ export default function Main() {
             width: {
               xs: '100%',
               md:'100%',
-              lg: 'calc(100% - 250px)',
+              lg: 'calc(100% - 300px)',
             },
           }}
         >

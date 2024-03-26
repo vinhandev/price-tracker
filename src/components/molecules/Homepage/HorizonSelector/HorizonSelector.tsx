@@ -14,10 +14,11 @@ import {
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useColors } from '@/hooks';
+import { useForm } from 'react-hook-form';
+import { FormInput } from '@/components';
 export default function HorizonSelector() {
   const colors = useColors();
   const navigation = useNavigate();
-  const [tempSelectedShop, setTempSelectedShop] = React.useState('');
 
   const user = useUser((state) => state.user);
 
@@ -37,6 +38,22 @@ export default function HorizonSelector() {
   const shopSelectedData = productSelectedData?.data?.find(
     (item) => item.name === selectedShop
   );
+
+  const { control, handleSubmit, watch } = useForm({
+    defaultValues: {
+      product: product,
+      shop: selectedShop,
+    },
+    values: {
+      product: product,
+      shop: selectedShop,
+    },
+  });
+
+  const onSubmit = (data: { product: string; shop: string }) => {
+    setSelectedProduct(data.product);
+    setSelectedShop(data.shop);
+  };
 
   const handleChangeShopName = async () => {
     const text = prompt('Change shop name', selectedShop);
@@ -169,11 +186,15 @@ export default function HorizonSelector() {
     setSelectedShop(item);
   };
 
+  const watchProduct = watch('product');
   useEffect(() => {
-    if (tempSelectedShop === '') {
-      setTempSelectedShop(selectedShop);
+    if (watchProduct) {
+      setSelectedProduct(watchProduct);
+      const selectedShop = prices.find((item) => item.label === watchProduct)
+        ?.data[0].name;
+      setSelectedShop(selectedShop ?? '');
     }
-  }, [selectedShop]);
+  }, [watchProduct]);
 
   return (
     <Box
@@ -184,15 +205,16 @@ export default function HorizonSelector() {
         gap: '10px',
 
         height: '100%',
+        width: '100%',
       }}
     >
       <Box
         sx={{
-          flexGrow: 1,
-
           display: 'flex',
           flexDirection: 'column',
           gap: '10px',
+
+          width: '100%',
         }}
       >
         <Box
@@ -324,92 +346,35 @@ export default function HorizonSelector() {
             Delete Shop
           </Button>
         </ButtonGroup>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <Typography
-            sx={{
-              fontWeight: '300',
-              lineHeight: '20px',
-              color: colors.text,
-              fontSize: '12px',
-              fontFamily: 'Roboto',
-            }}
-          >
-            Product
-          </Typography>
-          <Select
-            sx={{
-              color: colors.text,
-              fontSize: '14px',
-              fontFamily: 'Roboto',
 
-              '.MuiOutlinedInput-notchedOutline': {
-                borderColor: 'rgba(228, 219, 233, 0.25)',
-              },
-              '.MuiSelect-icon': {
-                color: colors.text,
-              },
-              borderColor: colors.text,
-            }}
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={selectedProduct}
-          >
-            {prices.map((item) => {
-              return (
-                <MenuItem
-                  key={item.label}
-                  value={item.label}
-                  onClick={() => handleSelectProduct(item)}
-                >
-                  {item.label}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <Typography
-            sx={{
-              fontSize: '12px',
-              fontWeight: '300',
-              lineHeight: '20px',
-              color: colors.text,
-              fontFamily: 'Roboto',
-            }}
-          >
-            Shop
-          </Typography>
-
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={tempSelectedShop}
-            sx={{
-              color: colors.text,
-              fontSize: '14px',
-              fontFamily: 'Roboto',
-              '.MuiOutlinedInput-notchedOutline': {
-                borderColor: 'rgba(228, 219, 233, 0.25)',
-              },
-              '.MuiSelect-icon': {
-                color: colors.text,
-              },
-              borderColor: colors.text,
-            }}
-          >
-            {productSelectedData?.data?.map((item) => {
-              return (
-                <MenuItem
-                  key={item.name}
-                  value={item.name}
-                  onClick={() => setTempSelectedShop(item.name)}
-                >
-                  {item.name}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </Box>
+        <FormInput
+          variant="dropdown"
+          control={control}
+          name="product"
+          data={
+            prices.map((item) => {
+              return {
+                label: item.label,
+                value: item.label,
+              };
+            }) ?? []
+          }
+          label="Products"
+        />
+        <FormInput
+          variant="dropdown"
+          control={control}
+          name="shop"
+          data={
+            productSelectedData?.data.map((item) => {
+              return {
+                label: item.name,
+                value: item.name,
+              };
+            }) ?? []
+          }
+          label="Shops"
+        />
       </Box>
 
       <Button
@@ -417,7 +382,7 @@ export default function HorizonSelector() {
           height: 50,
         }}
         variant="contained"
-        onClick={() => handleSelectShop(tempSelectedShop)}
+        onClick={handleSubmit(onSubmit)}
       >
         Search Product
       </Button>

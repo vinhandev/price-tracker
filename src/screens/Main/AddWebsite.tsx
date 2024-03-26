@@ -9,10 +9,12 @@ import { Selector } from '../../components/atoms/Inputs/Selector/Selector';
 import { GroupPriceProps } from '../../types/prices';
 import { useStore } from '../../store/useStore';
 import { updateFirebasePrices } from '../../utils/firebase';
-import { IconButton } from '../../components';
 import { useUser } from '../../store/useUser';
-import { Autocomplete, TextField } from '@mui/material';
-
+import { Box, Button, IconButton, Typography } from '@mui/material';
+import TextInput from '@/components/atoms/Inputs/TextInput/TextInput';
+import Tab from '@/HOCs/Tab';
+import AddIcon from '@mui/icons-material/Add';
+import { Label } from '@/components/atoms';
 export default function AddWebsite() {
   const [websiteLink, setWebsiteLink] = React.useState('');
   const [image, setImage] = React.useState('');
@@ -150,12 +152,6 @@ export default function AddWebsite() {
     }
   }
 
-  useEffect(() => {
-    if (prices && selectedProduct === '') {
-      setSelectedProduct(prices[0]?.label ?? '');
-    }
-  }, [prices]);
-
   return (
     <div
       style={{
@@ -163,160 +159,271 @@ export default function AddWebsite() {
         width: '100%',
         overflow: 'auto',
       }}
-      className="container-fluid"
     >
-      <div>
-        <IconButton onClick={setOpenSidebar} variant="menu" />
-      </div>
-      <div className="row">
-        <div
-          className="item col-12 col-lg-4 gap-3"
-          style={{
-            padding: 10,
-            gap: 10,
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          gap: '10px',
+        }}
+      >
+        <Box
+          sx={{
+            width: '400px',
+
             display: 'flex',
             flexDirection: 'column',
+            gap: '10px',
           }}
         >
-          <div className="fs-5">Products</div>
-          <Autocomplete
-            options={prices}
-            getOptionLabel={(item) => item.label}
-            value={prices.find((item) => item.label === selectedProduct)}
-            onChange={(_, newValue) => {
-              if (newValue) {
-                setSelectedProduct(newValue.label);
-              }
+          <Box
+            sx={{
+              display: 'flex',
+              flex: 1,
             }}
-            renderInput={(params) => (
-              <TextField {...params} variant="outlined" />
-            )}
-          />
+          >
+            <Tab title="Select Product">
+              <IconButton
+                onClick={handleAddNewProduct}
+                sx={{
+                  position: 'absolute',
+                  right: '20px',
+                  top: '20px',
+                  zIndex: 9999,
 
-          <div className="d-flex flex-row gap-3">
-            <Selector
-              data={
-                prices?.map((item) => ({
-                  label: item.label,
-                  value: item.label,
-                })) ?? []
-              }
-              value={selectedProduct}
-              onChange={setSelectedProduct}
-            />
-            <button onClick={handleAddNewProduct} className="btn btn-primary">
-              +
-            </button>
-          </div>
-          <div className="fs-5">Website</div>
-          <input
-            className="form-control"
-            value={websiteLink}
-            onChange={(e) => setWebsiteLink(e.target.value)}
-          />
-          <div className="fs-5">Logo</div>
-          <input
-            className="form-control"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
-          />
-          <div className="fs-5">First</div>
-          <input
-            className="form-control"
-            value={beforeCharacters}
-            onChange={(e) => setBeforeCharacters(e.target.value)}
-          />
-          <div className="fs-5">Last</div>
-          <input
-            className="form-control"
-            value={afterCharacters}
-            onChange={(e) => setAfterCharacters(e.target.value)}
-          />
+                  width: '30px',
+                  height: '30px',
+                }}
+              >
+                <AddIcon />
+              </IconButton>
+              <Box
+                sx={{
+                  paddingTop: '20px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '10px',
+                }}
+              >
+                <Selector
+                  label="Product"
+                  data={
+                    prices?.map((item) => ({
+                      label: item.label,
+                      value: item.label,
+                    })) ?? []
+                  }
+                  value={selectedProduct}
+                  onChange={setSelectedProduct}
+                />
+              </Box>
+            </Tab>
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              flexGrow: 2,
+            }}
+          >
+            <Tab title="Input New Website">
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  gap: '10px',
 
-          <button onClick={handlePriceChange} className="btn btn-primary">
-            Preview Website
-          </button>
-        </div>
-        <div
-          className="item col-12 col-lg-8 gap-3 d-flex flex-column"
-          style={{
-            padding: 10,
+                  flex: 1,
+
+                  paddingTop: '20px',
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '5px',
+                  }}
+                >
+                  <TextInput
+                    disabled={selectedProduct === ''}
+                    label={'Website'}
+                    value={websiteLink}
+                    onChange={(value) => setWebsiteLink(value)}
+                    errorText=""
+                    isError={false}
+                  />
+                  <TextInput
+                    disabled={selectedProduct === ''}
+                    label={'Logo'}
+                    value={image}
+                    onChange={(value) => setImage(value)}
+                    errorText=""
+                    isError={false}
+                  />
+                  <TextInput
+                    disabled={selectedProduct === ''}
+                    label={'First'}
+                    value={beforeCharacters}
+                    onChange={(value) => setBeforeCharacters(value)}
+                    errorText=""
+                    isError={false}
+                  />
+                  <TextInput
+                    disabled={selectedProduct === ''}
+                    label={'Last'}
+                    value={afterCharacters}
+                    onChange={(value) => setAfterCharacters(value)}
+                    errorText=""
+                    isError={false}
+                  />
+                </Box>
+                <Button
+                  sx={{
+                    height: '50px',
+                  }}
+                  variant="contained"
+                  disabled={selectedProduct === ''}
+                  onClick={handlePriceChange}
+                >
+                  Preview Website
+                </Button>
+              </Box>
+            </Tab>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            flexGrow: 1,
           }}
         >
-          <div className="fs-5">Logo</div>
-          <img
-            src={image}
-            style={{
-              height: 100,
-              width: 100,
-              overflow: 'auto',
-            }}
-          />
-          <div className="fs-5">Removed before characters</div>
-          <div
-            className="form-control"
-            style={{
-              height: 100,
-              overflow: 'auto',
-              padding: 10,
-            }}
-          >
-            <div>{websiteRemoveBeforeCharacters}</div>
-          </div>
-          <div className="fs-5">Price remove before characters</div>
-          <div
-            className="form-control"
-            style={{
-              height: 100,
-              overflow: 'auto',
-              padding: 10,
-            }}
-          >
-            <div>{websiteSourceCode}</div>
-          </div>
-          <div className="fs-5">Price remove after characters</div>
-          <div
-            className="form-control"
-            style={{
-              height: 100,
-              overflowY: 'auto',
-              width: '100%',
+          <Tab title="Preview">
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                gap: '10px',
 
-              padding: 10,
-            }}
-          >
-            {websiteRemoveAllCharacters}
-          </div>
-          <div className="fs-5">Price only numbers</div>
-          <div
-            className="form-control"
-            style={{
-              height: 100,
-              overflowY: 'auto',
-              width: '100%',
+                flex: 1,
 
-              padding: 10,
-            }}
-          >
-            {price}
-          </div>
-          <div className="fs-5">Formatted file</div>
-          <div
-            className="form-control"
-            style={{
-              height: 100,
-              overflowY: 'auto',
-              width: '100%',
-              padding: 10,
-            }}
-          >
-            {formatMoney(price)}
-          </div>
-          <button onClick={handleAddWebsite} className="btn btn-primary">
-            Submit
-          </button>
-        </div>
-      </div>
+                paddingTop: '20px',
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  gap: '10px',
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '10px',
+                  }}
+                >
+                  <Label label={'Photo'} />
+                  <Box
+                    sx={{
+                      borderRadius: '10px',
+                      height: '150px',
+                      width: undefined,
+                      aspectRatio: 1,
+                      border: `1px solid rgba(228, 219, 233, 0.25)`,
+                    }}
+                  >
+                    <img
+                      src={image}
+                      style={{
+                        height: '100%',
+                        width: '100%',
+                        borderRadius: '10px',
+                      }}
+                    />
+                  </Box>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    flexGrow: 1,
+
+                    gap: '10px',
+                  }}
+                >
+                  <TextInput
+                    disabled={selectedProduct === ''}
+                    label={'Price only numbers'}
+                    value={`${price}`}
+                    onChange={() => {}}
+                    errorText=""
+                    isError={false}
+                  />
+                  <TextInput
+                    disabled={selectedProduct === ''}
+                    label={'Formatted price'}
+                    value={formatMoney(price)}
+                    onChange={() => {}}
+                    errorText=""
+                    isError={false}
+                  />
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '10px',
+                }}
+              >
+                <TextInput
+                  multiline
+                  rows={3}
+                  disabled={selectedProduct === ''}
+                  label={'Removed before characters'}
+                  value={websiteRemoveBeforeCharacters}
+                  onChange={() => {}}
+                  errorText=""
+                  isError={false}
+                />
+                <TextInput
+                  multiline
+                  rows={3}
+                  disabled={selectedProduct === ''}
+                  label={'Price remove before characters'}
+                  value={websiteSourceCode}
+                  onChange={() => {}}
+                  errorText=""
+                  isError={false}
+                />
+                <TextInput
+                  multiline
+                  rows={3}
+                  disabled={selectedProduct === ''}
+                  label={'Price remove after characters'}
+                  value={websiteRemoveAllCharacters}
+                  onChange={() => {}}
+                  errorText=""
+                  isError={false}
+                />
+              </Box>
+              <Button
+                sx={{
+                  height: '50px',
+                }}
+                variant="contained"
+                disabled={selectedProduct === ''}
+                onClick={handleAddWebsite}
+              >
+                Submit Website
+              </Button>
+            </Box>
+          </Tab>
+        </Box>
+      </Box>
     </div>
   );
 }
