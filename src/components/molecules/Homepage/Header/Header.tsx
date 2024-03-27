@@ -11,6 +11,7 @@ export default function Header() {
     <Box
       sx={{
         width: '100%',
+        height: '60px',
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
@@ -45,7 +46,7 @@ export default function Header() {
         >
           <img
             style={{ width: '100%', height: '100%', borderRadius: 1000 }}
-            src="https://images.pexels.com/photos/4656102/pexels-photo-4656102.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHcM04W6diLQBzw4Y4pXDhPgovRf7l1cBF0Q&usqp=CAU"
           />
         </Box>
       </Box>

@@ -161,7 +161,14 @@ export default function Main() {
 
           if (response.prices) {
             initData(response.prices, response.labels ?? [], 0);
-            await handleFetch(response.prices, response.labels ?? []);
+            if (response.labels) {
+              const lastDayLabels =
+                response?.labels[response?.labels.length - 1];
+              const isToday = isSameDay(new Date(lastDayLabels), new Date());
+              if (!isToday) {
+                await handleFetch(response.prices, response.labels ?? []);
+              }
+            }
           }
         }
       } catch (error) {
@@ -171,7 +178,6 @@ export default function Main() {
     }
     getData();
   }, []);
-
 
   const NavBarList = [
     [
@@ -188,6 +194,13 @@ export default function Main() {
           navigate('/update_product');
         },
         isActive: pathname === '/update_product',
+      },
+      {
+        label: 'Products',
+        onClick: () => {
+          navigate('/products');
+        },
+        isActive: pathname === '/products',
       },
       {
         label: 'Add New Shop',
@@ -223,23 +236,18 @@ export default function Main() {
   ];
 
   useEffect(() => {
-    if(isLoading === false){
+    if (isLoading === false) {
       setCurrentProduct(() => '');
       setCurrentShop(() => '');
       setCount(() => 0);
     }
-  },[isLoading])
+  }, [isLoading]);
 
   return (
     <Box
       sx={{
-        height: '100vh',
+        minHeight: '100vh',
         width: '100vw',
-        overflow: {
-          xs: 'scroll',
-          md: 'hidden',
-        },
-
         padding: {
           xs: '20px',
           md: '30px',
@@ -261,7 +269,10 @@ export default function Main() {
         <Box
           sx={{
             width: '300px',
-            height: '100%',
+            height: {
+              xs: 'calc( 100vh - 40px )',
+              md: 'calc( 100vh - 60px )',
+            },
 
             display: {
               xs: 'none',
@@ -294,7 +305,6 @@ export default function Main() {
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            height: '100%',
             width: {
               xs: '100%',
               md: '100%',
@@ -313,13 +323,7 @@ export default function Main() {
           >
             <Header />
           </Box>
-          <Box
-            sx={{
-              display: 'flex',
-              flex: 1,
-              overflow: 'scroll',
-            }}
-          >
+          <Box>
             <Outlet />
           </Box>
         </Box>

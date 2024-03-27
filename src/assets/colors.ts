@@ -62,7 +62,7 @@ export const Colors = {
   white: '#fff',
   white2: '#F8F8F8',
   black: '#000',
-  black2:'#191919',
+  black2: '#191919',
   grey: '#eeeeee',
   grey2: '#333333',
   blue: '#40679E',
@@ -71,3 +71,9 @@ export const Colors = {
   green: '#00FF00',
   transparent: 'transparent',
 };
+
+export const graphTheme = [
+  ['#FF204E', '#A0153E', '#5D0E41', '#00224D'],
+  ['#070F2B', '#1B1A55', '#535C91', '#9290C3'],
+  ['#F8F6E3', '#97E7E1', '#6AD4DD', '#7AA2E3'],
+];
