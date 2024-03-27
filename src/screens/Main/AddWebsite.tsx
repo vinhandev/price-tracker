@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import {
   convertStringToNumber,
+  delay,
   extractDomainName,
   formatMoney,
-  showSuccess,
 } from '../../utils/helper';
 import { Selector } from '../../components/atoms/Inputs/Selector/Selector';
 import { GroupPriceProps } from '../../types/prices';
@@ -15,6 +15,7 @@ import TextInput from '@/components/atoms/Inputs/TextInput/TextInput';
 import Tab from '@/HOCs/Tab';
 import AddIcon from '@mui/icons-material/Add';
 import { Label } from '@/components/atoms';
+import { showSuccess } from '@/utils';
 export default function AddWebsite() {
   const [websiteLink, setWebsiteLink] = useState<string>('');
   const [image, setImage] = useState<string>('');
@@ -141,7 +142,8 @@ export default function AddWebsite() {
         }
         setLoading(false);
 
-        alert('success');
+        showSuccess();
+        await delay(1000);
         window.location.reload();
       } catch (error) {
         setLoading(false);
