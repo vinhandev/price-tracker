@@ -6,6 +6,8 @@ type Store = {
   setDarkMode: () => void;
   openSidebar: boolean;
   setOpenSidebar: () => void;
+  isInit: boolean;
+  setIsInit: (value: boolean) => void;
   isLoading: boolean;
   setLoading: (isLoading: boolean) => void;
   prices: GroupPriceProps[];
@@ -32,6 +34,8 @@ export const useStore = create<Store>((set) => ({
   setDarkMode: () => set((state) => ({ isDarkMode: !state.isDarkMode })),
   openSidebar: false,
   setOpenSidebar: () => set((state) => ({ openSidebar: !state.openSidebar })),
+  isInit: true,
+  setIsInit: (value) => set({ isInit: value }),
   isLoading: false,
   setLoading: (isLoading) => set(() => ({ isLoading })),
   prices: [],

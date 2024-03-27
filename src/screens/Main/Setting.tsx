@@ -1,7 +1,9 @@
+import Tab from '@/HOCs/Tab';
 import { useStore } from '../../store/useStore';
 import { useUser } from '../../store/useUser';
 import { updateFirebasePrices } from '../../utils/firebase';
 import { showError } from '../../utils/helper';
+import { Box, Button } from '@mui/material';
 
 export default function SettingScreen() {
   const user = useUser((state) => state.user);
@@ -64,15 +66,25 @@ export default function SettingScreen() {
         width: '100%',
       }}
     >
-      <div className="fs-3">Setting</div>
-      <div className="d-flex flex-row gap-3">
-        <button onClick={onDeleteAllRecords} className="btn btn-danger">
-          Delete all record
-        </button>
-        <button onClick={onDeleteAllData} className="btn btn-danger">
-          Delete all data
-        </button>
-      </div>
+      <Tab title="Setting">
+        <Box sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          gap: '10px',
+          paddingTop:'20px'
+        }}>
+          <Button
+            onClick={onDeleteAllRecords}
+            color="error"
+            variant="contained"
+          >
+            Delete all record
+          </Button>
+          <Button onClick={onDeleteAllData} color="error" variant="contained">
+            Delete all data
+          </Button>
+        </Box>
+      </Tab>
     </div>
   );
 }

@@ -1,46 +1,48 @@
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   convertStringToNumber,
-  extractDomainName,
   formatMoney,
+  showError,
+  showSuccess,
 } from '../../utils/helper';
+import { Selector } from '../../components/atoms/Inputs/Selector/Selector';
 import { GroupPriceProps } from '../../types/prices';
 import { useStore } from '../../store/useStore';
 import { updateFirebasePrices } from '../../utils/firebase';
 import { useUser } from '../../store/useUser';
-
+import { Box, Button, IconButton } from '@mui/material';
+import TextInput from '@/components/atoms/Inputs/TextInput/TextInput';
+import Tab from '@/HOCs/Tab';
+import AddIcon from '@mui/icons-material/Add';
+import { Label } from '@/components/atoms';
 export default function UpdateWebsite() {
-  const [beforeCharacters, setBeforeCharacters] = React.useState('');
-  const [afterCharacters, setAfterCharacters] = React.useState('<');
+  const [websiteLink, setWebsiteLink] = useState<string>('');
+  const [image, setImage] = useState<string>('');
+  const [beforeCharacters, setBeforeCharacters] = useState<string>('<!');
+  const [afterCharacters, setAfterCharacters] = useState<string>('</html>');
 
+  const selectedProduct = useStore((state) => state.selectedProduct);
+  const setSelectedProduct = useStore((state) => state.setSelectedProduct);
+
+  const selectedShop = useStore((state) => state.selectedShop);
+  const setSelectedShop = useStore((state) => state.setSelectedShop);
+
+  const [websiteSourceCode, setWebsiteSourceCode] = useState<string>();
   const [websiteRemoveBeforeCharacters, setWebsiteRemoveBeforeCharacters] =
-    React.useState('');
-  const [websiteSourceCode, setWebsiteSourceCode] = React.useState('');
+    useState<string>('');
   const [websiteRemoveAllCharacters, setWebsiteRemoveAllCharacters] =
-    React.useState('');
-  const [price, setPrice] = React.useState(0);
+    useState<string>('');
+  const [price, setPrice] = useState<number>(0);
 
   const user = useUser((state) => state.user);
 
   const prices = useStore((state) => state.prices);
-
-  const selectedShop = useStore((state) => state.selectedShop);
-  const selectedProduct = useStore((state) => state.selectedProduct);
-
-  const selectedProductProps = prices.find(
-    (item) => item.label === selectedProduct
-  );
-  const selectedShopProps = selectedProductProps?.data.find(
-    (item) => item.name === selectedShop
-  );
-  const websiteLink = selectedShopProps?.link;
   const labels = useStore((state) => state.labels);
   const setLoading = useStore((state) => state.setLoading);
 
-  async function handlePreview() {
+  async function handlePriceChange() {
     setLoading(true);
     try {
-      if (!websiteLink) return;
       const response = await fetch(websiteLink);
       const data = (await response.text())
         .replace(/\n/g, ' ')
@@ -51,7 +53,7 @@ export default function UpdateWebsite() {
         .split(' ')
         .join('');
 
-      const beforeRemoveCharacters =
+      const tmpRemoved =
         data?.split(beforeCharacters.split(' ').join(''))[0] ?? '0';
       const tmpPrice =
         data?.split(beforeCharacters.split(' ').join(''))[1] ?? '0';
@@ -60,7 +62,7 @@ export default function UpdateWebsite() {
       const number = convertStringToNumber(price1) ?? 0;
 
       setPrice(number);
-      setWebsiteRemoveBeforeCharacters(() => beforeRemoveCharacters);
+      setWebsiteRemoveBeforeCharacters(() => tmpRemoved);
       setWebsiteSourceCode(() => tmpPrice);
       setWebsiteRemoveAllCharacters(() => price1);
     } catch (error) {
@@ -69,28 +71,88 @@ export default function UpdateWebsite() {
     setLoading(false);
   }
 
-  async function handleUpdateWebsite() {
-    if (!websiteLink) return;
-    const defaultText = extractDomainName(websiteLink);
+  const handleDelete = async () => {
+    if (user) {
+      setLoading(true);
+      try {
+        const tmpPrices = prices.map((item) => {
+          if (item.label === selectedProduct) {
+            const tmpShop = item.data.filter((subItem) => {
+              return subItem.name !== selectedShop;
+            });
+
+            return {
+              label: item.label,
+              data: tmpShop,
+            };
+          }
+          return item;
+        });
+
+        await updateFirebasePrices(user?.uid, {
+          labels,
+          prices: tmpPrices,
+          lastUpdate: new Date().getTime(),
+        });
+        window.location.reload();
+      } catch (error) {
+        showError(error);
+      }
+      setLoading(false);
+    }
+  };
+
+  async function handleAddNewProduct() {
+    const text = prompt('Add new product');
+    if (text && user) {
+      setLoading(true);
+      try {
+        prices.push({
+          label: text,
+          data: [],
+        });
+        await updateFirebasePrices(user?.uid, {
+          prices,
+          labels,
+          lastUpdate: new Date().getTime(),
+        });
+        showSuccess();
+        window.location.reload();
+      } catch (error) {
+        console.error(error);
+      }
+      setLoading(false);
+    }
+  }
+  async function handleAddWebsite() {
+    const defaultText = prices
+      .find((item) => item.label === selectedProduct)
+      ?.data.find((subItem) => subItem.name === selectedShop)?.name;
     const text = prompt(
-      `Add new name for website:  \n + Website: ${websiteLink} \n + Product: ${selectedProduct} \n + Price: ${formatMoney(
+      `Update information website:  \n + Website: ${websiteLink} \n + Product: ${selectedProduct} \n + Price: ${formatMoney(
         price
       )}`,
       defaultText ?? ''
     );
-    if (text && user) {
+    if (text) {
       setLoading(true);
       try {
         const tmpPrices: GroupPriceProps[] = prices.map((item) => {
+          console.log('hello', item, selectedProduct);
+
           if (item.label === selectedProduct) {
             return {
-              label: item.label,
+              ...item,
               data: item.data.map((subItem) => {
                 if (subItem.name === selectedShop) {
                   return {
-                    ...subItem,
+                    color: '',
+                    link: websiteLink,
                     first: beforeCharacters,
                     last: afterCharacters,
+                    name: text,
+                    avatar: image,
+                    data: subItem.data,
                   };
                 }
                 return subItem;
@@ -99,16 +161,24 @@ export default function UpdateWebsite() {
           }
           return item;
         });
+        console.log(
+          'tmpPrices',
+          tmpPrices[0].data,
+          prices[0].data,
+          tmpPrices[0].data
+        );
 
-        await updateFirebasePrices(user.uid, {
-          prices: tmpPrices,
-          labels,
-          lastUpdate: new Date().getTime(),
-        });
+        if (user) {
+          await updateFirebasePrices(user.uid, {
+            prices: tmpPrices,
+            labels,
+            lastUpdate: new Date().getTime(),
+          });
+        }
         setLoading(false);
 
         alert('success');
-        window.location.href = '/home';
+        window.location.reload();
       } catch (error) {
         setLoading(false);
 
@@ -118,134 +188,338 @@ export default function UpdateWebsite() {
   }
 
   useEffect(() => {
-    if (selectedProduct && selectedShop) {
-      setAfterCharacters(selectedShopProps?.last ?? '<');
-      setBeforeCharacters(selectedShopProps?.first ?? '');
+    if (selectedShop) {
+      const shop = prices
+        ?.find((item) => item.label === selectedProduct)
+        ?.data.find((subItem) => subItem.name === selectedShop);
+
+      setWebsiteLink(() => shop?.link ?? '');
+      setImage(() => shop?.avatar ?? '');
+      setBeforeCharacters(() => shop?.first ?? '');
+      setAfterCharacters(() => shop?.last ?? '');
     }
   }, [selectedProduct, selectedShop]);
 
   useEffect(() => {
-    handlePreview();
-  }, [beforeCharacters, afterCharacters]);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  });
+    if (websiteLink) {
+      handlePriceChange();
+    }
+  }, [websiteLink]);
 
   return (
     <div
       style={{
-        flex: 1,
-        padding: 20,
         height: '100%',
+        width: '100%',
         overflow: 'auto',
       }}
-      className="container-fluid"
     >
-      <div className="row">
-        <div
-          className="item col-12 col-lg-4 gap-3"
-          style={{
-            padding: 10,
-            gap: 10,
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          gap: '10px',
+        }}
+      >
+        <Box
+          sx={{
+            width: '400px',
+
             display: 'flex',
             flexDirection: 'column',
+            gap: '10px',
           }}
         >
-          <div className="fs-5">Products</div>
-          <div className="d-flex flex-row gap-3">
-            <input className="form-control" value={selectedProduct} disabled />
-          </div>
-          <div className="fs-5">Website</div>
-          <input className="form-control" value={websiteLink} disabled />
-          <div className="fs-5">First</div>
-          <input
-            className="form-control"
-            value={beforeCharacters}
-            onChange={(e) => setBeforeCharacters(e.target.value)}
-          />
-          <div className="fs-5">Last</div>
-          <input
-            className="form-control"
-            value={afterCharacters}
-            onChange={(e) => setAfterCharacters(e.target.value)}
-          />
+          <Box
+            sx={{
+              display: 'flex',
+              flex: 1,
+            }}
+          >
+            <Tab title="Select Product">
+              <IconButton
+                onClick={handleAddNewProduct}
+                sx={{
+                  position: 'absolute',
+                  right: '20px',
+                  top: '20px',
+                  zIndex: 9999,
 
-          <button onClick={handlePreview} className="btn btn-primary">
-            Preview Website
-          </button>
-        </div>
-        <div
-          className="item col-12 col-lg-8 gap-3 d-flex flex-column"
-          style={{
-            padding: 10,
+                  width: '30px',
+                  height: '30px',
+                }}
+              >
+                <AddIcon />
+              </IconButton>
+              <Box
+                sx={{
+                  paddingTop: '20px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '10px',
+                }}
+              >
+                <Selector
+                  label="Product"
+                  data={
+                    prices?.map((item) => ({
+                      label: item.label,
+                      value: item.label,
+                    })) ?? []
+                  }
+                  value={selectedProduct}
+                  onChange={(value) => {
+                    const shop = prices?.find(
+                      (item) => item.label === value
+                    )?.data[0];
+                    setSelectedProduct(value);
+                    setSelectedShop(shop?.name ?? '');
+                  }}
+                />
+                <Selector
+                  label="Shop"
+                  data={
+                    prices
+                      .find((item) => item.label === selectedProduct)
+                      ?.data.map((item) => ({
+                        label: item.name,
+                        value: item.name,
+                      })) ?? []
+                  }
+                  value={selectedShop}
+                  onChange={(value) => {
+                    setSelectedShop(value);
+                  }}
+                />
+              </Box>
+            </Tab>
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              flexGrow: 2,
+            }}
+          >
+            <Tab title="Input New Website">
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  gap: '10px',
+
+                  flex: 1,
+
+                  paddingTop: '20px',
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '5px',
+                  }}
+                >
+                  <TextInput
+                    disabled={selectedProduct === ''}
+                    label={'Website'}
+                    value={websiteLink}
+                    onChange={(value) => {
+                      setWebsiteLink(value);
+                    }}
+                    errorText=""
+                    isError={false}
+                  />
+                  <TextInput
+                    disabled={selectedProduct === ''}
+                    label={'Logo'}
+                    value={image}
+                    onChange={(value) => setImage(value)}
+                    errorText=""
+                    isError={false}
+                  />
+                  <TextInput
+                    disabled={selectedProduct === ''}
+                    label={'First'}
+                    value={beforeCharacters}
+                    onChange={(value) => setBeforeCharacters(value)}
+                    errorText=""
+                    isError={false}
+                  />
+                  <TextInput
+                    disabled={selectedProduct === ''}
+                    label={'Last'}
+                    value={afterCharacters}
+                    onChange={(value) => setAfterCharacters(value)}
+                    errorText=""
+                    isError={false}
+                  />
+                </Box>
+                <Button
+                  sx={{
+                    height: '50px',
+                  }}
+                  variant="contained"
+                  disabled={selectedProduct === ''}
+                  onClick={handlePriceChange}
+                >
+                  Preview Website
+                </Button>
+              </Box>
+            </Tab>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            flexGrow: 1,
           }}
         >
-          <div className="fs-5">Removed characters</div>
-          <div
-            className="form-control"
-            style={{
-              height: 100,
-              overflow: 'auto',
-              padding: 10,
-            }}
-          >
-            <div>{websiteRemoveBeforeCharacters}</div>
-          </div>
-          <div className="fs-5">Price remove before characters</div>
-          <div
-            className="form-control"
-            style={{
-              height: 100,
-              overflow: 'auto',
-              padding: 10,
-            }}
-          >
-            <div>{websiteSourceCode}</div>
-          </div>
-          <div className="fs-5">Price remove after characters</div>
-          <div
-            className="form-control"
-            style={{
-              height: 100,
-              overflowY: 'auto',
-              width: '100%',
+          <Tab title="Preview">
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                gap: '10px',
 
-              padding: 10,
-            }}
-          >
-            {websiteRemoveAllCharacters}
-          </div>
-          <div className="fs-5">Price only numbers</div>
-          <div
-            className="form-control"
-            style={{
-              height: 100,
-              overflowY: 'auto',
-              width: '100%',
+                flex: 1,
 
-              padding: 10,
-            }}
-          >
-            {price}
-          </div>
-          <div className="fs-5">Formatted file</div>
-          <div
-            className="form-control"
-            style={{
-              height: 100,
-              overflowY: 'auto',
-              width: '100%',
-              padding: 10,
-            }}
-          >
-            {formatMoney(price)}
-          </div>
-          <button onClick={handleUpdateWebsite} className="btn btn-primary">
-            Update Website Link
-          </button>
-        </div>
-      </div>
+                paddingTop: '20px',
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  gap: '10px',
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '10px',
+                  }}
+                >
+                  <Label label={'Photo'} />
+                  <Box
+                    sx={{
+                      borderRadius: '10px',
+                      height: '150px',
+                      width: undefined,
+                      aspectRatio: 1,
+                      border: `1px solid rgba(228, 219, 233, 0.25)`,
+                    }}
+                  >
+                    <img
+                      src={image}
+                      style={{
+                        height: '100%',
+                        width: '100%',
+                        borderRadius: '10px',
+                      }}
+                    />
+                  </Box>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    flexGrow: 1,
+
+                    gap: '10px',
+                  }}
+                >
+                  <TextInput
+                    disabled={selectedProduct === ''}
+                    label={'Price only numbers'}
+                    value={`${price}`}
+                    onChange={() => {}}
+                    errorText=""
+                    isError={false}
+                  />
+                  <TextInput
+                    disabled={selectedProduct === ''}
+                    label={'Formatted price'}
+                    value={formatMoney(price)}
+                    onChange={() => {}}
+                    errorText=""
+                    isError={false}
+                  />
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '10px',
+                }}
+              >
+                <TextInput
+                  multiline
+                  rows={3}
+                  disabled={selectedProduct === ''}
+                  label={'Removed before characters'}
+                  value={websiteRemoveBeforeCharacters}
+                  onChange={() => {}}
+                  errorText=""
+                  isError={false}
+                />
+                <TextInput
+                  multiline
+                  rows={3}
+                  disabled={selectedProduct === ''}
+                  label={'Price remove before characters'}
+                  value={websiteSourceCode ?? ''}
+                  onChange={() => {}}
+                  errorText=""
+                  isError={false}
+                />
+                <TextInput
+                  multiline
+                  rows={3}
+                  disabled={selectedProduct === ''}
+                  label={'Price remove after characters'}
+                  value={websiteRemoveAllCharacters}
+                  onChange={() => {}}
+                  errorText=""
+                  isError={false}
+                />
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  gap: '10px',
+                }}
+              >
+                <Button
+                  sx={{
+                    height: '50px',
+                  }}
+                  variant="contained"
+                  disabled={selectedProduct === ''}
+                  onClick={handleAddWebsite}
+                >
+                  Update Website
+                </Button>
+                <Button
+                  sx={{
+                    height: '50px',
+                  }}
+                  variant="contained"
+                  color="error"
+                  disabled={selectedProduct === ''}
+                  onClick={handleDelete}
+                >
+                  Delete
+                </Button>
+              </Box>
+            </Box>
+          </Tab>
+        </Box>
+      </Box>
     </div>
   );
 }
