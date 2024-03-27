@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { showError, showSuccess } from '../../utils/helper';
 import { Selector } from '../../components/atoms/Inputs/Selector/Selector';
 import { GroupPriceProps } from '../../types/prices';
 import { useStore } from '../../store/useStore';
@@ -9,6 +8,7 @@ import { Box, Button, IconButton } from '@mui/material';
 import Tab from '@/HOCs/Tab';
 import AddIcon from '@mui/icons-material/Add';
 import TextInput from '@/components/atoms/Inputs/TextInput/TextInput';
+import { delay, showError, showSuccess } from '@/utils';
 export default function UpdateProduct() {
   const [name, setName] = useState<string>('');
 
@@ -93,8 +93,8 @@ export default function UpdateProduct() {
         });
       }
       setLoading(false);
-
-      alert('success');
+      showSuccess();
+      await delay(1000);
       window.location.reload();
     } catch (error) {
       setLoading(false);

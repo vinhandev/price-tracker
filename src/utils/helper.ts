@@ -30,13 +30,6 @@ export const formatDate = (date: Date) => {
   return `${day}/${month}`;
 };
 
-export const showSuccess = () => {
-  alert('success');
-};
-export const showError = (error: unknown) => {
-  console.error(error);
-};
-
 export function extractDomainName(url: string): string | null {
   try {
     const parsedUrl = new URL(url);

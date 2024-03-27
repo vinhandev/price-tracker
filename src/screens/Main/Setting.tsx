@@ -2,7 +2,6 @@ import Tab from '@/HOCs/Tab';
 import { useStore } from '../../store/useStore';
 import { useUser } from '../../store/useUser';
 import { updateFirebasePrices } from '../../utils/firebase';
-import { showError } from '../../utils/helper';
 import {
   Box,
   Button,
@@ -12,9 +11,8 @@ import {
   RadioGroup,
 } from '@mui/material';
 import { Label } from '@/components/atoms';
-import { useState } from 'react';
-import TextInput from '@/components/atoms/Inputs/TextInput/TextInput';
 import RatingTab from '@/components/molecules/RatingTab/RatingTab';
+import { showError } from '@/utils';
 
 export default function SettingScreen() {
   const user = useUser((state) => state.user);

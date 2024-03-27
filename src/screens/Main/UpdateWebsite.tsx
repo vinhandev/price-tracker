@@ -1,10 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  convertStringToNumber,
-  formatMoney,
-  showError,
-  showSuccess,
-} from '../../utils/helper';
+import { convertStringToNumber, delay, formatMoney } from '../../utils/helper';
 import { Selector } from '../../components/atoms/Inputs/Selector/Selector';
 import { GroupPriceProps } from '../../types/prices';
 import { useStore } from '../../store/useStore';
@@ -15,6 +10,7 @@ import TextInput from '@/components/atoms/Inputs/TextInput/TextInput';
 import Tab from '@/HOCs/Tab';
 import AddIcon from '@mui/icons-material/Add';
 import { Label } from '@/components/atoms';
+import { showError, showSuccess } from '@/utils';
 export default function UpdateWebsite() {
   const [websiteLink, setWebsiteLink] = useState<string>('');
   const [image, setImage] = useState<string>('');
@@ -94,6 +90,8 @@ export default function UpdateWebsite() {
           prices: tmpPrices,
           lastUpdate: new Date().getTime(),
         });
+        showSuccess();
+        await delay(1000);
         window.location.reload();
       } catch (error) {
         showError(error);
@@ -117,6 +115,7 @@ export default function UpdateWebsite() {
           lastUpdate: new Date().getTime(),
         });
         showSuccess();
+        await delay(1000);
         window.location.reload();
       } catch (error) {
         console.error(error);
@@ -177,7 +176,8 @@ export default function UpdateWebsite() {
         }
         setLoading(false);
 
-        alert('success');
+        showSuccess();
+        await delay(1000);
         window.location.reload();
       } catch (error) {
         setLoading(false);
@@ -269,9 +269,8 @@ export default function UpdateWebsite() {
                   }
                   value={selectedProduct}
                   onChange={(value) => {
-                    const shop = prices?.find(
-                      (item) => item.label === value
-                    )?.data[0];
+                    const shop = prices?.find((item) => item.label === value)
+                      ?.data[0];
                     setSelectedProduct(value);
                     setSelectedShop(shop?.name ?? '');
                   }}
