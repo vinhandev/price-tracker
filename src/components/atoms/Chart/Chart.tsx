@@ -34,6 +34,8 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { getGradientMainChart } from '@/utils';
+import { useUser } from '@/store';
+import { graphTheme } from '@/assets/colors';
 
 export default function Chart() {
   const [isShowAll, setIsShowAll] = React.useState(true);
@@ -43,7 +45,8 @@ export default function Chart() {
   const product = useStore((state) => state.selectedProduct);
   const shop = useStore((state) => state.selectedShop);
   const item = prices?.find((item) => item.label === product);
-
+  const themeIndex = useUser((state) => state.themeIndex);
+  const graphColors = graphTheme[themeIndex];
   if (!item)
     return (
       <Box
@@ -178,8 +181,11 @@ export default function Chart() {
                   return subItem.price;
                 }) ?? [],
 
-              backgroundColor: (context) => getGradientMainChart(context),
-              borderColor: colors.chartColors[subIndex],
+              backgroundColor: (context) =>
+                getGradientMainChart(context, graphColors),
+              borderColor: !isShowAll
+                ? graphColors[0]
+                : colors.chartColors[subIndex],
               borderWidth: 2,
               fill: !isShowAll ? true : false,
             })),

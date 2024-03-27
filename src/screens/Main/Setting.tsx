@@ -3,10 +3,24 @@ import { useStore } from '../../store/useStore';
 import { useUser } from '../../store/useUser';
 import { updateFirebasePrices } from '../../utils/firebase';
 import { showError } from '../../utils/helper';
-import { Box, Button } from '@mui/material';
+import {
+  Box,
+  Button,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+} from '@mui/material';
+import { Label } from '@/components/atoms';
+import { useState } from 'react';
+import TextInput from '@/components/atoms/Inputs/TextInput/TextInput';
+import RatingTab from '@/components/molecules/RatingTab/RatingTab';
 
 export default function SettingScreen() {
   const user = useUser((state) => state.user);
+
+  const themeIndex = useUser((state) => state.themeIndex);
+  const setThemeIndex = useUser((state) => state.setThemeIndex);
 
   const prices = useStore((state) => state.prices);
   const setLoading = useStore((state) => state.setLoading);
@@ -60,19 +74,24 @@ export default function SettingScreen() {
   };
 
   return (
-    <div
-      style={{
-        padding: 20,
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px',
         width: '100%',
+        height: '100%',
       }}
     >
       <Tab title="Setting">
-        <Box sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          gap: '10px',
-          paddingTop:'20px'
-        }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            gap: '10px',
+            paddingTop: '20px',
+          }}
+        >
           <Button
             onClick={onDeleteAllRecords}
             color="error"
@@ -85,6 +104,40 @@ export default function SettingScreen() {
           </Button>
         </Box>
       </Tab>
-    </div>
+      <Tab title="Graph Theme">
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            gap: '10px',
+            paddingTop: '20px',
+          }}
+        >
+          <FormControl>
+            <Label label="Theme" />
+            <RadioGroup
+              value={themeIndex}
+              onChange={(e) => setThemeIndex(Number(e.target.value))}
+              aria-labelledby="demo-radio-buttons-group-label"
+              defaultValue="female"
+              name="radio-buttons-group"
+            >
+              <FormControlLabel
+                value="0"
+                control={<Radio />}
+                label="Night Volcano"
+              />
+              <FormControlLabel
+                value="1"
+                control={<Radio />}
+                label="Deep Sea"
+              />
+              <FormControlLabel value="2" control={<Radio />} label="Peace" />
+            </RadioGroup>
+          </FormControl>
+        </Box>
+      </Tab>
+      <RatingTab />
+    </Box>
   );
 }

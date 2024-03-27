@@ -18,7 +18,10 @@ export function getGradient(context: ScriptableContext<'line'>, color: string) {
   return gradientBg;
 }
 
-export function getGradientMainChart(context: ScriptableContext<'line'>) {
+export function getGradientMainChart(
+  context: ScriptableContext<'line'>,
+  colors: string[]
+) {
   const { ctx, chartArea } = context.chart;
   if (!chartArea) {
     // This case happens on initial chart load
@@ -30,9 +33,11 @@ export function getGradientMainChart(context: ScriptableContext<'line'>) {
     0,
     chartArea.bottom
   );
-  gradientBg.addColorStop(0, '#FF204EAA');
-  gradientBg.addColorStop(0.25, '#A0153EAA');
-  gradientBg.addColorStop(0.75, '#5D0E41AA');
-  gradientBg.addColorStop(1, '#00224D');
+  for (let index = 0; index < colors.length; index++) {
+    const color = colors[index];
+    const part = Math.round((1 * 100) / colors.length) / 100;
+    console.log(part, index, color);
+    gradientBg.addColorStop(part * index, `${color}AA`);
+  }
   return gradientBg;
 }

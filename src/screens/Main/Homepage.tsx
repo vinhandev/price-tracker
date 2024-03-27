@@ -192,7 +192,7 @@ export default function Homepage() {
   return (
     <Box
       sx={{
-        height: '100%',
+        height: 'calc( 100vh - 60px - 60px)',
         width: '100%',
 
         display: 'flex',
