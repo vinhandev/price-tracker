@@ -2,7 +2,7 @@ import { useColors } from '@/hooks';
 import { Box, Typography } from '@mui/material';
 
 type Props = {
-  title: string;
+  title?: string;
   children: React.ReactNode;
   noPadding?: boolean;
 };
@@ -23,17 +23,19 @@ export default function Tab({ title, children, noPadding = false }: Props) {
         height: '100%',
       }}
     >
-      <Typography
-        sx={{
-          paddingTop: noPadding ? '20px' : 0,
-          paddingX: noPadding ? '20px' : 0,
-          fontFamily: 'Roboto',
-          fontWeight: '700',
-          color: colors.text,
-        }}
-      >
-        {title}
-      </Typography>
+      {title ? (
+        <Typography
+          sx={{
+            paddingTop: noPadding ? '20px' : 0,
+            paddingX: noPadding ? '20px' : 0,
+            fontFamily: 'Roboto',
+            fontWeight: '700',
+            color: colors.text,
+          }}
+        >
+          {title}
+        </Typography>
+      ) : null}
       {children}
     </Box>
   );

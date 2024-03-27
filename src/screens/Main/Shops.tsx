@@ -15,13 +15,13 @@ import {
 import NavigationIcon from '@mui/icons-material/Navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useColors } from '@/hooks';
-import { useStore, useUser } from '@/store';
+import { useStore } from '@/store';
 import { Tab } from '@/HOCs';
-import { showSuccess, updateFirebasePrices } from '@/utils';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
+import { Selector } from '@/components/atoms/Inputs/Selector/Selector';
 
-export default function ProductsScreen() {
+export default function ShopsScreen() {
   const theme = useTheme();
   const colors = useColors();
   const navigate = useNavigate();
@@ -30,52 +30,35 @@ export default function ProductsScreen() {
 
   const isActive = scrollPosition > 0;
 
-  const user = useUser((state) => state.user);
-
-  const prices = useStore((state) => state.prices);
-  const labels = useStore((state) => state.labels);
-  const setLoading = useStore((state) => state.setLoading);
+  const selectedProduct = useStore((state) => state.selectedProduct);
   const setSelectedProduct = useStore((state) => state.setSelectedProduct);
+  const setSelectedShop = useStore((state) => state.setSelectedShop);
+  const prices = useStore((state) => state.prices);
 
   const priceList = useMemo(() => {
     const tmpList: {
       label: string;
       numOfWebsites: number;
     }[] = [];
-    prices?.map((item) => {
-      tmpList.push({
-        label: item.label,
-        numOfWebsites: item?.data?.length ?? 0,
+    prices
+      ?.filter((item) => item.label === selectedProduct)
+      .map((item) => {
+        item.data?.map((subItem) => {
+          tmpList.push({
+            label: subItem.name,
+            numOfWebsites: item?.data?.length ?? 0,
+          });
+        });
       });
-    });
     return tmpList.sort((a, b) => b.numOfWebsites - a.numOfWebsites);
-  }, [prices]);
+  }, [prices,selectedProduct]);
   const handleScroll = () => {
     const position = window.pageYOffset;
     setScrollPosition(position);
   };
 
   async function handleAddNewProduct() {
-    const text = prompt('Add new product');
-    if (text && user) {
-      setLoading(true);
-      try {
-        prices.push({
-          label: text,
-          data: [],
-        });
-        await updateFirebasePrices(user?.uid, {
-          prices,
-          labels,
-          lastUpdate: new Date().getTime(),
-        });
-        showSuccess();
-        window.location.reload();
-      } catch (error) {
-        console.error(error);
-      }
-      setLoading(false);
-    }
+    navigate('/add');
   }
 
   const handleScrollToTop = () => {
@@ -113,26 +96,48 @@ export default function ProductsScreen() {
             sx={{
               display: 'flex',
               alignItems: 'center',
+              justifyContent: 'space-between',
               gap: '10px',
             }}
           >
-            <Typography variant="h5">Products</Typography>
-            <IconButton
-              onClick={handleAddNewProduct}
-              sx={{
-                borderRadius: 1000,
-                background: colors.primary,
-                padding: '2px',
-              }}
-            >
-              <AddIcon
+            <Box sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+            }}>
+              <Typography variant="h5">Shops</Typography>
+              <IconButton
+                onClick={handleAddNewProduct}
                 sx={{
-                  width: '18px',
-                  height: '18px',
-                  color: colors.text2,
+                  borderRadius: 1000,
+                  background: colors.primary,
+                  padding: '2px',
                 }}
-              />
-            </IconButton>
+              >
+                <AddIcon
+                  sx={{
+                    width: '18px',
+                    height: '18px',
+                    color: colors.text2,
+                  }}
+                />
+              </IconButton>
+            </Box>
+            <Selector
+              data={
+                prices?.map((item) => ({
+                  label: item.label,
+                  value: item.label,
+                })) ?? []
+              }
+              value={selectedProduct}
+              onChange={(value) => {
+                const shop = prices?.find((item) => item.label === value)
+                  ?.data[0];
+                setSelectedProduct(value);
+                setSelectedShop(shop?.name ?? '');
+              }}
+            />
           </Box>
           <TableContainer
             sx={{
@@ -185,13 +190,12 @@ export default function ProductsScreen() {
               </TableHead>
               <TableBody>
                 {priceList.map((item) => (
-                  <TableRow
-                    key={item.label}
-                    onClick={() => {
-                      setSelectedProduct(item.label);
-                      navigate('/shops');
-                    }}
-                  >
+                  <TableRow key={item.label} onClick={
+                    () => {
+                      setSelectedShop(item.label);
+                      navigate('/shop')
+                    }
+                  }>
                     <TableCell
                       sx={{
                         paddingLeft: 0,

@@ -19,6 +19,8 @@ import { Box } from '@mui/material';
 import { useStore } from '@/store';
 import UpdateProduct from '@/screens/Main/UpdateProduct';
 import ProductsScreen from '@/screens/Main/Products';
+import ShopsScreen from '@/screens/Main/Shops';
+import ShopScreen from '@/screens/Main/Shop';
 
 export default function RouterProvider() {
   const user = useUser((state) => state.user);
@@ -50,6 +52,8 @@ export default function RouterProvider() {
                 <Route path="/update_shop" element={<UpdateWebsite />} />
                 <Route path="/update_product" element={<UpdateProduct />} />
                 <Route path="/products" element={<ProductsScreen />} />
+                <Route path="/shops" element={<ShopsScreen />} />
+                <Route path="/shop" element={<ShopScreen />} />
                 <Route path="/setting" element={<SettingScreen />} />
               </Route>
             </>
