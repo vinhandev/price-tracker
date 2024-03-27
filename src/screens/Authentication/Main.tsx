@@ -30,6 +30,7 @@ export default function Main() {
 
   const user = useUser((state) => state.user);
 
+  const isLoading = useStore((state) => state.isLoading);
   const setLoading = useStore((state) => state.setLoading);
   const initData = useStore((state) => state.initData);
 
@@ -171,6 +172,7 @@ export default function Main() {
     getData();
   }, []);
 
+
   const NavBarList = [
     [
       {
@@ -181,11 +183,25 @@ export default function Main() {
         isActive: pathname === '/home',
       },
       {
-        label: 'Add Product',
+        label: 'Update Product',
+        onClick: () => {
+          navigate('/update_product');
+        },
+        isActive: pathname === '/update_product',
+      },
+      {
+        label: 'Add New Shop',
         onClick: () => {
           navigate('/add');
         },
         isActive: pathname === '/add',
+      },
+      {
+        label: 'Update Shop',
+        onClick: () => {
+          navigate('/update_shop');
+        },
+        isActive: pathname === '/update_shop',
       },
     ],
     [
@@ -205,6 +221,14 @@ export default function Main() {
       },
     ],
   ];
+
+  useEffect(() => {
+    if(isLoading === false){
+      setCurrentProduct(() => '');
+      setCurrentShop(() => '');
+      setCount(() => 0);
+    }
+  },[isLoading])
 
   return (
     <Box
@@ -273,7 +297,7 @@ export default function Main() {
             height: '100%',
             width: {
               xs: '100%',
-              md:'100%',
+              md: '100%',
               lg: 'calc(100% - 300px)',
             },
           }}

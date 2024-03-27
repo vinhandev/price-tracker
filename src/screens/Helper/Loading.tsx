@@ -29,7 +29,10 @@ export default function Loading({
         zIndex: 9999,
         backgroundColor: 'rgba(0,0,0,0.5)',
         color: 'white',
-        backdropFilter: `blur(${100 - (100 * count) / prices.length}px)`,
+        backdropFilter:
+          prices.length > 0 && count > 0
+            ? `blur(${50 - (50 * count) / prices.length}px)`
+            : 'blur(50px)',
         transition: 'all 0.3s ease',
       }}
     >

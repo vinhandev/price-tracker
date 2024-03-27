@@ -1,7 +1,4 @@
 import { useStore } from '../../../../store/useStore';
-import { useUser } from '../../../../store/useUser';
-import { updateFirebasePrices } from '../../../../utils/firebase';
-import { showError } from '../../../../utils/helper';
 import { Box, Button, ButtonGroup, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +9,6 @@ export default function HorizonSelector() {
   const colors = useColors();
   const navigation = useNavigate();
 
-  const user = useUser((state) => state.user);
 
   const prices = useStore((state) => state.prices);
   const setSelectedProduct = useStore((state) => state.setSelectedProduct);
@@ -20,8 +16,6 @@ export default function HorizonSelector() {
   const setSelectedShop = useStore((state) => state.setSelectedShop);
   const selectedShop = useStore((state) => state.selectedShop);
   const product = useStore((state) => state.selectedProduct);
-  const setLoading = useStore((state) => state.setLoading);
-  const labels = useStore((state) => state.labels);
 
   const productSelectedData = prices.find(
     (item) => item.label === selectedProduct
@@ -47,41 +41,6 @@ export default function HorizonSelector() {
     setSelectedShop(data.shop);
   };
 
-  const handleChangeShopName = async () => {
-    const text = prompt('Change shop name', selectedShop);
-    if (text && user) {
-      setLoading(true);
-      try {
-        const tmpPrices = prices.map((item) => {
-          if (item.label === product) {
-            return {
-              ...item,
-              data: item.data.map((subItem) => {
-                if (subItem.name === selectedShop) {
-                  return {
-                    ...subItem,
-                    name: text,
-                  };
-                }
-                return subItem;
-              }),
-            };
-          }
-          return item;
-        });
-        await updateFirebasePrices(user?.uid, {
-          labels,
-          prices: tmpPrices,
-          lastUpdate: new Date().getTime(),
-        });
-        window.location.reload();
-      } catch (error) {
-        showError(error);
-      }
-      setLoading(false);
-    }
-  };
-
   const handleOpenLink = () => {
     const url = prices
       .find((item) => item.label === product)
@@ -91,82 +50,13 @@ export default function HorizonSelector() {
     }
   };
 
-  const handleDelete = async () => {
-    if (user) {
-      setLoading(true);
-      try {
-        const tmpPrices = prices.map((item) => {
-          if (item.label === product) {
-            const tmpShop = item.data.filter((subItem) => {
-              return subItem.name !== selectedShop;
-            });
-
-            return {
-              label: item.label,
-              data: tmpShop,
-            };
-          }
-          return item;
-        });
-
-        await updateFirebasePrices(user?.uid, {
-          labels,
-          prices: tmpPrices,
-          lastUpdate: new Date().getTime(),
-        });
-        window.location.reload();
-      } catch (error) {
-        showError(error);
-      }
-      setLoading(false);
-    }
+  const handleUpdateProduct = () => {
+    navigation('/update_product');
   };
 
-  // const handleChangeProductName = async () => {
-  //   const text = prompt('Change product name', product);
-  //   setLoading(true);
-  //   try {
-  //     if (text && user) {
-  //       const tmpPrices = prices.map((item) => {
-  //         if (item.label === product) {
-  //           return {
-  //             ...item,
-  //             label: text,
-  //           };
-  //         }
-  //         return item;
-  //       });
-  //       await updateFirebasePrices(user?.uid, {
-  //         prices: tmpPrices,
-  //         labels,
-  //         lastUpdate: new Date().getTime(),
-  //       });
-  //       window.location.reload();
-  //     }
-  //   } catch (error) {
-  //     showError(error);
-  //   }
-  //   setLoading(false);
-  // };
-  // const handleDeleteProduct = async () => {
-  //   setLoading(true);
-  //   try {
-  //     if (user) {
-  //       const tmpPrices = prices.filter((item) => {
-  //         return item.label !== product;
-  //       });
-  //       await updateFirebasePrices(user?.uid, {
-  //         prices: tmpPrices,
-  //         labels,
-  //         lastUpdate: new Date().getTime(),
-  //       });
-  //       window.location.reload();
-  //     }
-  //   } catch (error) {
-  //     showError(error);
-  //   }
-  //   setLoading(false);
-  // };
+  const handleUpdateShop = () => {
+    navigation('/update_shop');
+  };
 
   const watchProduct = watch('product');
   useEffect(() => {
@@ -290,7 +180,7 @@ export default function HorizonSelector() {
           }}
         >
           <Button
-            onClick={handleChangeShopName}
+            onClick={handleUpdateProduct}
             sx={{
               flex: 1,
               flexDirection: 'column',
@@ -299,12 +189,10 @@ export default function HorizonSelector() {
               fontSize: '10px',
             }}
           >
-            Edit Name
+            Edit Product
           </Button>
           <Button
-            onClick={() => {
-              navigation('/update');
-            }}
+            onClick={handleUpdateShop}
             sx={{
               flex: 1,
               flexDirection: 'column',
@@ -313,19 +201,7 @@ export default function HorizonSelector() {
               fontSize: '10px',
             }}
           >
-            Edit Link
-          </Button>
-          <Button
-            onClick={handleDelete}
-            sx={{
-              flex: 1,
-              flexDirection: 'column',
-              color: colors.primary,
-              fontFamily: 'Roboto',
-              fontSize: '10px',
-            }}
-          >
-            Delete Shop
+            Edit Shop
           </Button>
         </ButtonGroup>
 

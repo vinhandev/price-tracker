@@ -13,12 +13,16 @@ import {
   UpdateWebsite,
   SettingScreen,
 } from '@/screens/Main';
-import { NotFound } from '@/screens/Helper';
+import { Init, NotFound } from '@/screens/Helper';
 import Tester from '@/screens/Helper/Tester';
+import { Box } from '@mui/material';
+import { useStore } from '@/store';
+import UpdateProduct from '@/screens/Main/UpdateProduct';
 
 export default function RouterProvider() {
   const user = useUser((state) => state.user);
   const setUser = useUser((state) => state.setUser);
+  const setIsInit = useStore((state) => state.setIsInit);
 
   useEffect(() => {
     onAuthStateChanged(auth, (paramUser) => {
@@ -28,10 +32,12 @@ export default function RouterProvider() {
         // User is signed out
         // ...
       }
+      setIsInit(false);
     });
   });
 
   return (
+    <Box>
       <BrowserRouter>
         <Routes>
           {user ? (
@@ -40,7 +46,8 @@ export default function RouterProvider() {
                 <Route path="/" element={<NotFound />} />
                 <Route path="/home" element={<Homepage />} />
                 <Route path="/add" element={<AddWebsite />} />
-                <Route path="/update" element={<UpdateWebsite />} />
+                <Route path="/update_shop" element={<UpdateWebsite />} />
+                <Route path="/update_product" element={<UpdateProduct />} />
                 <Route path="/setting" element={<SettingScreen />} />
               </Route>
             </>
@@ -54,5 +61,7 @@ export default function RouterProvider() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
+      <Init />
+    </Box>
   );
 }
