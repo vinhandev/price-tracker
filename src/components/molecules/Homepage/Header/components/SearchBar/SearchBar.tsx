@@ -3,7 +3,10 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useColors } from '@/hooks';
 import { useStore } from '@/store';
 import { useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 export default function SearchBar() {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
   const colors = useColors();
   const prices = useStore((state) => state.prices);
   const setProduct = useStore((state) => state.setSelectedProduct);
@@ -17,6 +20,9 @@ export default function SearchBar() {
           onClick: () => {
             setProduct(item.label);
             setShop(item.data[0].name);
+            if (pathname !== '/home') {
+              navigate('/home');
+            }
           },
         });
         item.data.map((subItem) => {
@@ -25,6 +31,9 @@ export default function SearchBar() {
             onClick: () => {
               setProduct(item.label);
               setShop(subItem.name);
+              if (pathname !== '/home') {
+                navigate('/home');
+              }
             },
           });
         });
