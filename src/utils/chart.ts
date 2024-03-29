@@ -36,7 +36,7 @@ export function getGradientMainChart(
   for (let index = 0; index < colors.length; index++) {
     const color = colors[index];
     const part = Math.round((1 * 100) / colors.length) / 100;
-    gradientBg.addColorStop(part * index, `${color}AA`);
+    gradientBg.addColorStop(part * index, `${color}`);
   }
   return gradientBg;
 }

@@ -8,17 +8,23 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
+  Slider,
 } from '@mui/material';
 import { Label } from '@/components/atoms';
 import RatingTab from '@/components/molecules/RatingTab/RatingTab';
-import { showError } from '@/utils';
+import { alphaToHex, showError } from '@/utils';
 import { Button } from '@/components';
+import { graphTheme } from '@/assets/colors';
+import { useMemo } from 'react';
 
 export default function SettingScreen() {
   const user = useUser((state) => state.user);
 
   const themeIndex = useUser((state) => state.themeIndex);
   const setThemeIndex = useUser((state) => state.setThemeIndex);
+
+  const opacity = useUser((state) => state.opacity);
+  const setOpacity = useUser((state) => state.setOpacity);
 
   const prices = useStore((state) => state.prices);
   const setLoading = useStore((state) => state.setLoading);
@@ -71,6 +77,17 @@ export default function SettingScreen() {
     }
   };
 
+  const linearGradient = useMemo(() => {
+    return `linear-gradient(180deg ${graphTheme[themeIndex].reduce(
+      (item, result) => {
+        return ` ${item}, ${result}${alphaToHex(opacity)}`;
+      },
+      ''
+    )})`;
+  }, [opacity, themeIndex]);
+
+  console.log(linearGradient, alphaToHex(opacity), opacity);
+
   return (
     <Box
       sx={{
@@ -111,28 +128,64 @@ export default function SettingScreen() {
             paddingTop: '20px',
           }}
         >
-          <FormControl>
-            <Label label="Theme" />
-            <RadioGroup
-              value={themeIndex}
-              onChange={(e) => setThemeIndex(Number(e.target.value))}
-              aria-labelledby="demo-radio-buttons-group-label"
-              defaultValue="female"
-              name="radio-buttons-group"
-            >
-              <FormControlLabel
-                value="0"
-                control={<Radio />}
-                label="Night Volcano"
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px',
+              flex: 1,
+            }}
+          >
+            <FormControl>
+              <Label label="Theme" />
+              <RadioGroup
+                value={themeIndex}
+                onChange={(e) => setThemeIndex(Number(e.target.value))}
+                aria-labelledby="demo-radio-buttons-group-label"
+                defaultValue="female"
+                name="radio-buttons-group"
+              >
+                <FormControlLabel
+                  value="0"
+                  control={<Radio />}
+                  label="Night Volcano"
+                />
+                <FormControlLabel
+                  value="1"
+                  control={<Radio />}
+                  label="Deep Sea"
+                />
+                <FormControlLabel value="2" control={<Radio />} label="Peace" />
+              </RadioGroup>
+            </FormControl>
+            <FormControl>
+              <Label label="Opacity" />
+              <Slider
+                aria-label="Volume"
+                value={opacity}
+                onChange={(e, value) => {
+                  setOpacity(Number(value));
+                  console.log(value);
+                }}
               />
-              <FormControlLabel
-                value="1"
-                control={<Radio />}
-                label="Deep Sea"
-              />
-              <FormControlLabel value="2" control={<Radio />} label="Peace" />
-            </RadioGroup>
-          </FormControl>
+            </FormControl>
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              flex: 1,
+              justifyContent: 'flex-end',
+            }}
+          >
+            <Box
+              sx={{
+                width: '200px',
+                height: '200px',
+                borderRadius: '10px',
+                background: linearGradient,
+              }}
+            />
+          </Box>
         </Box>
       </Tab>
       <RatingTab />

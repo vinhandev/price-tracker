@@ -23,7 +23,7 @@ ChartJS.register(
 
 import { Line } from 'react-chartjs-2';
 import { useStore } from '../../../store/useStore';
-import { formatDate } from '../../../utils/helper';
+import { alphaToHex, formatDate } from '../../../utils/helper';
 import { useColors } from '@/hooks';
 import {
   Box,
@@ -46,7 +46,11 @@ export default function Chart() {
   const shop = useStore((state) => state.selectedShop);
   const item = prices?.find((item) => item.label === product);
   const themeIndex = useUser((state) => state.themeIndex);
-  const graphColors = graphTheme[themeIndex];
+  const opacity = useUser((state) => state.opacity);
+  console.log(opacity,alphaToHex(opacity));
+  const graphColors = graphTheme[themeIndex].map(
+    (item) => `${item}${alphaToHex(opacity)}`
+  );
   if (!item)
     return (
       <Box

@@ -56,3 +56,16 @@ export const isSameDay = (date1: Date, date2: Date) => {
 export function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+const normalize = (val: number, max: number, min: number) => {
+  return (val - min) / (max - min);
+};
+
+export const hexToAlpha = (alphaHexString: string) => {
+  return Math.round(normalize(parseInt(alphaHexString, 16), 255, 0) * 100);
+};
+
+export const alphaToHex = (num: number) => {
+  const hex = Math.round((num / 100) * 255).toString(16);
+  return (hex.length > 1 ? hex : 0 + hex).toUpperCase();
+};
