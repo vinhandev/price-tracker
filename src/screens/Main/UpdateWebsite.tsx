@@ -12,6 +12,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { Label } from '@/components/atoms';
 import { showError, showSuccess } from '@/utils';
 import { Button } from '@/components';
+import { previewWebsite } from '@/services';
 export default function UpdateWebsite() {
   const [websiteLink, setWebsiteLink] = useState<string>('');
   const [image, setImage] = useState<string>('');
@@ -40,22 +41,11 @@ export default function UpdateWebsite() {
   async function handlePriceChange() {
     setLoading(true);
     try {
-      const response = await fetch(
-        'https://price-tracker-be.fly.dev/previewPrices?' +
-          new URLSearchParams({
-            websiteLink,
-            beforeCharacters,
-            afterCharacters,
-          }),
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
-          },
-        }
-      );
-      const responseData = await response.json();
+      const responseData = await previewWebsite({
+        websiteLink,
+        beforeCharacters,
+        afterCharacters,
+      });
 
       setPrice(responseData.price);
       setWebsiteRemoveBeforeCharacters(

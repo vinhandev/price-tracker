@@ -9,6 +9,7 @@ import Loading from '../Helper/Loading';
 import { Sidebar } from '@/components';
 import { Header } from '@/components/molecules';
 import { useColors } from '@/hooks';
+import { updateUserPrices } from '@/services';
 
 export default function Main() {
   const colors = useColors();
@@ -45,13 +46,7 @@ export default function Main() {
   async function handleReload() {
     try {
       setLoading(true);
-      await fetch('https://price-tracker-be.fly.dev/updatePrices', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + localStorage.getItem('token'),
-        },
-      });
+      await updateUserPrices();
       await getData();
     } catch (error) {
       showError(error);

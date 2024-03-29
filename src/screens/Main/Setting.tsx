@@ -163,7 +163,7 @@ export default function SettingScreen() {
               <Slider
                 aria-label="Volume"
                 value={opacity}
-                onChange={(e, value) => {
+                onChange={(_, value) => {
                   setOpacity(Number(value));
                   console.log(value);
                 }}

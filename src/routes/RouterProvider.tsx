@@ -29,9 +29,11 @@ export default function RouterProvider() {
   const setIsInit = useStore((state) => state.setIsInit);
 
   useEffect(() => {
-    onAuthStateChanged(auth, (paramUser) => {
+    onAuthStateChanged(auth, async (paramUser) => {
       if (paramUser) {
         setUser(paramUser);
+        const token = await paramUser.getIdToken();
+        localStorage.setItem('token', token);
       } else {
         // User is signed out
         // ...

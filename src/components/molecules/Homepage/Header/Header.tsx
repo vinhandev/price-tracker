@@ -63,7 +63,7 @@ export default function Header() {
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
-          gap: 4,
+          gap: 1,
         }}
       >
         <Typography
