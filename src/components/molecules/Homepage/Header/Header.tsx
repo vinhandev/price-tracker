@@ -1,18 +1,21 @@
 import {
   Avatar,
+  Badge,
   Box,
+  IconButton,
   Menu,
   MenuItem,
   Tooltip,
   Typography,
 } from '@mui/material';
 import SearchBar from './components/SearchBar/SearchBar';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+
 import { useUser } from '@/store';
 import { useColors } from '@/hooks';
 import { useState } from 'react';
 import { logout } from '@/utils';
 import { useNavigate } from 'react-router-dom';
-
 export default function Header() {
   const navigation = useNavigate();
   const colors = useColors();
@@ -72,6 +75,12 @@ export default function Header() {
         >
           {user?.email}
         </Typography>
+
+        <IconButton>
+          <Badge badgeContent={4} color="primary">
+            <NotificationsIcon />
+          </Badge>
+        </IconButton>
         <Tooltip title="Account settings">
           <Avatar
             onClick={handleClick}

@@ -1,5 +1,6 @@
 import {
   Box,
+  Divider,
   Fab,
   IconButton,
   Table,
@@ -152,9 +153,9 @@ export default function ShopScreen() {
               justifyContent: 'space-between',
               gap: '10px',
               paddingY: '10px',
-              borderBottom: '1px solid ' + colors.border,
             }}
           >
+            <Divider />
             <Box
               sx={{
                 display: 'flex',
