@@ -38,7 +38,7 @@ export default function AddWebsite() {
     setLoading(true);
     try {
       const response = await fetch(
-        'http://localhost:4000/previewPrices?' +
+        'https://price-tracker-be.fly.dev/previewPrices?' +
           new URLSearchParams({
             websiteLink,
             beforeCharacters,

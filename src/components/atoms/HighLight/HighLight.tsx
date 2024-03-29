@@ -19,12 +19,15 @@ export default function HighLight({ data }: Props) {
         display: 'flex',
         flexDirection: 'column',
         flex: 1,
-        gap: '5px',
+        gap: '10px',
       }}
     >
       {data.map((item, index) => {
         return (
-          <Box key={item.name} sx={{ width: '100%', flex: 1, display: 'flex' }}>
+          <Box
+            key={item.name}
+            sx={{ width: '100%', flex: 1, flexGrow: 1, display: 'flex' }}
+          >
             <Box
               sx={{
                 background: colors.background,
@@ -32,10 +35,10 @@ export default function HighLight({ data }: Props) {
                 borderRadius: 2,
 
                 flex: 1,
+                height: '130px',
                 width: '100%',
 
                 position: 'relative',
-                height: '120px',
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'flex-end',

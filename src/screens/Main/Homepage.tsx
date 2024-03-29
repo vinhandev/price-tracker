@@ -7,7 +7,6 @@ import ShopRecords from '../../components/molecules/Homepage/Records/ShopRecords
 import { Box } from '@mui/material';
 import Tab from '@/HOCs/Tab';
 import HorizonSelector from '@/components/molecules/Homepage/HorizonSelector/HorizonSelector';
-import { showError } from '@/utils';
 
 export type HightLightType = {
   label: string;
@@ -24,7 +23,6 @@ export default function Homepage() {
   const product = useStore((state) => state.selectedProduct);
   const setProduct = useStore((state) => state.setSelectedProduct);
   const setSelectedShop = useStore((state) => state.setSelectedShop);
-  const setLoading = useStore((state) => state.setLoading);
 
   const currentLowestPrice = useMemo(() => {
     if (prices && selectedProduct) {

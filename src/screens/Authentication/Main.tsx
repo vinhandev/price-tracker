@@ -45,7 +45,7 @@ export default function Main() {
   async function handleReload() {
     try {
       setLoading(true);
-      await fetch('http://localhost:4000/updatePrices', {
+      await fetch('https://price-tracker-be.fly.dev/updatePrices', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

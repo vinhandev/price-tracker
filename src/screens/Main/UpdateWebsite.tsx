@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { convertStringToNumber, delay, formatMoney } from '../../utils/helper';
+import { delay, formatMoney } from '../../utils/helper';
 import { Selector } from '../../components/atoms/Inputs/Selector/Selector';
 import { GroupPriceProps } from '../../types/prices';
 import { useStore } from '../../store/useStore';
@@ -40,34 +40,36 @@ export default function UpdateWebsite() {
   async function handlePriceChange() {
     setLoading(true);
     try {
-      const response = await fetch(websiteLink);
-      const data = (await response.text())
-        .replace(/\n/g, ' ')
-        .replace(/\r/g, ' ')
-        .replace(/\t/g, ' ')
-        .split('=""')
-        .join('')
-        .split(' ')
-        .join('');
+      const response = await fetch(
+        'https://price-tracker-be.fly.dev/previewPrices?' +
+          new URLSearchParams({
+            websiteLink,
+            beforeCharacters,
+            afterCharacters,
+          }),
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + localStorage.getItem('token'),
+          },
+        }
+      );
+      const responseData = await response.json();
 
-      const tmpRemoved =
-        data?.split(beforeCharacters.split(' ').join(''))[0] ?? '0';
-      const tmpPrice =
-        data?.split(beforeCharacters.split(' ').join(''))[1] ?? '0';
-      const price1 =
-        tmpPrice?.split(afterCharacters.split(' ').join(''))[0] ?? '0';
-      const number = convertStringToNumber(price1) ?? 0;
-
-      setPrice(number);
-      setWebsiteRemoveBeforeCharacters(() => tmpRemoved);
-      setWebsiteSourceCode(() => tmpPrice);
-      setWebsiteRemoveAllCharacters(() => price1);
+      setPrice(responseData.price);
+      setWebsiteRemoveBeforeCharacters(
+        () => responseData.websiteRemoveBeforeCharacters
+      );
+      setWebsiteSourceCode(() => responseData.websiteSourceCode);
+      setWebsiteRemoveAllCharacters(
+        () => responseData.websiteRemoveAllCharacters
+      );
     } catch (error) {
-      console.log(error);
+      showError(error);
     }
     setLoading(false);
   }
-
   const handleDelete = async () => {
     if (user) {
       setLoading(true);
