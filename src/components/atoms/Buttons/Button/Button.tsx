@@ -6,15 +6,13 @@ export default function Button(props: ButtonProps) {
   return (
     <RButton
       {...props}
-      variant="outlined"
+      disableElevation
       sx={{
-        paddingY: 2,
-        paddingX: 4,
-        background: colors.primary,
-        color: colors.text2,
+        height: '40px',
         fontSize: 14,
+        textTransform: 'capitalize',
+        fontWeight: '300',
         ':hover': {
-          color: colors.primary,
         },
       }}
     />

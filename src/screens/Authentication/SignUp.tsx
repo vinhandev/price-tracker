@@ -1,8 +1,8 @@
 import { Box } from '@mui/material';
 import FormInput from '../../components/atoms/FormInput/FormInput';
 import { useForm } from 'react-hook-form';
-import { Button } from '../../components/atoms/Buttons';
 import { useColors, useSignUp } from '../../hooks';
+import { Button } from '@/components';
 
 export default function SignUp() {
   const colors = useColors()

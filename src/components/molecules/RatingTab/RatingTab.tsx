@@ -1,9 +1,10 @@
 import Tab from '@/HOCs/Tab';
+import { Button } from '@/components';
 import { Label } from '@/components/atoms';
 import TextInput from '@/components/atoms/Inputs/TextInput/TextInput';
 import { useUser } from '@/store';
 import { addRating, getRating, showSuccess } from '@/utils';
-import { Box, Button, Rating } from '@mui/material';
+import { Box, Rating } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 export default function RatingTab() {

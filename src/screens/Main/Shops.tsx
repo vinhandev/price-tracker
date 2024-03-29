@@ -18,8 +18,9 @@ import { useColors } from '@/hooks';
 import { useStore } from '@/store';
 import { Tab } from '@/HOCs';
 import AddIcon from '@mui/icons-material/Add';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Selector } from '@/components/atoms/Inputs/Selector/Selector';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 export default function ShopsScreen() {
   const theme = useTheme();
@@ -92,6 +93,44 @@ export default function ShopsScreen() {
     >
       <Tab>
         <Box>
+        <Link
+            style={{
+              textDecoration: 'none',
+              color: colors.primary,
+            }}
+            to="/products"
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1px',
+              }}
+            >
+              <ArrowBackIosIcon
+                sx={{
+                  fontWeight: '400',
+                  fontSize: '12px',
+                  textDecorationLine: 'none',
+                }}
+              />
+              <Typography
+                sx={{
+                  cursor: 'pointer',
+                  color: colors.primary,
+                  fontWeight: '400',
+                  fontSize: '12px',
+                  textDecorationLine: 'none',
+                  transition: 'all 0.3s ease',
+                  ':hover': {
+                    textDecorationLine: 'underline',
+                  },
+                }}
+              >
+                All products
+              </Typography>
+            </Box>
+          </Link>
           <Box
             sx={{
               display: 'flex',

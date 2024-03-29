@@ -1,10 +1,10 @@
 import { useStore } from '../../../../store/useStore';
-import { Box, Button, ButtonGroup, Typography } from '@mui/material';
+import { Box, ButtonGroup, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useColors } from '@/hooks';
 import { useForm } from 'react-hook-form';
-import { FormInput } from '@/components';
+import { Button, FormInput } from '@/components';
 export default function HorizonSelector() {
   const colors = useColors();
   const navigation = useNavigate();

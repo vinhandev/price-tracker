@@ -1,11 +1,39 @@
-import { Box, Typography } from '@mui/material';
+import { Avatar, Box, Menu, MenuItem, Typography } from '@mui/material';
 import SearchBar from './components/SearchBar/SearchBar';
 import { useUser } from '@/store';
 import { useColors } from '@/hooks';
+import { useState } from 'react';
+import { logout } from '@/utils';
+import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
+  const navigation = useNavigate();
   const colors = useColors();
   const user = useUser((state) => state.user);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const profileMenuProps = [
+    {
+      title: 'Profile',
+      onClick: () => {
+        navigation('/profile');
+      },
+    },
+    {
+      title: 'Log out',
+      onClick: async () => {
+        await logout();
+        window.location.reload();
+      },
+    },
+  ];
 
   return (
     <Box
@@ -37,18 +65,56 @@ export default function Header() {
         >
           {user?.email}
         </Typography>
-        <Box
+        <Avatar
+          onClick={handleClick}
+          alt="User"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHcM04W6diLQBzw4Y4pXDhPgovRf7l1cBF0Q&usqp=CAU"
           sx={{
-            borderRadius: 1000,
-            width: '50px',
-            height: '50px',
+            ':hover': {
+              cursor: 'pointer',
+            },
+          }}
+        />
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+          }}
+          sx={{
+            marginTop: '10px',
+            '.MuiPaper-root': {
+              boxShadow: '0px 10px 15px -3px rgba(0,0,0,0.1)',
+              borderRadius: '10px',
+            },
           }}
         >
-          <img
-            style={{ width: '100%', height: '100%', borderRadius: 1000 }}
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHcM04W6diLQBzw4Y4pXDhPgovRf7l1cBF0Q&usqp=CAU"
-          />
-        </Box>
+          {profileMenuProps.map((item) => (
+            <MenuItem
+              sx={{
+                width: '100px',
+
+                fontFamily: 'Roboto',
+                fontSize: '14px',
+                fontWeight: '600',
+
+                '&.Mui-focusVisible': {
+                  background: colors.background,
+                },
+
+                '&:hover': {
+                  background: colors.background2,
+                },
+              }}
+              key={item.title}
+              onClick={item.onClick}
+            >
+              {item.title}
+            </MenuItem>
+          ))}
+        </Menu>
       </Box>
     </Box>
   );

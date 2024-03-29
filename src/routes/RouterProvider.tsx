@@ -12,6 +12,7 @@ import {
   AddWebsite,
   UpdateWebsite,
   SettingScreen,
+  Profile,
 } from '@/screens/Main';
 import { Init, NotFound } from '@/screens/Helper';
 import Tester from '@/screens/Helper/Tester';
@@ -55,6 +56,7 @@ export default function RouterProvider() {
                 <Route path="/shops" element={<ShopsScreen />} />
                 <Route path="/shop" element={<ShopScreen />} />
                 <Route path="/setting" element={<SettingScreen />} />
+                <Route path="/profile" element={<Profile />} />
               </Route>
             </>
           ) : (

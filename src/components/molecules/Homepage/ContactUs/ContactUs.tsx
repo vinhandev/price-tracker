@@ -1,6 +1,7 @@
+import { Button } from '@/components';
 import { useColors } from '@/hooks';
 import { useUser } from '@/store';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 export default function ContactUs() {
   const colors = useColors();
   const user = useUser((state) => state.user);

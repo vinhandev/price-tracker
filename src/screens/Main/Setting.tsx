@@ -4,7 +4,6 @@ import { useUser } from '../../store/useUser';
 import { updateFirebasePrices } from '../../utils/firebase';
 import {
   Box,
-  Button,
   FormControl,
   FormControlLabel,
   Radio,
@@ -13,6 +12,7 @@ import {
 import { Label } from '@/components/atoms';
 import RatingTab from '@/components/molecules/RatingTab/RatingTab';
 import { showError } from '@/utils';
+import { Button } from '@/components';
 
 export default function SettingScreen() {
   const user = useUser((state) => state.user);

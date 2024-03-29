@@ -45,10 +45,10 @@ export function Selector({
         value={value}
         sx={{
           color: colors.text,
-          fontSize: '14px',
+          fontSize: '12px',
           fontFamily: 'Roboto',
           '.MuiOutlinedInput-notchedOutline': {
-            borderColor: 'rgba(228, 219, 233, 0.25)',
+            borderColor: colors.border,
           },
           '.MuiSelect-icon': {
             color: colors.text,

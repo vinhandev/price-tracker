@@ -188,33 +188,13 @@ export default function Main() {
         },
         isActive: pathname === '/home',
       },
-      {
-        label: 'Update Product',
-        onClick: () => {
-          navigate('/update_product');
-        },
-        isActive: pathname === '/update_product',
-      },
+
       {
         label: 'Products',
         onClick: () => {
           navigate('/products');
         },
         isActive: pathname === '/products',
-      },
-      {
-        label: 'Add New Shop',
-        onClick: () => {
-          navigate('/add');
-        },
-        isActive: pathname === '/add',
-      },
-      {
-        label: 'Update Shop',
-        onClick: () => {
-          navigate('/update_shop');
-        },
-        isActive: pathname === '/update_shop',
       },
     ],
     [
@@ -224,13 +204,6 @@ export default function Main() {
           navigate('/setting');
         },
         isActive: pathname === '/setting',
-      },
-      {
-        label: 'Logout',
-        onClick: async () => {
-          await auth.signOut();
-          window.location.reload();
-        },
       },
     ],
   ];

@@ -31,13 +31,16 @@ export default function TextInput({
       <TextField
         sx={{
           '.MuiInputBase-root': {
-            borderColor: 'rgba(228, 219, 233, 0.25)',
+            borderColor: colors.border,
           },
-          color: colors.text,
-          fontSize: '14px',
-          fontFamily: 'Roboto',
+
           '.MuiOutlinedInput-notchedOutline': {
-            borderColor: 'rgba(228, 219, 233, 0.25)',
+            borderColor: colors.border,
+          },
+          '.MuiInputBase-input': {
+            color: colors.text,
+            fontSize: '12px',
+            fontFamily: 'Roboto',
           },
           '.MuiSelect-icon': {
             color: colors.text,
