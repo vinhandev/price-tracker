@@ -25,7 +25,7 @@ export default function HighLight({ data }: Props) {
       {data.map((item, index) => {
         return (
           <Box
-            key={item.name}
+            key={index}
             sx={{ width: '100%', flex: 1, flexGrow: 1, display: 'flex' }}
           >
             <Box
