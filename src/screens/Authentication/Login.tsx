@@ -15,7 +15,9 @@ export default function Login() {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    await mutation(data.username, data.password);
+    const response = await mutation(data.username, data.password);
+    const token = await response.user.getIdToken();
+    localStorage.setItem('token', token);
     window.location.href = '/';
   };
 

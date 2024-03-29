@@ -3,12 +3,16 @@ import { HightLightType } from '@/screens/Main/Homepage';
 import HighLightChart from '../HighLightChart/HighLightChart';
 import { formatMoney } from '@/utils';
 import { useColors } from '@/hooks';
+import { useUser } from '@/store';
+import { graphTheme } from '@/assets/colors';
 
 type Props = {
   data: HightLightType[];
 };
 export default function HighLight({ data }: Props) {
   const colors = useColors();
+  const theme = useUser((state) => state.themeIndex);
+  const selectedTheme = graphTheme[theme];
   return (
     <div
       style={{
@@ -18,9 +22,9 @@ export default function HighLight({ data }: Props) {
         gap: '5px',
       }}
     >
-      {data.map((item) => {
+      {data.map((item, index) => {
         return (
-          <Box sx={{ width: '100%', flex: 1, display: 'flex' }}>
+          <Box key={item.name} sx={{ width: '100%', flex: 1, display: 'flex' }}>
             <Box
               sx={{
                 background: colors.background,
@@ -102,7 +106,10 @@ export default function HighLight({ data }: Props) {
                   width: 'calc(50% - 10px)',
                 }}
               >
-                <HighLightChart colors={[item.color]} data={item.data} />
+                <HighLightChart
+                  colors={[selectedTheme[index]]}
+                  data={item.data}
+                />
               </Box>
             </Box>
           </Box>

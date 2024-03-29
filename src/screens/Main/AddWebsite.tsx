@@ -1,10 +1,5 @@
 import { useState } from 'react';
-import {
-  convertStringToNumber,
-  delay,
-  extractDomainName,
-  formatMoney,
-} from '../../utils/helper';
+import { delay, extractDomainName, formatMoney } from '../../utils/helper';
 import { Selector } from '../../components/atoms/Inputs/Selector/Selector';
 import { GroupPriceProps } from '../../types/prices';
 import { useStore } from '../../store/useStore';
@@ -15,7 +10,7 @@ import TextInput from '@/components/atoms/Inputs/TextInput/TextInput';
 import Tab from '@/HOCs/Tab';
 import AddIcon from '@mui/icons-material/Add';
 import { Label } from '@/components/atoms';
-import { showSuccess } from '@/utils';
+import { showError, showSuccess } from '@/utils';
 import { Button } from '@/components';
 export default function AddWebsite() {
   const [websiteLink, setWebsiteLink] = useState<string>('');
@@ -23,7 +18,8 @@ export default function AddWebsite() {
   const [beforeCharacters, setBeforeCharacters] = useState<string>('<!');
   const [afterCharacters, setAfterCharacters] = useState<string>('</html>');
 
-  const [selectedProduct, setSelectedProduct] = useState<string>('');
+  const selectedProduct = useStore((state) => state.selectedProduct);
+  const setSelectedProduct = useStore((state) => state.setSelectedProduct);
 
   const [websiteSourceCode, setWebsiteSourceCode] = useState<string>('');
   const [websiteRemoveBeforeCharacters, setWebsiteRemoveBeforeCharacters] =
@@ -41,30 +37,29 @@ export default function AddWebsite() {
   async function handlePriceChange() {
     setLoading(true);
     try {
-      const response = await fetch(websiteLink);
-      const data = (await response.text())
-        .replace(/\n/g, ' ')
-        .replace(/\r/g, ' ')
-        .replace(/\t/g, ' ')
-        .split('=""')
-        .join('')
-        .split(' ')
-        .join('');
+      const response = await fetch(
+        'http://localhost:4000/previewPrices?' +
+          new URLSearchParams({
+            websiteLink,
+            beforeCharacters,
+            afterCharacters,
+          }),
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + localStorage.getItem('token'),
+          },
+        }
+      );
+      const responseData = await response.json();
 
-      const tmpRemoved =
-        data?.split(beforeCharacters.split(' ').join(''))[0] ?? '0';
-      const tmpPrice =
-        data?.split(beforeCharacters.split(' ').join(''))[1] ?? '0';
-      const price1 =
-        tmpPrice?.split(afterCharacters.split(' ').join(''))[0] ?? '0';
-      const number = convertStringToNumber(price1) ?? 0;
-
-      setPrice(number);
-      setWebsiteRemoveBeforeCharacters(() => tmpRemoved);
-      setWebsiteSourceCode(() => tmpPrice);
-      setWebsiteRemoveAllCharacters(() => price1);
+      setPrice(responseData.price);
+      setWebsiteRemoveBeforeCharacters(() => responseData.websiteRemoveBeforeCharacters);
+      setWebsiteSourceCode(() => responseData.websiteSourceCode);
+      setWebsiteRemoveAllCharacters(() => responseData.websiteRemoveAllCharacters);
     } catch (error) {
-      console.log(error);
+      showError(error);
     }
     setLoading(false);
   }
