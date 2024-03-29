@@ -5,7 +5,7 @@ import {
   sidebarClasses,
 } from 'react-pro-sidebar';
 import { useStore } from '../../../../store/useStore';
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Tooltip } from '@mui/material';
 import { DarkModeButton } from '@/components';
 import { ContactUs } from '../..';
 import { useColors } from '@/hooks';
@@ -112,7 +112,7 @@ export default function Sidebar({ navBarList, onReload }: Props) {
                           height: '1px',
                           backgroundColor: colors.border,
                           marginY: 1,
-                          marginRight:'30px',
+                          marginRight: '30px',
                         }}
                       />
                     )}
@@ -159,8 +159,12 @@ export default function Sidebar({ navBarList, onReload }: Props) {
                 paddingRight: '30px',
               }}
             >
-              <DarkModeButton key={new Date().toString()} />
-              <ReloadButton onClick={onReload} />
+              <Tooltip title="Dark Mode">
+                <DarkModeButton key={new Date().toString()} />
+              </Tooltip>
+              <Tooltip title="Reload">
+                <ReloadButton onClick={onReload} />
+              </Tooltip>
             </Box>
             <Box
               sx={{

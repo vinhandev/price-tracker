@@ -1,4 +1,11 @@
-import { Avatar, Box, Menu, MenuItem, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Menu,
+  MenuItem,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import SearchBar from './components/SearchBar/SearchBar';
 import { useUser } from '@/store';
 import { useColors } from '@/hooks';
@@ -65,16 +72,18 @@ export default function Header() {
         >
           {user?.email}
         </Typography>
-        <Avatar
-          onClick={handleClick}
-          alt="User"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHcM04W6diLQBzw4Y4pXDhPgovRf7l1cBF0Q&usqp=CAU"
-          sx={{
-            ':hover': {
-              cursor: 'pointer',
-            },
-          }}
-        />
+        <Tooltip title="Account settings">
+          <Avatar
+            onClick={handleClick}
+            alt="User"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHcM04W6diLQBzw4Y4pXDhPgovRf7l1cBF0Q&usqp=CAU"
+            sx={{
+              ':hover': {
+                cursor: 'pointer',
+              },
+            }}
+          />
+        </Tooltip>
         <Menu
           id="basic-menu"
           anchorEl={anchorEl}
