@@ -1,5 +1,10 @@
 import {
   Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
   Fab,
   IconButton,
   Table,
@@ -20,6 +25,8 @@ import { Tab } from '@/HOCs';
 import { showSuccess, updateFirebasePrices } from '@/utils';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
+import TextInput from '@/components/atoms/Inputs/TextInput/TextInput';
+import { Button } from '@/components';
 
 export default function ProductsScreen() {
   const theme = useTheme();
@@ -27,6 +34,8 @@ export default function ProductsScreen() {
   const navigate = useNavigate();
 
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [open, setOpen] = useState(false);
+  const [newProductName, setNewProductName] = useState('');
 
   const isActive = scrollPosition > 0;
 
@@ -53,6 +62,10 @@ export default function ProductsScreen() {
   const handleScroll = () => {
     const position = window.pageYOffset;
     setScrollPosition(position);
+  };
+
+  const handleClose = () => {
+    setOpen(!open);
   };
 
   async function handleAddNewProduct() {
@@ -107,6 +120,32 @@ export default function ProductsScreen() {
         paddingTop: '10px',
       }}
     >
+      <Dialog
+        sx={{
+          '.MuiPaper-root': {
+            width: 500,
+            padding: '10px',
+          },
+        }}
+        open={open}
+        onClose={handleClose}
+      >
+        <DialogTitle>New Product</DialogTitle>
+        <DialogContent>
+          <TextInput
+            onChange={setNewProductName}
+            value={newProductName}
+            label="Name"
+            errorText=""
+            isError={false}
+          />
+        </DialogContent>
+        <Divider />
+        <DialogActions>
+          <Button onClick={handleAddNewProduct}>Add</Button>
+          <Button color='inherit' onClick={handleClose}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
       <Tab>
         <Box>
           <Box
@@ -118,7 +157,7 @@ export default function ProductsScreen() {
           >
             <Typography variant="h5">Products</Typography>
             <IconButton
-              onClick={handleAddNewProduct}
+              onClick={handleClose}
               sx={{
                 borderRadius: 1000,
                 background: colors.primary,
