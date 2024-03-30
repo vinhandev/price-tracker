@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Backdrop, Box, Typography } from '@mui/material';
 import { useStore } from '../../store/useStore';
 
 export default function Loading({
@@ -14,27 +14,9 @@ export default function Loading({
   const prices = useStore((state) => state.prices);
   if (!prices) return null;
   return (
-    <div
-      style={{
-        display: isLoading ? 'flex' : 'none',
-        flexDirection: 'column',
-        gap: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: '100%',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        zIndex: 9999,
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        color: 'white',
-        backdropFilter:
-          prices.length > 0 && count > 0
-            ? `blur(${50 - (50 * count) / prices.length}px)`
-            : 'blur(50px)',
-        transition: 'all 0.3s ease',
-      }}
+    <Backdrop
+      open={isLoading}
+      sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
     >
       <Box>
         {currentShop && (
@@ -72,6 +54,6 @@ export default function Loading({
           <div>{((count * 100) / prices?.length).toFixed(2)}%</div>
         )}
       </Box>
-    </div>
+    </Backdrop>
   );
 }
