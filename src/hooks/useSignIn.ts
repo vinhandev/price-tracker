@@ -1,6 +1,6 @@
 import { z, ZodType } from 'zod';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../services/firebase';
+import { auth } from '@/services';
 
 export type LoginFormData = {
   username: string;

@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../services/firebase';
 import { useUser } from '../store/useUser';
 
 import { Main, Login, SignUp } from '@/screens/Authentication';
@@ -22,6 +21,7 @@ import UpdateProduct from '@/screens/Main/UpdateProduct';
 import ProductsScreen from '@/screens/Main/Products';
 import ShopsScreen from '@/screens/Main/Shops';
 import ShopScreen from '@/screens/Main/Shop';
+import { auth } from '@/services';
 
 export default function RouterProvider() {
   const user = useUser((state) => state.user);

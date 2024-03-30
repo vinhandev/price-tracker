@@ -1,7 +1,7 @@
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { FirebaseType } from '../types/prices';
-import { db } from '../services/firebase';
 import { FeedbackProps } from '@/types/rating';
+import { db } from '@/services';
 
 export const updateFirebasePrices = async (
   uid: string,
