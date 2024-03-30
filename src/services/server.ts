@@ -1,5 +1,5 @@
-const url = 'https://localhost:3000';
-// const url = 'https://price-tracker-be.fly.dev';
+// const url = 'https://localhost:3000';
+const url = 'https://price-tracker-be.fly.dev';
 export const updateUserPrices = async () => {
   const response = await fetch(url + 'updatePrices', {
     method: 'GET',
