@@ -16,6 +16,7 @@ import { alphaToHex, showError } from '@/utils';
 import { Button } from '@/components';
 import { graphTheme } from '@/assets/colors';
 import { useMemo } from 'react';
+import { updateAllData } from '@/services';
 
 export default function SettingScreen() {
   const user = useUser((state) => state.user);
@@ -77,6 +78,16 @@ export default function SettingScreen() {
     }
   };
 
+  const handleUpdateData = async () => {
+    setLoading(true);
+    try {
+      await updateAllData();
+    } catch (error) {
+      showError(error);
+    }
+    setLoading(false);
+  };
+
   const linearGradient = useMemo(() => {
     return `linear-gradient(180deg ${graphTheme[themeIndex].reduce(
       (item, result) => {
@@ -116,6 +127,9 @@ export default function SettingScreen() {
           </Button>
           <Button onClick={onDeleteAllData} color="error" variant="contained">
             Delete all data
+          </Button>
+          <Button onClick={handleUpdateData} variant="contained">
+            Update all user data
           </Button>
         </Box>
       </Tab>

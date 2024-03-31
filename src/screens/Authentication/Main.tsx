@@ -2,7 +2,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 import { Box } from '@mui/material';
-import { getFirebasePrices, showError } from '@/utils';
+import { delay, getFirebasePrices, showError, showSuccess } from '@/utils';
 import { LogoHorizontal } from '@/components/atoms/Logos';
 import { useStore, useUser } from '@/store';
 import Loading from '../Helper/Loading';
@@ -27,27 +27,13 @@ export default function Main() {
   const setLoading = useStore((state) => state.setLoading);
   const initData = useStore((state) => state.initData);
 
-  async function getData() {
-    setLoading(true);
-    try {
-      if (user) {
-        const response = await getFirebasePrices(user.uid);
-        console.log(response);
-
-        if (response.prices) {
-          initData(response.prices, response.labels ?? [], 0);
-        }
-      }
-    } catch (error) {
-      showError(error);
-    }
-    setLoading(false);
-  }
   async function handleReload() {
     try {
       setLoading(true);
       await updateUserPrices();
-      await getData();
+      showSuccess('Prices updated successfully');
+      await delay(1000);
+      window.location.reload();
     } catch (error) {
       showError(error);
     }
