@@ -1,5 +1,5 @@
 import { useColors } from '@/hooks';
-import { Box, Typography } from '@mui/material';
+import { Box, Card, Typography } from '@mui/material';
 
 type Props = {
   title?: string;
@@ -9,7 +9,8 @@ type Props = {
 export default function Tab({ title, children, noPadding = false }: Props) {
   const colors = useColors();
   return (
-    <Box
+    <Card
+      elevation={0}
       sx={{
         position: 'relative',
         display: 'flex',
@@ -37,6 +38,6 @@ export default function Tab({ title, children, noPadding = false }: Props) {
         </Typography>
       ) : null}
       {children}
-    </Box>
+    </Card>
   );
 }

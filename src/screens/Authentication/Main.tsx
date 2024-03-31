@@ -169,10 +169,6 @@ export default function Main() {
           <Box
             sx={{
               width: '100%',
-              display: {
-                xs: 'none',
-                md: 'flex',
-              },
             }}
           >
             <Header />

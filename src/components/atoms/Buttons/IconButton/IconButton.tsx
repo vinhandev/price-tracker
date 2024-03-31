@@ -25,7 +25,7 @@ export default function IconButton({ variant, onClick }: Props) {
         borderRadius: 10,
       }}
     >
-      <Icon variant={variant} size={20} />
+      <Icon variant={variant} size={20} color={colors.text} />
     </div>
   );
 }
