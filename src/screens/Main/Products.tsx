@@ -69,12 +69,12 @@ export default function ProductsScreen() {
   };
 
   async function handleAddNewProduct() {
-    const text = prompt('Add new product');
-    if (text && user) {
+    if (user) {
+      handleClose();
       setLoading(true);
       try {
         prices.push({
-          label: text,
+          label: newProductName,
           data: [],
         });
         await updateFirebasePrices(user?.uid, {
@@ -143,7 +143,9 @@ export default function ProductsScreen() {
         <Divider />
         <DialogActions>
           <Button onClick={handleAddNewProduct}>Add</Button>
-          <Button color='inherit' onClick={handleClose}>Cancel</Button>
+          <Button color="inherit" onClick={handleClose}>
+            Cancel
+          </Button>
         </DialogActions>
       </Dialog>
       <Tab>

@@ -1,5 +1,5 @@
 import { useColors } from '@/hooks';
-import { Box, Card, Typography } from '@mui/material';
+import { Card, Typography } from '@mui/material';
 
 type Props = {
   title?: string;

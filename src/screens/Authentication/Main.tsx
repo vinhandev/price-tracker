@@ -1,7 +1,7 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
-import { Box } from '@mui/material';
+import { Alert, Box, Slide, Snackbar } from '@mui/material';
 import { delay, getFirebasePrices, showError, showSuccess } from '@/utils';
 import { LogoHorizontal } from '@/components/atoms/Logos';
 import { useStore, useUser } from '@/store';
@@ -25,6 +25,11 @@ export default function Main() {
 
   const isLoading = useStore((state) => state.isLoading);
   const setLoading = useStore((state) => state.setLoading);
+
+  const successMessage = useStore((state) => state.successMessage);
+  const isSuccess = useStore((state) => state.isSuccess);
+  const setSuccess = useStore((state) => state.setSuccess);
+
   const initData = useStore((state) => state.initData);
 
   async function handleReload() {
@@ -38,6 +43,10 @@ export default function Main() {
       showError(error);
     }
     setLoading(false);
+  }
+
+  function handleCloseSnackbar() {
+    setSuccess(false);
   }
 
   useEffect(() => {
@@ -183,6 +192,21 @@ export default function Main() {
           currentProduct={currentProduct}
           currentShop={currentShop}
         />
+
+        <Snackbar
+          open={isSuccess}
+          onClose={handleCloseSnackbar}
+          // TransitionComponent={Slide}
+          autoHideDuration={1200}
+        >
+          <Alert
+            severity="success"
+            variant="filled"
+            sx={{ width: '100%' }}
+          >
+            {successMessage}
+          </Alert>
+        </Snackbar>
       </Box>
     </Box>
   );

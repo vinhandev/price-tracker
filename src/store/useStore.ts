@@ -10,6 +10,10 @@ type Store = {
   setIsInit: (value: boolean) => void;
   isLoading: boolean;
   setLoading: (isLoading: boolean) => void;
+  isSuccess: boolean;
+  setSuccess: (isSuccess: boolean) => void;
+  successMessage: string;
+  setSuccessMessage: (message: string) => void;
   prices: GroupPriceProps[];
   setPrices: (prices: GroupPriceProps[]) => void;
   progressValue: number;
@@ -52,4 +56,8 @@ export const useStore = create<Store>((set) => ({
     set({ prices, labels, lastUpdate }),
   selectedShop: '',
   setSelectedShop: (value: string) => set({ selectedShop: value }),
+  isSuccess: false,
+  setSuccess: (isSuccess: boolean) => set({ isSuccess }),
+  successMessage: 'Success',
+  setSuccessMessage: (message: string) => set({ successMessage: message }),
 }));

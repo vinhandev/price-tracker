@@ -1,5 +1,5 @@
-// const url = 'http://localhost:3000/api';
-const url = 'https://price-tracker-be.fly.dev/api';
+const url = 'http://localhost:3000/api';
+// const url = 'https://price-tracker-be.fly.dev/api';
 
 const priceUrl = url + '/price';
 export const updateUserPrices = async () => {
