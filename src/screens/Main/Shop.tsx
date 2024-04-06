@@ -149,13 +149,12 @@ export default function ShopScreen() {
           <Box
             sx={{
               display: 'flex',
-              alignItems: 'center',
+              flexDirection: 'column',
               justifyContent: 'space-between',
               gap: '10px',
               paddingY: '10px',
             }}
           >
-            <Divider />
             <Box
               sx={{
                 display: 'flex',
@@ -181,6 +180,7 @@ export default function ShopScreen() {
                 />
               </IconButton>
             </Box>
+            <Divider />
           </Box>
           <Box
             sx={{

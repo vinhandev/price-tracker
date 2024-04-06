@@ -22,7 +22,13 @@ export function Selector({
 }: Props) {
   const colors = useColors();
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '5px',
+      }}
+    >
       {label && (
         <Typography
           sx={{
@@ -47,6 +53,7 @@ export function Selector({
           color: colors.text,
           fontSize: '12px',
           fontFamily: 'Roboto',
+          height: '40px',
           '.MuiOutlinedInput-notchedOutline': {
             borderColor: colors.border,
           },

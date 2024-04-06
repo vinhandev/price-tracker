@@ -21,6 +21,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { Link, useNavigate } from 'react-router-dom';
 import { Selector } from '@/components/atoms/Inputs/Selector/Selector';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { Button } from '@/components';
 
 export default function ShopsScreen() {
   const theme = useTheme();
@@ -52,10 +53,14 @@ export default function ShopsScreen() {
         });
       });
     return tmpList.sort((a, b) => b.numOfWebsites - a.numOfWebsites);
-  }, [prices,selectedProduct]);
+  }, [prices, selectedProduct]);
   const handleScroll = () => {
     const position = window.pageYOffset;
     setScrollPosition(position);
+  };
+
+  const handleDeleteProduct = () => {
+    
   };
 
   async function handleAddNewProduct() {
@@ -93,7 +98,7 @@ export default function ShopsScreen() {
     >
       <Tab>
         <Box>
-        <Link
+          <Link
             style={{
               textDecoration: 'none',
               color: colors.primary,
@@ -139,11 +144,13 @@ export default function ShopsScreen() {
               gap: '10px',
             }}
           >
-            <Box sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-            }}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+              }}
+            >
               <Typography variant="h5">Shops</Typography>
               <IconButton
                 onClick={handleAddNewProduct}
@@ -162,21 +169,32 @@ export default function ShopsScreen() {
                 />
               </IconButton>
             </Box>
-            <Selector
-              data={
-                prices?.map((item) => ({
-                  label: item.label,
-                  value: item.label,
-                })) ?? []
-              }
-              value={selectedProduct}
-              onChange={(value) => {
-                const shop = prices?.find((item) => item.label === value)
-                  ?.data[0];
-                setSelectedProduct(value);
-                setSelectedShop(shop?.name ?? '');
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
               }}
-            />
+            >
+              <Button onClick={handleDeleteProduct} color="error" variant="outlined">
+                Delete Shop
+              </Button>
+              <Selector
+                data={
+                  prices?.map((item) => ({
+                    label: item.label,
+                    value: item.label,
+                  })) ?? []
+                }
+                value={selectedProduct}
+                onChange={(value) => {
+                  const shop = prices?.find((item) => item.label === value)
+                    ?.data[0];
+                  setSelectedProduct(value);
+                  setSelectedShop(shop?.name ?? '');
+                }}
+              />
+            </Box>
           </Box>
           <TableContainer
             sx={{
@@ -229,12 +247,13 @@ export default function ShopsScreen() {
               </TableHead>
               <TableBody>
                 {priceList.map((item) => (
-                  <TableRow key={item.label} onClick={
-                    () => {
+                  <TableRow
+                    key={item.label}
+                    onClick={() => {
                       setSelectedShop(item.label);
-                      navigate('/shop')
-                    }
-                  }>
+                      navigate('/shop');
+                    }}
+                  >
                     <TableCell
                       sx={{
                         paddingLeft: 0,
