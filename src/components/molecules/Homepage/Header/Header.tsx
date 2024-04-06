@@ -20,7 +20,6 @@ import { useState } from 'react';
 import { logout } from '@/utils';
 import { useNavigate } from 'react-router-dom';
 import { IconButton } from '@/components';
-import { useProSidebar } from 'react-pro-sidebar';
 export default function Header() {
   const setOpenSidebar = useStore((state) => state.setOpenSidebar);
   const navigation = useNavigate();

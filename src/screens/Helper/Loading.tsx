@@ -1,4 +1,4 @@
-import { Backdrop, Box, Typography } from '@mui/material';
+import { Backdrop, Box, CircularProgress, Typography } from '@mui/material';
 import { useStore } from '../../store/useStore';
 
 export default function Loading({
@@ -49,7 +49,7 @@ export default function Loading({
           gap: '10px',
         }}
       >
-        <div className="spinner-border" role="status" />
+        <CircularProgress color="inherit" />
         {prices.length > 0 && count > 0 && (
           <div>{((count * 100) / prices?.length).toFixed(2)}%</div>
         )}
