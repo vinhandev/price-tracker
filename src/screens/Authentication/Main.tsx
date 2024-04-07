@@ -6,7 +6,6 @@ import {
   BottomNavigation,
   BottomNavigationAction,
   Box,
-  Slide,
   Snackbar,
 } from '@mui/material';
 import { delay, getFirebasePrices, showError, showSuccess } from '@/utils';
@@ -17,10 +16,9 @@ import { Sidebar } from '@/components';
 import { Header } from '@/components/molecules';
 import { useColors } from '@/hooks';
 import { updateUserPrices } from '@/services';
-import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-
+import WidgetsIcon from '@mui/icons-material/Widgets';
+import SettingsIcon from '@mui/icons-material/Settings';
+import HomeIcon from '@mui/icons-material/Home';
 export default function Main() {
   const colors = useColors();
   const navigate = useNavigate();
@@ -235,26 +233,29 @@ export default function Main() {
         }}
       >
         <BottomNavigation
+          sx={{
+            height: '80px',
+          }}
           showLabels
           value={pathname}
           onChange={(_, newValue) => {
-            navigate(`${newValue}`);
+            navigate(newValue);
           }}
         >
           <BottomNavigationAction
-            value={'products'}
+            value={'/products'}
             label="Products"
-            icon={<RestoreIcon />}
+            icon={<WidgetsIcon />}
           />
           <BottomNavigationAction
-            value={'home'}
+            value={'/home'}
             label="Dashboard"
-            icon={<FavoriteIcon />}
+            icon={<HomeIcon />}
           />
           <BottomNavigationAction
-            value={'setting'}
+            value={'/setting'}
             label="Setting"
-            icon={<LocationOnIcon />}
+            icon={<SettingsIcon />}
           />
         </BottomNavigation>
       </Box>
