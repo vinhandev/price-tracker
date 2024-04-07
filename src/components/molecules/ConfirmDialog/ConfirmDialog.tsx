@@ -28,7 +28,14 @@ export default function ConfirmDialog({ onPress, onClose, open }: Props) {
         <Button autoFocus onClick={onClose}>
           Cancel
         </Button>
-        <Button onClick={onPress}>Ok</Button>
+        <Button
+          onClick={async () => {
+            onClose();
+            await onPress();
+          }}
+        >
+          Ok
+        </Button>
       </DialogActions>
     </Dialog>
   );

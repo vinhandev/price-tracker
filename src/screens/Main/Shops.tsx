@@ -16,14 +16,19 @@ import {
 import NavigationIcon from '@mui/icons-material/Navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useColors } from '@/hooks';
-import { useStore } from '@/store';
+import { useStore, useUser } from '@/store';
 import { Tab } from '@/HOCs';
 import AddIcon from '@mui/icons-material/Add';
 import { Link, useNavigate } from 'react-router-dom';
 import { Selector } from '@/components/atoms/Inputs/Selector/Selector';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { Button } from '@/components';
-import { convertLabelToUrl, getPath } from '@/utils';
+import { Button, ConfirmDialog } from '@/components';
+import {
+  convertLabelToUrl,
+  getPath,
+  showError,
+  updateFirebasePrices,
+} from '@/utils';
 
 export default function ShopsScreen() {
   const theme = useTheme();
@@ -31,6 +36,7 @@ export default function ShopsScreen() {
   const navigate = useNavigate();
 
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [open, setOpen] = useState(false);
 
   const isActive = scrollPosition > 0;
 
@@ -38,6 +44,11 @@ export default function ShopsScreen() {
   const setSelectedProduct = useStore((state) => state.setSelectedProduct);
   const setSelectedShop = useStore((state) => state.setSelectedShop);
   const prices = useStore((state) => state.prices);
+
+  const user = useUser((state) => state.user);
+
+  const labels = useStore((state) => state.labels);
+  const setLoading = useStore((state) => state.setLoading);
 
   const priceList = useMemo(() => {
     const tmpList: {
@@ -61,7 +72,29 @@ export default function ShopsScreen() {
     setScrollPosition(position);
   };
 
-  const handleDeleteProduct = () => {};
+  const handleDeleteProduct = async () => {
+    if (user) {
+      setLoading(true);
+      try {
+        const tmpPrices = prices.filter(
+          (item) => item.label !== selectedProduct
+        );
+
+        await updateFirebasePrices(user?.uid, {
+          labels,
+          prices: tmpPrices,
+          lastUpdate: new Date().getTime(),
+        });
+
+        window.location.href = getPath({
+          path: 'PRODUCTS',
+        });
+      } catch (error) {
+        showError(error);
+      }
+      setLoading(false);
+    }
+  };
 
   async function handleAddNewProduct() {
     navigate(
@@ -189,11 +222,13 @@ export default function ShopsScreen() {
               }}
             >
               <Button
-                onClick={handleDeleteProduct}
+                onClick={() => {
+                  setOpen(true);
+                }}
                 color="error"
                 variant="outlined"
               >
-                Delete Shop
+                Delete
               </Button>
               <Selector
                 data={
@@ -312,6 +347,13 @@ export default function ShopsScreen() {
           </TableContainer>
         </Box>
       </Tab>
+      <ConfirmDialog
+        open={open}
+        onClose={() => {
+          setOpen(!open);
+        }}
+        onPress={handleDeleteProduct}
+      />
       <Zoom
         in={isActive}
         timeout={transitionDuration}
