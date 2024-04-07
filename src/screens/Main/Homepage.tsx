@@ -192,7 +192,6 @@ export default function Homepage() {
   return (
     <Box
       sx={{
-        height: 'calc( 100vh - 60px - 60px)',
         width: '100%',
 
         display: 'flex',
@@ -215,24 +214,10 @@ export default function Homepage() {
           },
         }}
       >
-        <Box
-          sx={{
-            height: {
-              xs: '50vh',
-              md: 'calc( 50% - 5px )',
-            },
-          }}
-        >
+        <Box>
           <Chart />
         </Box>
-        <Box
-          sx={{
-            height: {
-              xs: '50vh',
-              md: 'calc( 50% - 5px )',
-            },
-          }}
-        >
+        <Box>
           <Tab noPadding title="Records">
             <ShopRecords />
           </Tab>
@@ -240,6 +225,7 @@ export default function Homepage() {
       </Box>
       <Box
         sx={{
+          height: 'calc( 100vh - 60px - 60px)',
           width: {
             xs: '100%',
             md: '40%',

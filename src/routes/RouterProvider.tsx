@@ -22,8 +22,10 @@ import ProductsScreen from '@/screens/Main/Products';
 import ShopsScreen from '@/screens/Main/Shops';
 import ShopScreen from '@/screens/Main/Shop';
 import { auth } from '@/services';
+import { useColors } from '@/hooks';
 
 export default function RouterProvider() {
+  const colors = useColors();
   const user = useUser((state) => state.user);
   const setUser = useUser((state) => state.setUser);
   const setIsInit = useStore((state) => state.setIsInit);
@@ -43,7 +45,11 @@ export default function RouterProvider() {
   });
 
   return (
-    <Box>
+    <Box
+      sx={{
+        background: colors.background2,
+      }}
+    >
       <BrowserRouter>
         <Routes>
           {user ? (

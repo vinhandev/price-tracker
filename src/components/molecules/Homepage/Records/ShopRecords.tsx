@@ -21,7 +21,7 @@ type RecordType = {
 
 export default function ShopRecords() {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(15);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const colors = useColors();
   const prices = useStore((state) => state.prices);
   const selectedProduct = useStore((state) => state.selectedProduct);
@@ -91,9 +91,9 @@ export default function ShopRecords() {
               >
                 #
               </TableCell>
-              <TableCell>Date & Time</TableCell>
               <TableCell>Shop</TableCell>
-              <TableCell>Price</TableCell>
+              <TableCell>Date & Time</TableCell>
+              <TableCell align="right">Price</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -110,14 +110,14 @@ export default function ShopRecords() {
                   >
                     {index + 1 + page * rowsPerPage}
                   </TableCell>
+                  <TableCell>{item.label}</TableCell>
                   <TableCell>
                     {' '}
                     {`${new Date(item.date).getHours()}:${new Date(
                       item.date
                     ).getMinutes()} ${new Date(item.date).toDateString()}`}
                   </TableCell>
-                  <TableCell>{item.label}</TableCell>
-                  <TableCell>
+                  <TableCell align="right">
                     {item.price === -1 ? 'No Data' : formatMoney(item.price)}
                   </TableCell>
                 </TableRow>
@@ -127,7 +127,7 @@ export default function ShopRecords() {
       </TableContainer>
 
       <TablePagination
-        rowsPerPageOptions={[15, 20, 30]}
+        rowsPerPageOptions={[5, 10, 20]}
         component="div"
         sx={{
           background: colors.background,
@@ -135,7 +135,7 @@ export default function ShopRecords() {
 
           color: colors.text,
           fontSize: '12px',
-          fontFamily:'Roboto',
+          fontFamily: 'Roboto',
           p: {
             fontSize: '12px',
           },
