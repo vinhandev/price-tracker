@@ -5,7 +5,7 @@ import { GroupPriceProps } from '../../types/prices';
 import { useStore } from '../../store/useStore';
 import { updateFirebasePrices } from '../../utils/firebase';
 import { useUser } from '../../store/useUser';
-import { Box, IconButton } from '@mui/material';
+import { Box, IconButton, Step, StepLabel, Stepper } from '@mui/material';
 import TextInput from '@/components/atoms/Inputs/TextInput/TextInput';
 import Tab from '@/HOCs/Tab';
 import AddIcon from '@mui/icons-material/Add';
@@ -13,8 +13,12 @@ import { Label } from '@/components/atoms';
 import { showError, showSuccess } from '@/utils';
 import { Button } from '@/components';
 import { previewWebsite } from '@/services';
+
+const steps = ['Select Products', 'Preview Website', 'Submit new website'];
+
 export default function AddWebsite() {
   const [websiteLink, setWebsiteLink] = useState<string>('');
+  const [activeStep, setActiveStep] = useState(1);
   const [image, setImage] = useState<string>('');
   const [beforeCharacters, setBeforeCharacters] = useState<string>('<!');
   const [afterCharacters, setAfterCharacters] = useState<string>('</html>');
@@ -52,6 +56,8 @@ export default function AddWebsite() {
       setWebsiteRemoveAllCharacters(
         () => responseData.websiteRemoveAllCharacters
       );
+
+      setActiveStep(() => 2);
     } catch (error) {
       showError(error);
     }
@@ -149,8 +155,27 @@ export default function AddWebsite() {
         height: '100%',
         width: '100%',
         overflow: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '5px',
       }}
     >
+      <Tab title="Step">
+        <Stepper activeStep={activeStep}>
+          {steps.map((label) => {
+            const stepProps: { completed?: boolean } = {};
+            const labelProps: {
+              optional?: React.ReactNode;
+            } = {};
+
+            return (
+              <Step key={label} {...stepProps}>
+                <StepLabel {...labelProps}>{label}</StepLabel>
+              </Step>
+            );
+          })}
+        </Stepper>
+      </Tab>
       <Box
         sx={{
           display: 'flex',

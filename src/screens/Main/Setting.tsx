@@ -9,6 +9,7 @@ import {
   Radio,
   RadioGroup,
   Slider,
+  Switch,
 } from '@mui/material';
 import { Label } from '@/components/atoms';
 import RatingTab from '@/components/molecules/RatingTab/RatingTab';
@@ -110,27 +111,35 @@ export default function SettingScreen() {
       }}
     >
       <Tab title="Setting">
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            gap: '10px',
-            paddingTop: '20px',
-          }}
-        >
-          <Button
-            onClick={onDeleteAllRecords}
-            color="error"
-            variant="contained"
+        <Box>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: '10px',
+              paddingTop: '20px',
+            }}
           >
-            Delete all record
-          </Button>
-          <Button onClick={onDeleteAllData} color="error" variant="contained">
-            Delete all data
-          </Button>
-          <Button onClick={handleUpdateData} variant="contained">
-            Update all user data
-          </Button>
+            <Button
+              onClick={onDeleteAllRecords}
+              color="error"
+              variant="contained"
+            >
+              Delete all record
+            </Button>
+            <Button onClick={onDeleteAllData} color="error" variant="contained">
+              Delete all data
+            </Button>
+            <Button onClick={handleUpdateData} variant="contained">
+              Update all user data
+            </Button>
+          </Box>
+          <FormControl>
+            <FormControlLabel label="Show breadcrumb" control={<Switch />} />
+            <FormControlLabel label="Use Drawer" control={<Switch />} />
+            <FormControlLabel label="Use bigger pagination" control={<Switch />} />
+
+          </FormControl>
         </Box>
       </Tab>
       <Tab title="Graph Theme">
