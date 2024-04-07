@@ -1,7 +1,14 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
-import { Alert, Box, Slide, Snackbar } from '@mui/material';
+import {
+  Alert,
+  BottomNavigation,
+  BottomNavigationAction,
+  Box,
+  Slide,
+  Snackbar,
+} from '@mui/material';
 import { delay, getFirebasePrices, showError, showSuccess } from '@/utils';
 import { LogoHorizontal } from '@/components/atoms/Logos';
 import { useStore, useUser } from '@/store';
@@ -10,6 +17,9 @@ import { Sidebar } from '@/components';
 import { Header } from '@/components/molecules';
 import { useColors } from '@/hooks';
 import { updateUserPrices } from '@/services';
+import RestoreIcon from '@mui/icons-material/Restore';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 export default function Main() {
   const colors = useColors();
@@ -115,22 +125,23 @@ export default function Main() {
       sx={{
         minHeight: '100vh',
         width: '100vw',
-        padding: {
-          xs: '20px',
-          md: '30px',
-        },
 
         background: colors.background2,
         transition: 'all 1s ease',
       }}
     >
       <Box
-        style={{
+        sx={{
           height: '100%',
           width: '100%',
 
           display: 'flex',
           flexDirection: 'row',
+
+          padding: {
+            xs: '20px',
+            md: '30px',
+          },
         }}
       >
         <Box
@@ -171,6 +182,7 @@ export default function Main() {
         <Box
           sx={{
             display: 'flex',
+            position: 'relative',
             flexDirection: 'column',
             width: {
               xs: '100%',
@@ -207,6 +219,44 @@ export default function Main() {
             {successMessage}
           </Alert>
         </Snackbar>
+      </Box>
+      <Box
+        sx={{
+          zIndex: 100,
+          background: colors.background,
+          position: 'fixed',
+          bottom: 0,
+          width: '100%',
+          display: {
+            xs: 'block',
+            md: 'none',
+            lg: 'none',
+          },
+        }}
+      >
+        <BottomNavigation
+          showLabels
+          value={pathname}
+          onChange={(_, newValue) => {
+            navigate(`${newValue}`);
+          }}
+        >
+          <BottomNavigationAction
+            value={'products'}
+            label="Products"
+            icon={<RestoreIcon />}
+          />
+          <BottomNavigationAction
+            value={'home'}
+            label="Dashboard"
+            icon={<FavoriteIcon />}
+          />
+          <BottomNavigationAction
+            value={'setting'}
+            label="Setting"
+            icon={<LocationOnIcon />}
+          />
+        </BottomNavigation>
       </Box>
     </Box>
   );
