@@ -184,6 +184,10 @@ export default function ShopScreen() {
                   borderRadius: 1000,
                   background: colors.primary,
                   padding: '5px',
+                  transition:'background 0.3s ease',
+                  ':hover':{
+                    background: `${colors.primary}DD`,
+                  }
                 }}
               >
                 <EditIcon

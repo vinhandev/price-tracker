@@ -172,6 +172,10 @@ export default function ProductsScreen() {
                 borderRadius: 1000,
                 background: colors.primary,
                 padding: '2px',
+                transition: 'background 0.3s ease',
+                ':hover': {
+                  background: `${colors.primary}DD`,
+                },
               }}
             >
               <AddIcon

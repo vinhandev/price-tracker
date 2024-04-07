@@ -202,6 +202,10 @@ export default function ShopsScreen() {
                 sx={{
                   borderRadius: 1000,
                   background: colors.primary,
+                  transition: 'all 0.3s ease',
+                  ':hover': {
+                    background: `${colors.primary}DD`,
+                  },
                   padding: '2px',
                 }}
               >
