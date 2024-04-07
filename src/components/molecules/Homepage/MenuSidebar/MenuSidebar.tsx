@@ -18,6 +18,8 @@ type Props = {
 export default function MenuSidebar({ navBarList, onReload }: Props) {
   const colors = useColors();
   const isDarkMode = useStore((state) => state.isDarkMode);
+  const openSidebar = useStore((state) => state.openSidebar);
+  const setOpenSidebar = useStore((state) => state.setOpenSidebar);
   return (
     <Box
       sx={{
@@ -39,7 +41,7 @@ export default function MenuSidebar({ navBarList, onReload }: Props) {
       >
         <Box
           sx={{
-            width: 200,
+            width: '180px',
           }}
         >
           <LogoHorizontal />
@@ -102,7 +104,14 @@ export default function MenuSidebar({ navBarList, onReload }: Props) {
                     return (
                       <MenuItem
                         active={item.isActive}
-                        component={<div onClick={item.onClick} />}
+                        component={
+                          <div
+                            onClick={() => {
+                              item.onClick();
+                              if (openSidebar) setOpenSidebar();
+                            }}
+                          />
+                        }
                       >
                         {item.label}
                         {

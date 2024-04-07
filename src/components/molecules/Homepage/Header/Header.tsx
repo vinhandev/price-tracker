@@ -67,7 +67,8 @@ export default function Header() {
           paddingBottom: 2,
           display: {
             xs: 'none',
-            md: 'flex',
+            md: 'none',
+            lg: 'flex',
           },
         }}
       >
@@ -155,7 +156,8 @@ export default function Header() {
           background: colors.background2,
           display: {
             xs: 'flex',
-            md: 'none',
+            md: 'flex',
+            lg: 'none',
           },
           '.MuiToolbar-root': {
             padding: 0,
