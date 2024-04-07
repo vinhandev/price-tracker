@@ -56,6 +56,7 @@ export default function Chart() {
   const shop = useStore((state) => state.selectedShop);
   const item = prices?.find((item) => item.label === product);
   const themeIndex = useUser((state) => state.themeIndex);
+
   const opacity = useUser((state) => state.opacity);
   console.log(opacity, alphaToHex(opacity));
   const graphColors = graphTheme[themeIndex].map(

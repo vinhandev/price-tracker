@@ -7,6 +7,7 @@ import ShopRecords from '../../components/molecules/Homepage/Records/ShopRecords
 import { Box } from '@mui/material';
 import Tab from '@/HOCs/Tab';
 import HorizonSelector from '@/components/molecules/Homepage/HorizonSelector/HorizonSelector';
+import { SkeletonWrapper } from '@/HOCs';
 
 export type HightLightType = {
   label: string;
@@ -214,14 +215,18 @@ export default function Homepage() {
           },
         }}
       >
-        <Box>
-          <Chart />
-        </Box>
-        <Box>
-          <Tab noPadding title="Records">
-            <ShopRecords />
-          </Tab>
-        </Box>
+        <SkeletonWrapper>
+          <Box>
+            <Chart />
+          </Box>
+        </SkeletonWrapper>
+        <SkeletonWrapper>
+          <Box>
+            <Tab noPadding title="Records">
+              <ShopRecords />
+            </Tab>
+          </Box>
+        </SkeletonWrapper>
       </Box>
       <Box
         sx={{
@@ -251,9 +256,11 @@ export default function Homepage() {
             width: '100%',
           }}
         >
-          <Tab title="Filters">
-            <HorizonSelector />
-          </Tab>
+          <SkeletonWrapper>
+            <Tab title="Filters">
+              <HorizonSelector />
+            </Tab>
+          </SkeletonWrapper>
         </Box>
       </Box>
     </Box>

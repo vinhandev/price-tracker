@@ -34,6 +34,10 @@ export default function Main() {
 
   async function handleReload() {
     try {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
       setLoading(true);
       await updateUserPrices();
       showSuccess('Prices updated successfully');
@@ -199,11 +203,7 @@ export default function Main() {
           // TransitionComponent={Slide}
           autoHideDuration={1200}
         >
-          <Alert
-            severity="success"
-            variant="filled"
-            sx={{ width: '100%' }}
-          >
+          <Alert severity="success" variant="filled" sx={{ width: '100%' }}>
             {successMessage}
           </Alert>
         </Snackbar>

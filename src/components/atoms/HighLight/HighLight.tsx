@@ -5,6 +5,7 @@ import { formatMoney } from '@/utils';
 import { useColors } from '@/hooks';
 import { useUser } from '@/store';
 import { graphTheme } from '@/assets/colors';
+import { SkeletonWrapper } from '@/HOCs';
 
 type Props = {
   data: HightLightType[];
@@ -28,93 +29,95 @@ export default function HighLight({ data }: Props) {
             key={index}
             sx={{ width: '100%', flex: 1, flexGrow: 1, display: 'flex' }}
           >
-            <Box
-              sx={{
-                background: colors.background,
-                transition: 'background 1s ease',
-                borderRadius: 2,
-
-                flex: 1,
-                height: '130px',
-                width: '100%',
-
-                position: 'relative',
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                gap: '20px',
-
-                overflow: 'hidden',
-                padding: '20px',
-              }}
-            >
+            <SkeletonWrapper>
               <Box
                 sx={{
-                  zIndex: 1,
-                  borderRadius: 1,
+                  background: colors.background,
+                  transition: 'background 1s ease',
+                  borderRadius: 2,
+
+                  flex: 1,
+                  height: '130px',
+                  width: '100%',
+
+                  position: 'relative',
                   display: 'flex',
-                  flexDirection: 'column',
-                  width: 'calc(50% - 10px)',
+                  flexDirection: 'row',
+                  justifyContent: 'flex-end',
+                  gap: '20px',
 
-                  // backdropFilter: 'blur(5px)',
+                  overflow: 'hidden',
+                  padding: '20px',
                 }}
               >
-                <Typography
-                  style={{
-                    fontWeight: '700',
-                    fontFamily: 'Roboto',
-                    color: colors.text,
-                  }}
-                >
-                  {item.label}
-                </Typography>
-                <Typography
-                  style={{
-                    fontSize: 25,
-                    fontFamily: 'Roboto',
-                    fontWeight: 'bold',
-                    color: colors.primary,
-                  }}
-                >
-                  {formatMoney(item.price)}
-                </Typography>
-                <Typography
-                  onClick={() => {
-                    if (item.link) {
-                      window.open(item.link);
-                    }
-                  }}
+                <Box
                   sx={{
-                    fontSize: 12,
-                    fontWeight: '300',
-                    fontFamily: 'Roboto',
-                    color: colors.text,
-                    cursor: 'pointer',
-                    ':hover': {
-                      textDecoration: 'underline',
-                    },
+                    zIndex: 1,
+                    borderRadius: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    width: 'calc(50% - 10px)',
 
-                    display: '-webkit-box',
-                    overflow: 'hidden',
-                    WebkitBoxOrient: 'vertical',
-                    WebkitLineClamp: 1,
+                    // backdropFilter: 'blur(5px)',
                   }}
                 >
-                  {item.name}
-                </Typography>
+                  <Typography
+                    style={{
+                      fontWeight: '700',
+                      fontFamily: 'Roboto',
+                      color: colors.text,
+                    }}
+                  >
+                    {item.label}
+                  </Typography>
+                  <Typography
+                    style={{
+                      fontSize: 25,
+                      fontFamily: 'Roboto',
+                      fontWeight: 'bold',
+                      color: colors.primary,
+                    }}
+                  >
+                    {formatMoney(item.price)}
+                  </Typography>
+                  <Typography
+                    onClick={() => {
+                      if (item.link) {
+                        window.open(item.link);
+                      }
+                    }}
+                    sx={{
+                      fontSize: 12,
+                      fontWeight: '300',
+                      fontFamily: 'Roboto',
+                      color: colors.text,
+                      cursor: 'pointer',
+                      ':hover': {
+                        textDecoration: 'underline',
+                      },
+
+                      display: '-webkit-box',
+                      overflow: 'hidden',
+                      WebkitBoxOrient: 'vertical',
+                      WebkitLineClamp: 1,
+                    }}
+                  >
+                    {item.name}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    height: '100%',
+                    width: 'calc(50% - 10px)',
+                  }}
+                >
+                  <HighLightChart
+                    colors={[selectedTheme[index]]}
+                    data={item.data}
+                  />
+                </Box>
               </Box>
-              <Box
-                sx={{
-                  height: '100%',
-                  width: 'calc(50% - 10px)',
-                }}
-              >
-                <HighLightChart
-                  colors={[selectedTheme[index]]}
-                  data={item.data}
-                />
-              </Box>
-            </Box>
+            </SkeletonWrapper>
           </Box>
         );
       })}
