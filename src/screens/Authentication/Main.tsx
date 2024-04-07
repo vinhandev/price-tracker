@@ -6,6 +6,7 @@ import {
   BottomNavigation,
   BottomNavigationAction,
   Box,
+  Dialog,
   Snackbar,
 } from '@mui/material';
 import {
@@ -197,13 +198,6 @@ export default function Main() {
             gap: '20px',
           }}
         >
-          <Box
-            sx={{
-              width: 200,
-            }}
-          >
-            <LogoHorizontal />
-          </Box>
           <Box
             sx={{
               flex: 1,

@@ -14,12 +14,14 @@ import {
 import { Label } from '@/components/atoms';
 import RatingTab from '@/components/molecules/RatingTab/RatingTab';
 import { alphaToHex, showError } from '@/utils';
-import { Button } from '@/components';
+import { Button, ConfirmDialog } from '@/components';
 import { graphTheme } from '@/assets/colors';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { updateAllData } from '@/services';
 
 export default function SettingScreen() {
+  const [open, setOpen] = useState(false);
+  const [onPress, setOnPress] = useState<() => void>(() => {});
   const user = useUser((state) => state.user);
 
   const themeIndex = useStore((state) => state.themeIndex);
@@ -160,6 +162,22 @@ export default function SettingScreen() {
 
   console.log(linearGradient, alphaToHex(opacity), opacity);
 
+  const handleSave = async () => {
+    setLoading(true);
+    try {
+      await updateMetadata(user?.uid ?? '', {
+        themeIndex,
+        opacity,
+        isShowBreadcrumb,
+        isUseDrawer,
+        isUseBiggerPagination: isUseBiggerNavigation,
+      });
+    } catch (error) {
+      showError(error);
+    }
+    setLoading(false);
+  };
+
   return (
     <Box
       sx={{
@@ -167,7 +185,6 @@ export default function SettingScreen() {
         flexDirection: 'column',
         gap: '10px',
         width: '100%',
-        height: '100%',
       }}
     >
       <Tab title="Setting">
@@ -187,10 +204,23 @@ export default function SettingScreen() {
             >
               Delete all record
             </Button>
-            <Button onClick={onDeleteAllData} color="error" variant="contained">
+            <Button
+              onClick={() => {
+                setOnPress(() => onDeleteAllData);
+                setOpen(() => true);
+              }}
+              color="error"
+              variant="contained"
+            >
               Delete all data
             </Button>
-            <Button onClick={handleUpdateData} variant="contained">
+            <Button
+              onClick={() => {
+                setOnPress(() => handleUpdateData);
+                setOpen(() => true);
+              }}
+              variant="contained"
+            >
               Update all user data
             </Button>
           </Box>
@@ -226,72 +256,95 @@ export default function SettingScreen() {
         <Box
           sx={{
             display: 'flex',
-            flexDirection: 'row',
-            gap: '10px',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            alignItems: 'flex-start',
             paddingTop: '20px',
+            gap: '10px',
           }}
         >
           <Box
             sx={{
               display: 'flex',
-              flexDirection: 'column',
+              flexDirection: 'row',
               gap: '10px',
-              flex: 1,
-            }}
-          >
-            <FormControl>
-              <Label label="Theme" />
-              <RadioGroup
-                value={themeIndex}
-                onChange={(e) => setThemeIndex(Number(e.target.value))}
-                aria-labelledby="demo-radio-buttons-group-label"
-                defaultValue="female"
-                name="radio-buttons-group"
-              >
-                <FormControlLabel
-                  value="0"
-                  control={<Radio />}
-                  label="Night Volcano"
-                />
-                <FormControlLabel
-                  value="1"
-                  control={<Radio />}
-                  label="Deep Sea"
-                />
-                <FormControlLabel value="2" control={<Radio />} label="Peace" />
-              </RadioGroup>
-            </FormControl>
-            <FormControl>
-              <Label label="Opacity" />
-              <Slider
-                aria-label="Volume"
-                value={opacity}
-                onChange={(_, value) => {
-                  setOpacity(Number(value));
-                  console.log(value);
-                }}
-              />
-            </FormControl>
-          </Box>
-          <Box
-            sx={{
-              display: 'flex',
-              flex: 1,
-              justifyContent: 'flex-end',
+              width: '100%',
             }}
           >
             <Box
               sx={{
-                width: '200px',
-                height: '200px',
-                borderRadius: '10px',
-                background: linearGradient,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+                flex: 1,
               }}
-            />
+            >
+              <FormControl>
+                <Label label="Theme" />
+                <RadioGroup
+                  value={themeIndex}
+                  onChange={(e) => setThemeIndex(Number(e.target.value))}
+                  aria-labelledby="demo-radio-buttons-group-label"
+                  defaultValue="female"
+                  name="radio-buttons-group"
+                >
+                  <FormControlLabel
+                    value="0"
+                    control={<Radio />}
+                    label="Night Volcano"
+                  />
+                  <FormControlLabel
+                    value="1"
+                    control={<Radio />}
+                    label="Deep Sea"
+                  />
+                  <FormControlLabel
+                    value="2"
+                    control={<Radio />}
+                    label="Peace"
+                  />
+                </RadioGroup>
+              </FormControl>
+              <FormControl>
+                <Label label="Opacity" />
+                <Slider
+                  aria-label="Volume"
+                  value={opacity}
+                  onChange={(_, value) => {
+                    setOpacity(Number(value));
+                    console.log(value);
+                  }}
+                />
+              </FormControl>
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                flex: 1,
+                justifyContent: 'flex-end',
+              }}
+            >
+              <Box
+                sx={{
+                  width: '200px',
+                  height: '200px',
+                  borderRadius: '10px',
+                  background: linearGradient,
+                }}
+              />
+            </Box>
           </Box>
+          <Button variant="contained" onClick={handleSave}>
+            Save
+          </Button>
         </Box>
       </Tab>
       <RatingTab />
+      <ConfirmDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        onPress={onPress}
+      />
     </Box>
   );
 }

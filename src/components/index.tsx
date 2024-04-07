@@ -11,3 +11,4 @@ export { default as Chart } from './atoms/Chart/Chart';
 export { default as FormInput } from './atoms/FormInput/FormInput';
 
 export { default as CustomBreadcrumbs } from './molecules/CustomBreadcrumbs/CustomBreadcrumbs';
+export { default as ConfirmDialog } from './molecules/ConfirmDialog/ConfirmDialog';
