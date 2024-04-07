@@ -27,6 +27,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
 import TextInput from '@/components/atoms/Inputs/TextInput/TextInput';
 import { Button } from '@/components';
+import { convertLabelToUrl, getPath } from '@/utils/route';
 
 export default function ProductsScreen() {
   const theme = useTheme();
@@ -175,77 +176,102 @@ export default function ProductsScreen() {
               />
             </IconButton>
           </Box>
-          <TableContainer
-            sx={{
-              paddingTop: '10px',
-              flex: 1,
-              background: colors.background,
-              transition: 'background 1s ease',
-              color: colors.text,
-            }}
-          >
-            <Table
-              stickyHeader
+          {priceList.length > 0 ? (
+            <TableContainer
               sx={{
-                '.MuiTableCell-root': {
-                  color: colors.text3,
-                  transition: 'background 1s ease',
-                  paddingY: '7px',
-                  fontFamily: 'Roboto',
-                  fontWeight: '400',
-                  fontSize: '14px',
-                  ':hover': {
-                    color: colors.primary,
-                  },
-                },
-                '.MuiTableRow-root': {
-                  background: colors.background,
-                  ':hover': {
-                    backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                    cursor: 'pointer',
-                  },
-                },
-                '.MuiTableCell-head': {
-                  fontWeight: '300',
-                  color: 'grey',
-                },
+                paddingTop: '10px',
+                flex: 1,
+                background: colors.background,
+                transition: 'background 1s ease',
+                color: colors.text,
               }}
-              aria-label="simple table"
             >
-              <TableHead>
-                <TableRow>
-                  <TableCell
-                    sx={{
-                      paddingLeft: 0,
-                    }}
-                  >
-                    NAME
-                  </TableCell>
-                  <TableCell>SHOPS' QUANTITY</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {priceList.map((item) => (
-                  <TableRow
-                    key={item.label}
-                    onClick={() => {
-                      setSelectedProduct(item.label);
-                      navigate('/shops');
-                    }}
-                  >
+              <Table
+                stickyHeader
+                sx={{
+                  '.MuiTableCell-root': {
+                    color: colors.text3,
+                    transition: 'background 1s ease',
+                    paddingY: '7px',
+                    fontFamily: 'Roboto',
+                    fontWeight: '400',
+                    fontSize: '14px',
+                    ':hover': {
+                      color: colors.primary,
+                    },
+                  },
+                  '.MuiTableRow-root': {
+                    background: colors.background,
+                    ':hover': {
+                      backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                      cursor: 'pointer',
+                    },
+                  },
+                  '.MuiTableCell-head': {
+                    fontWeight: '300',
+                    color: 'grey',
+                  },
+                }}
+                aria-label="simple table"
+              >
+                <TableHead>
+                  <TableRow>
                     <TableCell
                       sx={{
                         paddingLeft: 0,
                       }}
                     >
-                      {item.label}
+                      NAME
                     </TableCell>
-                    <TableCell>{item.numOfWebsites}</TableCell>
+                    <TableCell>SHOPS' QUANTITY</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                </TableHead>
+                <TableBody>
+                  {priceList.map((item) => (
+                    <TableRow
+                      key={item.label}
+                      onClick={() => {
+                        setSelectedProduct(item.label);
+                        navigate(
+                          getPath({
+                            path: 'PRODUCT',
+                            params: {
+                              productId: convertLabelToUrl(item.label),
+                            },
+                          })
+                        );
+                      }}
+                    >
+                      <TableCell
+                        sx={{
+                          paddingLeft: 0,
+                        }}
+                      >
+                        {item.label}
+                      </TableCell>
+                      <TableCell>{item.numOfWebsites}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          ) : (
+            <Box>
+              <Divider />
+              <Typography
+                sx={{
+                  paddingTop: 2,
+                  color: colors.text,
+                  fontSize: '12px',
+                  fontWeight: '300',
+                  fontFamily: 'Roboto',
+                  textAlign: 'center',
+                }}
+              >
+                No data.
+              </Typography>
+            </Box>
+          )}
         </Box>
       </Tab>
       <Zoom

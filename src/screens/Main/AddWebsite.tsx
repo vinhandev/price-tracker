@@ -161,7 +161,12 @@ export default function AddWebsite() {
       }}
     >
       <Tab title="Step">
-        <Stepper activeStep={activeStep}>
+        <Stepper
+          sx={{
+            paddingTop: 1,
+          }}
+          activeStep={activeStep}
+        >
           {steps.map((label) => {
             const stepProps: { completed?: boolean } = {};
             const labelProps: {
@@ -170,7 +175,17 @@ export default function AddWebsite() {
 
             return (
               <Step key={label} {...stepProps}>
-                <StepLabel {...labelProps}>{label}</StepLabel>
+                <StepLabel
+                  {...labelProps}
+                  sx={{
+                    '.MuiStepLabel-label': {
+                      fontSize: '12px',
+                      fontFamily: 'Roboto',
+                    },
+                  }}
+                >
+                  {label}
+                </StepLabel>
               </Step>
             );
           })}

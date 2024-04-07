@@ -4,6 +4,7 @@ import { useColors } from '@/hooks';
 import { useStore } from '@/store';
 import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { getPath } from '@/utils';
 export default function SearchBar() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -21,7 +22,10 @@ export default function SearchBar() {
             setProduct(item.label);
             setShop(item.data[0].name);
             if (pathname !== '/home') {
-              navigate('/home');
+              const path = getPath({
+                path: 'HOME',
+              });
+              navigate(path);
             }
           },
         });
@@ -32,7 +36,7 @@ export default function SearchBar() {
               setProduct(item.label);
               setShop(subItem.name);
               if (pathname !== '/home') {
-                navigate('/home');
+                navigate(getPath({ path: 'HOME' }));
               }
             },
           });

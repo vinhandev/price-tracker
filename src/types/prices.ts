@@ -20,4 +20,11 @@ export type FirebaseType = {
   prices?: GroupPriceProps[];
   labels?: number[];
   lastUpdate?: number;
+  metadata: {
+    themeIndex: number;
+    opacity: number;
+    isShowBreadcrumb: boolean;
+    isUseDrawer: boolean;
+    isUseBiggerPagination: boolean;
+  };
 };

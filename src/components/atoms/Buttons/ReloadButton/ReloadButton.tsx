@@ -6,7 +6,7 @@ import React from 'react';
 type Props = {
   onClick: () => void;
 };
-function ReloadButton({ onClick }: Props) {
+const ReloadButton = ({ onClick }: Props) => {
   const [isClicked, setIsClicked] = React.useState(false);
   const colors = useColors();
   return (
@@ -35,6 +35,6 @@ function ReloadButton({ onClick }: Props) {
       <ReplayIcon />
     </Box>
   );
-}
+};
 
 export default ReloadButton;

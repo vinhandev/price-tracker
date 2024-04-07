@@ -21,7 +21,7 @@ import { Tab } from '@/HOCs';
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { Link, useNavigate } from 'react-router-dom';
-import { formatDate, formatMoney } from '@/utils';
+import { convertLabelToUrl, formatDate, formatMoney, getPath } from '@/utils';
 
 export default function ShopScreen() {
   const theme = useTheme();
@@ -46,8 +46,16 @@ export default function ShopScreen() {
     setScrollPosition(position);
   };
 
-  async function handleAddNewProduct() {
-    navigate('/update_shop');
+  async function handleUpdateShop() {
+    navigate(
+      getPath({
+        path: 'UPDATE_WEBSITE',
+        params: {
+          productId: convertLabelToUrl(selectedProduct),
+          shopId: convertLabelToUrl(selectedShop),
+        },
+      })
+    );
   }
 
   const handleScrollToTop = () => {
@@ -164,7 +172,7 @@ export default function ShopScreen() {
             >
               <Typography variant="h5">Review your shop</Typography>
               <IconButton
-                onClick={handleAddNewProduct}
+                onClick={handleUpdateShop}
                 sx={{
                   borderRadius: 1000,
                   background: colors.primary,
@@ -234,76 +242,94 @@ export default function ShopScreen() {
             }}
           >
             <Typography variant="h6">Shop Price Records</Typography>
-            <TableContainer
-              sx={{
-                paddingTop: '10px',
-                flex: 1,
-                background: colors.background,
-                transition: 'background 1s ease',
-                color: colors.text,
-              }}
-            >
-              <Table
-                stickyHeader
+            {shop?.data && shop?.data?.length > 0 ? (
+              <TableContainer
                 sx={{
-                  '.MuiTableCell-root': {
-                    color: colors.text3,
-                    transition: 'background 1s ease',
-                    paddingY: '7px',
-                    fontFamily: 'Roboto',
-                    fontWeight: '400',
-                    fontSize: '14px',
-                    ':hover': {
-                      color: colors.primary,
-                    },
-                  },
-                  '.MuiTableRow-root': {
-                    background: colors.background,
-                    ':hover': {
-                      backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                      cursor: 'pointer',
-                    },
-                  },
-                  '.MuiTableCell-head': {
-                    fontWeight: '300',
-                    color: 'grey',
-                  },
+                  paddingTop: '10px',
+                  flex: 1,
+                  background: colors.background,
+                  transition: 'background 1s ease',
+                  color: colors.text,
                 }}
-                aria-label="simple table"
               >
-                <TableHead>
-                  <TableRow>
-                    <TableCell
-                      sx={{
-                        paddingLeft: 0,
-                      }}
-                    >
-                      DATE
-                    </TableCell>
-                    <TableCell>PRICE</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {shop?.data?.map((item) => (
-                    <TableRow key={item.date}>
+                <Table
+                  stickyHeader
+                  sx={{
+                    '.MuiTableCell-root': {
+                      color: colors.text3,
+                      transition: 'background 1s ease',
+                      paddingY: '7px',
+                      fontFamily: 'Roboto',
+                      fontWeight: '400',
+                      fontSize: '14px',
+                      ':hover': {
+                        color: colors.primary,
+                      },
+                    },
+                    '.MuiTableRow-root': {
+                      background: colors.background,
+                      ':hover': {
+                        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                        cursor: 'pointer',
+                      },
+                    },
+                    '.MuiTableCell-head': {
+                      fontWeight: '300',
+                      color: 'grey',
+                    },
+                  }}
+                  aria-label="simple table"
+                >
+                  <TableHead>
+                    <TableRow>
                       <TableCell
                         sx={{
                           paddingLeft: 0,
                         }}
                       >
-                        {' '}
-                        {formatDate(new Date(item.date))}
+                        DATE
                       </TableCell>
-                      <TableCell>
-                        {item.price === -1
-                          ? 'No Data'
-                          : formatMoney(item.price)}
-                      </TableCell>
+                      <TableCell>PRICE</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                  </TableHead>
+                  <TableBody>
+                    {shop?.data?.map((item) => (
+                      <TableRow key={item.date}>
+                        <TableCell
+                          sx={{
+                            paddingLeft: 0,
+                          }}
+                        >
+                          {' '}
+                          {formatDate(new Date(item.date))}
+                        </TableCell>
+                        <TableCell>
+                          {item.price === -1
+                            ? 'No Data'
+                            : formatMoney(item.price)}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            ) : (
+              <Box>
+                <Divider />
+                <Typography
+                  sx={{
+                    paddingTop: 2,
+                    color: colors.text,
+                    fontSize: '12px',
+                    fontWeight: '300',
+                    fontFamily: 'Roboto',
+                    textAlign: 'center',
+                  }}
+                >
+                  No data.
+                </Typography>
+              </Box>
+            )}
           </Box>
         </Box>
       </Tab>

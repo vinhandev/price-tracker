@@ -26,10 +26,27 @@ type Store = {
   setLabels: (labels: number[]) => void;
   lastUpdate: number;
   setLastUpdate: (value: number) => void;
+  isShowBreadcrumb: boolean;
+  setIsShowBreadcrumb: (value: boolean) => void;
+  isUseDrawer: boolean;
+  setIsUseDrawer: (value: boolean) => void;
+  isUsePagePagination: boolean;
+  setIsUsePagePagination: (value: boolean) => void;
+  themeIndex: number;
+  setThemeIndex: (themeIndex: number) => void;
+  opacity: number;
+  setOpacity: (opacity: number) => void;
   initData: (
     prices: GroupPriceProps[],
     labels: number[],
-    lastUpdate: number
+    lastUpdate: number,
+    metadata: {
+      isShowBreadcrumb: boolean;
+      isUseBiggerPagination: boolean;
+      isUseDrawer: boolean;
+      opacity: number;
+      themeIndex: number;
+    }
   ) => void;
 };
 
@@ -52,12 +69,27 @@ export const useStore = create<Store>((set) => ({
   setLabels: (labels: number[]) => set({ labels }),
   lastUpdate: 0,
   setLastUpdate: (value: number) => set({ lastUpdate: value }),
-  initData: (prices: GroupPriceProps[], labels: number[], lastUpdate: number) =>
-    set({ prices, labels, lastUpdate }),
+  initData: (
+    prices: GroupPriceProps[],
+    labels: number[],
+    lastUpdate: number,
+    metadata
+  ) => set({ prices, labels, lastUpdate, ...metadata }),
   selectedShop: '',
   setSelectedShop: (value: string) => set({ selectedShop: value }),
   isSuccess: false,
   setSuccess: (isSuccess: boolean) => set({ isSuccess }),
   successMessage: 'Success',
   setSuccessMessage: (message: string) => set({ successMessage: message }),
+  isShowBreadcrumb: false,
+  setIsShowBreadcrumb: (value: boolean) => set({ isShowBreadcrumb: value }),
+  isUseDrawer: false,
+  setIsUseDrawer: (value: boolean) => set({ isUseDrawer: value }),
+  isUsePagePagination: false,
+  setIsUsePagePagination: (value: boolean) =>
+    set({ isUsePagePagination: value }),
+  themeIndex: 0,
+  setThemeIndex: (themeIndex: number) => set({ themeIndex }),
+  opacity: 50,
+  setOpacity: (opacity: number) => set({ opacity }),
 }));

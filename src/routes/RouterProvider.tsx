@@ -24,6 +24,22 @@ import ShopScreen from '@/screens/Main/Shop';
 import { auth } from '@/services';
 import { useColors } from '@/hooks';
 
+export const routes = {
+  HOME: '/home',
+  PRODUCTS: '/products',
+  PRODUCT: '/products/:productId',
+  SHOPS: '/shops',
+  SHOP: '/products/:productId/shop/:shopId',
+  ADD_WEBSITE: '/products/:productId/add',
+  UPDATE_WEBSITE: '/products/:productId/shop/:shopId/update',
+  UPDATE_PRODUCT: '/products/:productId/update',
+  SETTING: '/setting',
+  PROFILE: '/profile',
+  TESTER: '/tester',
+};
+
+export type RouteNeedParams = keyof typeof routes;
+
 export default function RouterProvider() {
   const colors = useColors();
   const user = useUser((state) => state.user);
@@ -57,12 +73,24 @@ export default function RouterProvider() {
               <Route path="/" element={<Main />}>
                 <Route path="/" element={<NotFound />} />
                 <Route path="/home" element={<Homepage />} />
-                <Route path="/add" element={<AddWebsite />} />
-                <Route path="/update_shop" element={<UpdateWebsite />} />
-                <Route path="/update_product" element={<UpdateProduct />} />
-                <Route path="/products" element={<ProductsScreen />} />
-                <Route path="/shops" element={<ShopsScreen />} />
-                <Route path="/shop" element={<ShopScreen />} />
+                <Route path="/products/*" element={<ProductsScreen />} />
+                <Route
+                  path="/products/:productId/add"
+                  element={<AddWebsite />}
+                />
+                <Route
+                  path="/products/:productId/update"
+                  element={<UpdateProduct />}
+                />
+                <Route path="/products/:productId/*" element={<ShopsScreen />} />
+                <Route
+                  path="/products/:productId/shop/:shopId/*"
+                  element={<ShopScreen />}
+                />
+                <Route
+                  path="/products/:productId/shop/:shopId/update"
+                  element={<UpdateWebsite />}
+                />
                 <Route path="/setting" element={<SettingScreen />} />
                 <Route path="/profile" element={<Profile />} />
               </Route>
@@ -71,6 +99,7 @@ export default function RouterProvider() {
             <>
               <Route path="/login" element={<Login />} />
               <Route path="/sign_up" element={<SignUp />} />
+             
             </>
           )}
           <Route path="/test" element={<Tester />} />

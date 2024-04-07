@@ -8,11 +8,18 @@ import {
   Box,
   Snackbar,
 } from '@mui/material';
-import { delay, getFirebasePrices, showError, showSuccess } from '@/utils';
+import {
+  convertLabelToUrl,
+  delay,
+  getFirebasePrices,
+  getPath,
+  showError,
+  showSuccess,
+} from '@/utils';
 import { LogoHorizontal } from '@/components/atoms/Logos';
 import { useStore, useUser } from '@/store';
 import Loading from '../Helper/Loading';
-import { Sidebar } from '@/components';
+import { CustomBreadcrumbs, Sidebar } from '@/components';
 import { Header } from '@/components/molecules';
 import { useColors } from '@/hooks';
 import { updateUserPrices } from '@/services';
@@ -31,12 +38,17 @@ export default function Main() {
 
   const user = useUser((state) => state.user);
 
+  const setSelectedProduct = useStore((state) => state.setSelectedProduct);
+  const setSelectedShop = useStore((state) => state.setSelectedShop);
+
   const isLoading = useStore((state) => state.isLoading);
   const setLoading = useStore((state) => state.setLoading);
 
   const successMessage = useStore((state) => state.successMessage);
   const isSuccess = useStore((state) => state.isSuccess);
   const setSuccess = useStore((state) => state.setSuccess);
+
+  const isShowBreadcrumb = useStore((state) => state.isShowBreadcrumb);
 
   const initData = useStore((state) => state.initData);
 
@@ -67,10 +79,35 @@ export default function Main() {
       try {
         if (user) {
           const response = await getFirebasePrices(user.uid);
+          if (response.prices && response?.prices?.length > 0) {
+            for (const item of response.prices) {
+              if (pathname.includes(convertLabelToUrl(item.label))) {
+                setSelectedProduct(item.label);
+                for (const subItem of item.data) {
+                  if (pathname.includes(convertLabelToUrl(subItem.name))) {
+                    setSelectedShop(subItem.name);
+                    break;
+                  }
+                }
+                break;
+              }
+            }
+          }
           console.log(response);
 
           if (response.prices) {
-            initData(response.prices, response.labels ?? [], 0);
+            initData(
+              response.prices,
+              response.labels ?? [],
+              response.lastUpdate ?? 0,
+              response.metadata ?? {
+                isShowBreadcrumb: false,
+                isUseDrawer: false,
+                isUseBiggerPagination: false,
+                opacity: 50,
+                themeIndex: 0,
+              }
+            );
           }
         }
       } catch (error) {
@@ -86,26 +123,26 @@ export default function Main() {
       {
         label: 'Dashboard',
         onClick: () => {
-          navigate('/home');
+          navigate(getPath({ path: 'HOME' }));
         },
-        isActive: pathname === '/home',
+        isActive: pathname === getPath({ path: 'HOME' }),
       },
 
       {
         label: 'Products',
         onClick: () => {
-          navigate('/products');
+          navigate(getPath({ path: 'PRODUCTS' }));
         },
-        isActive: pathname === '/products',
+        isActive: pathname === getPath({ path: 'PRODUCTS' }),
       },
     ],
     [
       {
         label: 'Settings',
         onClick: () => {
-          navigate('/setting');
+          navigate(getPath({ path: 'SETTING' }));
         },
-        isActive: pathname === '/setting',
+        isActive: pathname === getPath({ path: 'SETTING' }),
       },
     ],
   ];
@@ -195,6 +232,14 @@ export default function Main() {
             }}
           >
             <Header />
+          </Box>
+          <Box
+            sx={{
+              display: isShowBreadcrumb ? 'block' : 'none',
+              transition: 'all 1s ease',
+            }}
+          >
+            <CustomBreadcrumbs />
           </Box>
           <Box>
             <Outlet />

@@ -1,5 +1,6 @@
 import {
   Box,
+  Divider,
   Fab,
   IconButton,
   Table,
@@ -22,6 +23,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Selector } from '@/components/atoms/Inputs/Selector/Selector';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { Button } from '@/components';
+import { convertLabelToUrl, getPath } from '@/utils';
 
 export default function ShopsScreen() {
   const theme = useTheme();
@@ -59,12 +61,15 @@ export default function ShopsScreen() {
     setScrollPosition(position);
   };
 
-  const handleDeleteProduct = () => {
-    
-  };
+  const handleDeleteProduct = () => {};
 
   async function handleAddNewProduct() {
-    navigate('/add');
+    navigate(
+      getPath({
+        path: 'ADD_WEBSITE',
+        params: { productId: convertLabelToUrl(selectedProduct) },
+      })
+    );
   }
 
   const handleScrollToTop = () => {
@@ -176,7 +181,11 @@ export default function ShopsScreen() {
                 gap: '10px',
               }}
             >
-              <Button onClick={handleDeleteProduct} color="error" variant="outlined">
+              <Button
+                onClick={handleDeleteProduct}
+                color="error"
+                variant="outlined"
+              >
                 Delete Shop
               </Button>
               <Selector
@@ -205,67 +214,93 @@ export default function ShopsScreen() {
               color: colors.text,
             }}
           >
-            <Table
-              stickyHeader
-              sx={{
-                '.MuiTableCell-root': {
-                  color: colors.text3,
-                  transition: 'background 1s ease',
-                  paddingY: '7px',
-                  fontFamily: 'Roboto',
-                  fontWeight: '400',
-                  fontSize: '14px',
-                  ':hover': {
-                    color: colors.primary,
+            {priceList.length > 0 ? (
+              <Table
+                stickyHeader
+                sx={{
+                  '.MuiTableCell-root': {
+                    color: colors.text3,
+                    transition: 'background 1s ease',
+                    paddingY: '7px',
+                    fontFamily: 'Roboto',
+                    fontWeight: '400',
+                    fontSize: '14px',
+                    ':hover': {
+                      color: colors.primary,
+                    },
                   },
-                },
-                '.MuiTableRow-root': {
-                  background: colors.background,
-                  ':hover': {
-                    backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                    cursor: 'pointer',
+                  '.MuiTableRow-root': {
+                    background: colors.background,
+                    ':hover': {
+                      backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                      cursor: 'pointer',
+                    },
                   },
-                },
-                '.MuiTableCell-head': {
-                  fontWeight: '300',
-                  color: 'grey',
-                },
-              }}
-              aria-label="simple table"
-            >
-              <TableHead>
-                <TableRow>
-                  <TableCell
-                    sx={{
-                      paddingLeft: 0,
-                    }}
-                  >
-                    NAME
-                  </TableCell>
-                  <TableCell>SHOPS' QUANTITY</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {priceList.map((item) => (
-                  <TableRow
-                    key={item.label}
-                    onClick={() => {
-                      setSelectedShop(item.label);
-                      navigate('/shop');
-                    }}
-                  >
+                  '.MuiTableCell-head': {
+                    fontWeight: '300',
+                    color: 'grey',
+                  },
+                }}
+                aria-label="simple table"
+              >
+                <TableHead>
+                  <TableRow>
                     <TableCell
                       sx={{
                         paddingLeft: 0,
                       }}
                     >
-                      {item.label}
+                      NAME
                     </TableCell>
-                    <TableCell>{item.numOfWebsites}</TableCell>
+                    <TableCell>SHOPS' QUANTITY</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHead>
+                <TableBody>
+                  {priceList.map((item) => (
+                    <TableRow
+                      key={item.label}
+                      onClick={() => {
+                        setSelectedShop(item.label);
+                        navigate(
+                          getPath({
+                            path: 'SHOP',
+                            params: {
+                              productId: convertLabelToUrl(selectedProduct),
+                              shopId: convertLabelToUrl(item.label),
+                            },
+                          })
+                        );
+                      }}
+                    >
+                      <TableCell
+                        sx={{
+                          paddingLeft: 0,
+                        }}
+                      >
+                        {item.label}
+                      </TableCell>
+                      <TableCell>{item.numOfWebsites}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            ) : (
+              <Box>
+                <Divider />
+                <Typography
+                  sx={{
+                    paddingTop: 2,  
+                    color: colors.text,
+                    fontSize: '12px',
+                    fontWeight: '300',
+                    fontFamily: 'Roboto',
+                    textAlign: 'center',
+                  }}
+                >
+                  No data.
+                </Typography>
+              </Box>
+            )}
           </TableContainer>
         </Box>
       </Tab>

@@ -3,7 +3,7 @@ import { HightLightType } from '@/screens/Main/Homepage';
 import HighLightChart from '../HighLightChart/HighLightChart';
 import { formatMoney } from '@/utils';
 import { useColors } from '@/hooks';
-import { useUser } from '@/store';
+import { useStore } from '@/store';
 import { graphTheme } from '@/assets/colors';
 import { SkeletonWrapper } from '@/HOCs';
 
@@ -12,7 +12,7 @@ type Props = {
 };
 export default function HighLight({ data }: Props) {
   const colors = useColors();
-  const theme = useUser((state) => state.themeIndex);
+  const theme = useStore((state) => state.themeIndex);
   const selectedTheme = graphTheme[theme];
   return (
     <div

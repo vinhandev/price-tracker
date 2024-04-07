@@ -41,7 +41,6 @@ import {
 } from '@mui/material';
 import React, { useEffect, useMemo } from 'react';
 import { getGradientMainChart } from '@/utils';
-import { useUser } from '@/store';
 import { graphTheme } from '@/assets/colors';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
@@ -55,9 +54,9 @@ export default function Chart() {
   const product = useStore((state) => state.selectedProduct);
   const shop = useStore((state) => state.selectedShop);
   const item = prices?.find((item) => item.label === product);
-  const themeIndex = useUser((state) => state.themeIndex);
+  const themeIndex = useStore((state) => state.themeIndex);
 
-  const opacity = useUser((state) => state.opacity);
+  const opacity = useStore((state) => state.opacity);
   console.log(opacity, alphaToHex(opacity));
   const graphColors = graphTheme[themeIndex].map(
     (item) => `${item}${alphaToHex(opacity)}`

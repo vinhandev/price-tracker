@@ -1,7 +1,7 @@
 import Tab from '@/HOCs/Tab';
 import { useStore } from '../../store/useStore';
 import { useUser } from '../../store/useUser';
-import { updateFirebasePrices } from '../../utils/firebase';
+import { updateFirebasePrices, updateMetadata } from '../../utils/firebase';
 import {
   Box,
   FormControl,
@@ -22,14 +22,25 @@ import { updateAllData } from '@/services';
 export default function SettingScreen() {
   const user = useUser((state) => state.user);
 
-  const themeIndex = useUser((state) => state.themeIndex);
-  const setThemeIndex = useUser((state) => state.setThemeIndex);
+  const themeIndex = useStore((state) => state.themeIndex);
+  const setThemeIndex = useStore((state) => state.setThemeIndex);
 
-  const opacity = useUser((state) => state.opacity);
-  const setOpacity = useUser((state) => state.setOpacity);
+  const opacity = useStore((state) => state.opacity);
+  const setOpacity = useStore((state) => state.setOpacity);
 
   const prices = useStore((state) => state.prices);
   const setLoading = useStore((state) => state.setLoading);
+
+  const isShowBreadcrumb = useStore((state) => state.isShowBreadcrumb);
+  const setIsShowBreadcrumb = useStore((state) => state.setIsShowBreadcrumb);
+
+  const isUseDrawer = useStore((state) => state.isUseDrawer);
+  const setIsUseDrawer = useStore((state) => state.setIsUseDrawer);
+
+  const isUseBiggerNavigation = useStore((state) => state.isUsePagePagination);
+  const setIsUseBiggerNavigation = useStore(
+    (state) => state.setIsUsePagePagination
+  );
 
   async function onDeleteAllRecords() {
     setLoading(true);
@@ -89,6 +100,55 @@ export default function SettingScreen() {
     setLoading(false);
   };
 
+  const handleUpdateShowBreadcrumb = async (param: boolean) => {
+    setLoading(true);
+    try {
+      await updateMetadata(user?.uid ?? '', {
+        themeIndex,
+        opacity,
+        isShowBreadcrumb: param,
+        isUseDrawer,
+        isUseBiggerPagination: isUseBiggerNavigation,
+      });
+      setIsShowBreadcrumb(param);
+    } catch (error) {
+      showError(error);
+    }
+    setLoading(false);
+  };
+  const handleUpdateUseDrawer = async (param: boolean) => {
+    setLoading(true);
+    try {
+      await updateMetadata(user?.uid ?? '', {
+        themeIndex,
+        opacity,
+        isShowBreadcrumb,
+        isUseDrawer: param,
+        isUseBiggerPagination: isUseBiggerNavigation,
+      });
+      setIsUseDrawer(param);
+    } catch (error) {
+      showError(error);
+    }
+    setLoading(false);
+  };
+  const handleUpdateUseBiggerNavigation = async (param: boolean) => {
+    setLoading(true);
+    try {
+      await updateMetadata(user?.uid ?? '', {
+        themeIndex,
+        opacity,
+        isShowBreadcrumb,
+        isUseDrawer,
+        isUseBiggerPagination: param,
+      });
+      setIsUseBiggerNavigation(param);
+    } catch (error) {
+      showError(error);
+    }
+    setLoading(false);
+  };
+
   const linearGradient = useMemo(() => {
     return `linear-gradient(180deg ${graphTheme[themeIndex].reduce(
       (item, result) => {
@@ -135,10 +195,30 @@ export default function SettingScreen() {
             </Button>
           </Box>
           <FormControl>
-            <FormControlLabel label="Show breadcrumb" control={<Switch />} />
-            <FormControlLabel label="Use Drawer" control={<Switch />} />
-            <FormControlLabel label="Use bigger pagination" control={<Switch />} />
-
+            <FormControlLabel
+              checked={isShowBreadcrumb}
+              onChange={async (_, checked) => {
+                await handleUpdateShowBreadcrumb(checked);
+              }}
+              label="Show breadcrumb"
+              control={<Switch />}
+            />
+            <FormControlLabel
+              checked={isUseDrawer}
+              onChange={async (_, checked) =>
+                await handleUpdateUseDrawer(checked)
+              }
+              label="Use Drawer"
+              control={<Switch />}
+            />
+            <FormControlLabel
+              checked={isUseBiggerNavigation}
+              onChange={async (_, checked) =>
+                handleUpdateUseBiggerNavigation(checked)
+              }
+              label="Use bigger pagination"
+              control={<Switch />}
+            />
           </FormControl>
         </Box>
       </Tab>
