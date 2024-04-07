@@ -42,15 +42,15 @@ export default function Homepage() {
             item.data?.[item.data.length - 1]?.price > 0
           ) {
             allPrices.push({
-              price: item.data?.[item.data.length - 1].price,
+              price: item.data?.[item.data.length - 1]?.price,
               link: item.link,
               name: item.name,
             });
           }
         });
         if (allPrices.length > 0) {
-          const price = Math.min(...allPrices.map((item) => item.price));
-          const whereToBuy = allPrices.find((item) => item.price === price);
+          const price = Math.min(...allPrices.map((item) => item?.price));
+          const whereToBuy = allPrices.find((item) => item?.price === price);
           return {
             price: whereToBuy?.price,
             name: whereToBuy?.name,
@@ -82,15 +82,15 @@ export default function Homepage() {
             item.data?.[item.data.length - 1]?.price > 0
           ) {
             allPrices.push({
-              price: item.data?.[item.data.length - 1].price,
+              price: item.data?.[item.data.length - 1]?.price,
               link: item.link,
               name: item.name,
             });
           }
         });
         if (allPrices.length > 0) {
-          const price = Math.max(...allPrices.map((item) => item.price));
-          const whereToBuy = allPrices.find((item) => item.price === price);
+          const price = Math.max(...allPrices.map((item) => item?.price));
+          const whereToBuy = allPrices.find((item) => item?.price === price);
           return {
             price: whereToBuy?.price,
             name: whereToBuy?.name,
@@ -114,11 +114,11 @@ export default function Homepage() {
         let allPricesData: { date: number; prices: number[] }[] = [];
         selectedProductList.data.forEach((item) => {
           item.data?.forEach((subItem) => {
-            if (subItem.price !== -1) {
+            if (subItem?.price !== -1) {
               if (allPricesData.find((price) => price.date === subItem.date)) {
                 allPricesData = allPricesData.map((price) => {
                   if (price.date === subItem.date) {
-                    price.prices.push(subItem.price);
+                    price.prices.push(subItem?.price);
                     return price;
                   } else {
                     return price;
@@ -127,7 +127,7 @@ export default function Homepage() {
               } else {
                 allPricesData.push({
                   date: subItem.date,
-                  prices: [subItem.price],
+                  prices: [subItem?.price],
                 });
               }
             }
@@ -144,7 +144,7 @@ export default function Homepage() {
           });
         }
         return {
-          price: data[data.length - 1].price,
+          price: data[data.length - 1]?.price,
           name: '',
           link: '',
           data: data,
@@ -158,14 +158,14 @@ export default function Homepage() {
     {
       label: 'Lowest price',
       name: currentLowestPrice.name ?? '',
-      price: currentLowestPrice.price ?? 0,
+      price: currentLowestPrice?.price ?? 0,
       link: currentLowestPrice.link ?? '',
       data: currentLowestPrice.data ?? [],
       color: '#2192FF',
     },
     {
       label: 'Highest price',
-      price: currentHighestPrice.price ?? 0,
+      price: currentHighestPrice?.price ?? 0,
       name: currentHighestPrice.name ?? '',
       link: currentHighestPrice.link ?? '',
       data: currentHighestPrice.data ?? [],

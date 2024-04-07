@@ -121,7 +121,14 @@ export default function Chart() {
     }
   }, [isShowAll, shop]);
 
-  if (!item)
+  console.log(item?.data);
+
+  if (
+    item?.data.length === 0 ||
+    !item ||
+    item?.data?.[0].data?.length === 0 ||
+    !item?.data?.[0].data
+  )
     return (
       <Box
         style={{
@@ -318,7 +325,7 @@ export default function Chart() {
             height,
           }}
         >
-          {transitions((style, subItem, t, index) => (
+          {transitions((style, subItem, _, index) => (
             <animated.div
               style={{ zIndex: sortedItems.length - index, ...style }}
               key={subItem.keyIndex}
@@ -392,7 +399,8 @@ export default function Chart() {
                       color: colors.text,
                     }}
                   >
-                    {subItem?.data?.[subItem.data.length - 1].price === -1
+                    {subItem.data?.length === 0 ||
+                    subItem?.data?.[subItem.data.length - 1].price === -1
                       ? 'NO DATA'
                       : formatMoney(
                           subItem?.data?.[subItem.data.length - 1].price ?? 0

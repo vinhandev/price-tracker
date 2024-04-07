@@ -26,16 +26,14 @@ export const updateAllData = async () => {
 
 export const previewWebsite = async (params: {
   websiteLink: string;
-  beforeCharacters: string;
-  afterCharacters: string;
+  selector: string;
 }) => {
   const response = await fetch(
     priceUrl +
       '/previewPrices?' +
       new URLSearchParams({
         websiteLink: params.websiteLink,
-        beforeCharacters: params.beforeCharacters,
-        afterCharacters: params.afterCharacters,
+        selector: params.selector,
       }),
     {
       method: 'GET',
@@ -47,9 +45,8 @@ export const previewWebsite = async (params: {
   );
   const responseData: {
     price: number;
-    websiteRemoveBeforeCharacters: string;
-    websiteSourceCode: string;
-    websiteRemoveAllCharacters: string;
+    logo: string;
+    rawPrice: string;
   } = await response.json();
   return responseData;
 };

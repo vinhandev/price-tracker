@@ -87,12 +87,8 @@ export default function ShopScreen() {
       value: shop?.avatar ?? '',
     },
     {
-      label: 'Shop Before Characters Catchphrase',
-      value: shop?.first ?? '',
-    },
-    {
-      label: 'Shop After Characters Catchphrase',
-      value: shop?.last ?? '',
+      label: 'Selector',
+      value: shop?.selector ?? '',
     },
   ];
 
@@ -184,10 +180,10 @@ export default function ShopScreen() {
                   borderRadius: 1000,
                   background: colors.primary,
                   padding: '5px',
-                  transition:'background 0.3s ease',
-                  ':hover':{
+                  transition: 'background 0.3s ease',
+                  ':hover': {
                     background: `${colors.primary}DD`,
-                  }
+                  },
                 }}
               >
                 <EditIcon

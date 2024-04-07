@@ -5,8 +5,7 @@ export type PriceProps = {
     date: number;
   }[];
   link: string;
-  first: string;
-  last: string;
+  selector: string;
   color: string;
   avatar: string;
 };
