@@ -1,6 +1,6 @@
 import { Menu, MenuItem } from 'react-pro-sidebar';
 import { useStore } from '../../../../store/useStore';
-import { Box, Grid, Tooltip } from '@mui/material';
+import { Box, Divider, Grid, Tooltip } from '@mui/material';
 import { DarkModeButton } from '@/components';
 import { ContactUs } from '../..';
 import { useColors } from '@/hooks';
@@ -90,13 +90,11 @@ export default function MenuSidebar({ navBarList, onReload }: Props) {
               return (
                 <div>
                   {index !== 0 && (
-                    <Box
+                    <Divider
                       sx={{
-                        height: '1px',
-                        backgroundColor: colors.border,
-                        marginY: 1,
-                        marginRight: '30px',
+                        marginBottom: 2,
                       }}
+                      color={colors.border}
                     />
                   )}
 
