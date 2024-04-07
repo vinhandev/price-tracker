@@ -26,5 +26,6 @@ export type FirebaseType = {
     isShowBreadcrumb: boolean;
     isUseDrawer: boolean;
     isUseBiggerPagination: boolean;
+    isDarkMode: boolean;
   };
 };

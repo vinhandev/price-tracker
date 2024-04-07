@@ -20,6 +20,7 @@ export const updateFirebasePrices = async (
       isShowBreadcrumb: useStore.getState().isShowBreadcrumb,
       isUseBiggerPagination: useStore.getState().isUsePagePagination,
       isUseDrawer: useStore.getState().isUseDrawer,
+      isDarkMode: useStore.getState().isDarkMode,
       opacity: useStore.getState().opacity,
       themeIndex: useStore.getState().themeIndex,
     },
@@ -33,6 +34,7 @@ export const updateMetadata = async (
     isShowBreadcrumb: boolean;
     isUseBiggerPagination: boolean;
     isUseDrawer: boolean;
+    isDarkMode: boolean;
     opacity: number;
     themeIndex: number;
   }

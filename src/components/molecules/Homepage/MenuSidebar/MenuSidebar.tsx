@@ -30,11 +30,13 @@ export default function MenuSidebar({ navBarList, onReload }: Props) {
         gap: '10px',
       }}
     >
-      <Box sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '20px',
-      }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '20px',
+        }}
+      >
         <Box
           sx={{
             width: 200,
@@ -57,6 +59,7 @@ export default function MenuSidebar({ navBarList, onReload }: Props) {
               fontSize: '15px',
               borderBottom: '2px solid #00000000',
               transition: 'all 0.3s ease',
+              color: colors.text,
 
               [`&.ps-active`]: {
                 color: colors.text,

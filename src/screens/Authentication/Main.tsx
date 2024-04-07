@@ -6,7 +6,6 @@ import {
   BottomNavigation,
   BottomNavigationAction,
   Box,
-  Dialog,
   Snackbar,
 } from '@mui/material';
 import {
@@ -17,7 +16,6 @@ import {
   showError,
   showSuccess,
 } from '@/utils';
-import { LogoHorizontal } from '@/components/atoms/Logos';
 import { useStore, useUser } from '@/store';
 import Loading from '../Helper/Loading';
 import { CustomBreadcrumbs, Sidebar } from '@/components';
@@ -46,6 +44,7 @@ export default function Main() {
   const setLoading = useStore((state) => state.setLoading);
 
   const successMessage = useStore((state) => state.successMessage);
+  const isUseDrawer = useStore((state) => state.isUseDrawer);
   const isSuccess = useStore((state) => state.isSuccess);
   const setSuccess = useStore((state) => state.setSuccess);
 
@@ -257,47 +256,50 @@ export default function Main() {
           </Alert>
         </Snackbar>
       </Box>
-      <Box
-        sx={{
-          zIndex: 100,
-          background: colors.background,
-          position: 'fixed',
-          bottom: 0,
-          width: '100%',
-          display: {
-            xs: 'block',
-            md: 'none',
-            lg: 'none',
-          },
-        }}
-      >
-        <BottomNavigation
+      {!isUseDrawer ? (
+        <Box
           sx={{
-            height: '80px',
-          }}
-          showLabels
-          value={pathname}
-          onChange={(_, newValue) => {
-            navigate(newValue);
+            zIndex: 100,
+            background: colors.background,
+            position: 'fixed',
+            bottom: 0,
+            width: '100%',
+            display: {
+              xs: 'block',
+              md: 'none',
+              lg: 'none',
+            },
           }}
         >
-          <BottomNavigationAction
-            value={'/products'}
-            label="Products"
-            icon={<WidgetsIcon />}
-          />
-          <BottomNavigationAction
-            value={'/home'}
-            label="Dashboard"
-            icon={<HomeIcon />}
-          />
-          <BottomNavigationAction
-            value={'/setting'}
-            label="Setting"
-            icon={<SettingsIcon />}
-          />
-        </BottomNavigation>
-      </Box>
+          <BottomNavigation
+            sx={{
+              height: '80px',
+              borderTop: `1px solid ${colors.border}`,
+            }}
+            showLabels
+            value={pathname}
+            onChange={(_, newValue) => {
+              navigate(newValue);
+            }}
+          >
+            <BottomNavigationAction
+              value={'/products'}
+              label="Products"
+              icon={<WidgetsIcon />}
+            />
+            <BottomNavigationAction
+              value={'/home'}
+              label="Dashboard"
+              icon={<HomeIcon />}
+            />
+            <BottomNavigationAction
+              value={'/setting'}
+              label="Setting"
+              icon={<SettingsIcon />}
+            />
+          </BottomNavigation>
+        </Box>
+      ) : null}
     </Box>
   );
 }

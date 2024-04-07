@@ -170,7 +170,14 @@ export default function ShopScreen() {
                 gap: '10px',
               }}
             >
-              <Typography variant="h5">Review your shop</Typography>
+              <Typography
+                variant="h5"
+                sx={{
+                  color: colors.text,
+                }}
+              >
+                Review your shop
+              </Typography>
               <IconButton
                 onClick={handleUpdateShop}
                 sx={{
@@ -188,14 +195,21 @@ export default function ShopScreen() {
                 />
               </IconButton>
             </Box>
-            <Divider />
+            <Divider color={colors.text} />
           </Box>
           <Box
             sx={{
               paddingTop: '10px',
             }}
           >
-            <Typography variant="h6">Shop Details</Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                color: colors.text,
+              }}
+            >
+              Shop Details
+            </Typography>
             <Box
               sx={{
                 width: '70%',
@@ -219,6 +233,7 @@ export default function ShopScreen() {
                   <Typography
                     sx={{
                       fontSize: '14px',
+                      color: colors.text,
                       fontWeight: '400',
                     }}
                   >
@@ -227,6 +242,7 @@ export default function ShopScreen() {
                   <Typography
                     sx={{
                       fontSize: '14px',
+                      color: colors.text,
                       fontWeight: '300',
                     }}
                   >
@@ -241,7 +257,14 @@ export default function ShopScreen() {
               paddingTop: '10px',
             }}
           >
-            <Typography variant="h6">Shop Price Records</Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                color: colors.text,
+              }}
+            >
+              Shop Price Records
+            </Typography>
             {shop?.data && shop?.data?.length > 0 ? (
               <TableContainer
                 sx={{
@@ -258,6 +281,7 @@ export default function ShopScreen() {
                     '.MuiTableCell-root': {
                       color: colors.text3,
                       transition: 'background 1s ease',
+                      background: colors.background,
                       paddingY: '7px',
                       fontFamily: 'Roboto',
                       fontWeight: '400',

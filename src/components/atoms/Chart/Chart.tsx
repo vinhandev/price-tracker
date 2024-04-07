@@ -150,6 +150,8 @@ export default function Chart() {
         boxShadow: 'none',
         borderRadius: '10px',
         overflow: 'hidden',
+        background: colors.background,
+        transition: 'background 1s ease',
       }}
     >
       <AccordionSummary
@@ -233,7 +235,11 @@ export default function Chart() {
                   transform: isShowDetail ? 'rotate(180deg)' : 'rotate(0deg)',
                 }}
               >
-                <ExpandMoreIcon />
+                <ExpandMoreIcon
+                  sx={{
+                    color: colors.text,
+                  }}
+                />
               </Box>
             </FormGroup>
           </Box>
@@ -372,6 +378,7 @@ export default function Chart() {
                         fontSize: '12px',
                         fontWeight: '400',
                         fontFamily: 'Roboto',
+                        color: colors.text,
                       }}
                     >
                       {subItem.name}
@@ -382,6 +389,7 @@ export default function Chart() {
                       fontSize: '12px',
                       fontWeight: '300',
                       fontFamily: 'Roboto',
+                      color: colors.text,
                     }}
                   >
                     {subItem?.data?.[subItem.data.length - 1].price === -1

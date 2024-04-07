@@ -2,10 +2,43 @@ import { Box, Switch, styled } from '@mui/material';
 import { useStore } from '../../../../store/useStore';
 import './DarkModeButton.css';
 import { useMemo } from 'react';
+import { showError, updateMetadata } from '@/utils';
+import { useUser } from '@/store';
 
 function DarkModeButton() {
+  const user = useUser((state) => state.user);
   const isDarkMode = useStore((state) => state.isDarkMode);
   const setDarkMode = useStore((state) => state.setDarkMode);
+
+  const themeIndex = useStore((state) => state.themeIndex);
+  const setLoading = useStore((state) => state.setLoading);
+
+  const opacity = useStore((state) => state.opacity);
+
+  const isShowBreadcrumb = useStore((state) => state.isShowBreadcrumb);
+
+  const isUseDrawer = useStore((state) => state.isUseDrawer);
+
+  const isUseBiggerNavigation = useStore((state) => state.isUsePagePagination);
+
+  const handleDarkMode = async (param: boolean) => {
+    setLoading(true);
+    try {
+      await updateMetadata(user?.uid ?? '', {
+        themeIndex,
+        opacity,
+        isShowBreadcrumb,
+        isUseDrawer,
+        isUseBiggerPagination: isUseBiggerNavigation,
+        isDarkMode: param,
+      });
+      setDarkMode();
+    } catch (error) {
+      showError(error);
+    }
+    setLoading(false);
+
+  };
 
   const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     width: 62,
@@ -59,7 +92,7 @@ function DarkModeButton() {
     return (
       <MaterialUISwitch
         checked={isDarkMode}
-        onChange={setDarkMode}
+        onChange={(_, param) => handleDarkMode(param)}
       />
     );
   }, [isDarkMode]);

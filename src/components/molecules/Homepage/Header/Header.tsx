@@ -9,7 +9,7 @@ import {
   Toolbar,
   Tooltip,
   Typography,
-  IconButton as MuiIconButton
+  IconButton as MuiIconButton,
 } from '@mui/material';
 import SearchBar from './components/SearchBar/SearchBar';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -22,6 +22,7 @@ import { useNavigate } from 'react-router-dom';
 import { IconButton } from '@/components';
 export default function Header() {
   const setOpenSidebar = useStore((state) => state.setOpenSidebar);
+  const isUseDrawer = useStore((state) => state.isUseDrawer);
   const navigation = useNavigate();
   const colors = useColors();
   const user = useUser((state) => state.user);
@@ -163,7 +164,9 @@ export default function Header() {
         position="static"
       >
         <Toolbar>
-          <IconButton onClick={toggleSidebar} variant="menu" />
+          {isUseDrawer ? (
+            <IconButton onClick={toggleSidebar} variant="menu" />
+          ) : null}
           <Typography
             variant="h6"
             component="div"

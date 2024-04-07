@@ -158,7 +158,14 @@ export default function ProductsScreen() {
               gap: '10px',
             }}
           >
-            <Typography variant="h5">Products</Typography>
+            <Typography
+              variant="h5"
+              sx={{
+                color: colors.text,
+              }}
+            >
+              Products
+            </Typography>
             <IconButton
               onClick={handleClose}
               sx={{
@@ -191,6 +198,7 @@ export default function ProductsScreen() {
                 sx={{
                   '.MuiTableCell-root': {
                     color: colors.text3,
+                    background: colors.background,
                     transition: 'background 1s ease',
                     paddingY: '7px',
                     fontFamily: 'Roboto',
@@ -202,6 +210,7 @@ export default function ProductsScreen() {
                   },
                   '.MuiTableRow-root': {
                     background: colors.background,
+                    transition: 'background 1s ease',
                     ':hover': {
                       backgroundColor: 'rgba(0, 0, 0, 0.1)',
                       cursor: 'pointer',

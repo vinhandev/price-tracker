@@ -44,6 +44,8 @@ export default function SettingScreen() {
     (state) => state.setIsUsePagePagination
   );
 
+  const isDarkMode = useStore((state) => state.isDarkMode);
+
   async function onDeleteAllRecords() {
     setLoading(true);
     try {
@@ -111,6 +113,7 @@ export default function SettingScreen() {
         isShowBreadcrumb: param,
         isUseDrawer,
         isUseBiggerPagination: isUseBiggerNavigation,
+        isDarkMode,
       });
       setIsShowBreadcrumb(param);
     } catch (error) {
@@ -127,6 +130,7 @@ export default function SettingScreen() {
         isShowBreadcrumb,
         isUseDrawer: param,
         isUseBiggerPagination: isUseBiggerNavigation,
+        isDarkMode,
       });
       setIsUseDrawer(param);
     } catch (error) {
@@ -143,6 +147,7 @@ export default function SettingScreen() {
         isShowBreadcrumb,
         isUseDrawer,
         isUseBiggerPagination: param,
+        isDarkMode,
       });
       setIsUseBiggerNavigation(param);
     } catch (error) {
@@ -171,6 +176,7 @@ export default function SettingScreen() {
         isShowBreadcrumb,
         isUseDrawer,
         isUseBiggerPagination: isUseBiggerNavigation,
+        isDarkMode,
       });
     } catch (error) {
       showError(error);

@@ -156,7 +156,14 @@ export default function ShopsScreen() {
                 gap: '10px',
               }}
             >
-              <Typography variant="h5">Shops</Typography>
+              <Typography
+                variant="h5"
+                sx={{
+                  color: colors.text,
+                }}
+              >
+                Shops
+              </Typography>
               <IconButton
                 onClick={handleAddNewProduct}
                 sx={{
@@ -221,6 +228,7 @@ export default function ShopsScreen() {
                   '.MuiTableCell-root': {
                     color: colors.text3,
                     transition: 'background 1s ease',
+                    background: colors.background,
                     paddingY: '7px',
                     fontFamily: 'Roboto',
                     fontWeight: '400',
@@ -289,7 +297,7 @@ export default function ShopsScreen() {
                 <Divider />
                 <Typography
                   sx={{
-                    paddingTop: 2,  
+                    paddingTop: 2,
                     color: colors.text,
                     fontSize: '12px',
                     fontWeight: '300',
