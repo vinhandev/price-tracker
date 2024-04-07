@@ -9,6 +9,7 @@ import {
   Radio,
   RadioGroup,
   Slider,
+  Stack,
   Switch,
 } from '@mui/material';
 import { Label } from '@/components/atoms';
@@ -18,8 +19,10 @@ import { Button, ConfirmDialog } from '@/components';
 import { graphTheme } from '@/assets/colors';
 import { useMemo, useState } from 'react';
 import { updateAllData } from '@/services';
+import { useColors } from '@/hooks';
 
 export default function SettingScreen() {
+  const colors = useColors();
   const [open, setOpen] = useState(false);
   const [onPress, setOnPress] = useState<() => void>(() => {});
   const user = useUser((state) => state.user);
@@ -194,15 +197,8 @@ export default function SettingScreen() {
       }}
     >
       <Tab title="Setting">
-        <Box>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              gap: '10px',
-              paddingTop: '20px',
-            }}
-          >
+        <Stack sx={{ paddingTop: '20px' }} spacing={3}>
+          <Stack spacing={1} direction={'row'}>
             <Button
               onClick={onDeleteAllRecords}
               color="error"
@@ -229,14 +225,22 @@ export default function SettingScreen() {
             >
               Update all user data
             </Button>
-          </Box>
-          <FormControl>
+          </Stack>
+          <Stack spacing={1}>
             <FormControlLabel
               checked={isShowBreadcrumb}
               onChange={async (_, checked) => {
                 await handleUpdateShowBreadcrumb(checked);
               }}
               label="Show breadcrumb"
+              sx={{
+                '.MuiTypography-root': {
+                  fontSize: '12px',
+                  fontWeight: '400',
+                  fontFamily: 'Roboto',
+                  color: colors.text,
+                },
+              }}
               control={<Switch />}
             />
             <FormControlLabel
@@ -245,6 +249,14 @@ export default function SettingScreen() {
                 await handleUpdateUseDrawer(checked)
               }
               label="Use Drawer"
+              sx={{
+                '.MuiTypography-root': {
+                  fontSize: '12px',
+                  fontWeight: '400',
+                  fontFamily: 'Roboto',
+                  color: colors.text,
+                },
+              }}
               control={<Switch />}
             />
             <FormControlLabel
@@ -253,10 +265,18 @@ export default function SettingScreen() {
                 handleUpdateUseBiggerNavigation(checked)
               }
               label="Use bigger pagination"
+              sx={{
+                '.MuiTypography-root': {
+                  fontSize: '12px',
+                  fontWeight: '400',
+                  fontFamily: 'Roboto',
+                  color: colors.text,
+                },
+              }}
               control={<Switch />}
             />
-          </FormControl>
-        </Box>
+          </Stack>
+        </Stack>
       </Tab>
       <Tab title="Graph Theme">
         <Box
