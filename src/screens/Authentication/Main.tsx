@@ -125,7 +125,7 @@ export default function Main() {
         onClick: () => {
           navigate(getPath({ path: 'HOME' }));
         },
-        isActive: pathname === getPath({ path: 'HOME' }),
+        isActive: pathname.includes(getPath({ path: 'HOME' })),
       },
 
       {
@@ -133,7 +133,7 @@ export default function Main() {
         onClick: () => {
           navigate(getPath({ path: 'PRODUCTS' }));
         },
-        isActive: pathname === getPath({ path: 'PRODUCTS' }),
+        isActive: pathname.includes(getPath({ path: 'PRODUCTS' })),
       },
     ],
     [
@@ -142,7 +142,7 @@ export default function Main() {
         onClick: () => {
           navigate(getPath({ path: 'SETTING' }));
         },
-        isActive: pathname === getPath({ path: 'SETTING' }),
+        isActive: pathname.includes(getPath({ path: 'SETTING' })),
       },
     ],
   ];

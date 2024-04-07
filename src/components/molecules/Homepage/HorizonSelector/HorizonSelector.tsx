@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import { useColors } from '@/hooks';
 import { useForm } from 'react-hook-form';
 import { Button, FormInput } from '@/components';
+import { DEFAULT_IMAGE } from '@/constants';
 export default function HorizonSelector() {
   const colors = useColors();
   const navigation = useNavigate();
-
 
   const prices = useStore((state) => state.prices);
   const setSelectedProduct = useStore((state) => state.setSelectedProduct);
@@ -111,7 +111,7 @@ export default function HorizonSelector() {
           >
             <img
               style={{ height: '100%', width: '100%' }}
-              src={shopSelectedData?.avatar ?? undefined}
+              src={shopSelectedData?.avatar ?? DEFAULT_IMAGE}
             />
           </Box>
           <Box>

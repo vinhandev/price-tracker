@@ -13,7 +13,6 @@ export const updateUserPrices = async () => {
   return response.json();
 };
 
-
 export const updateAllData = async () => {
   const response = await fetch(priceUrl + '/updateAllPrices', {
     method: 'GET',
@@ -31,7 +30,7 @@ export const previewWebsite = async (params: {
   afterCharacters: string;
 }) => {
   const response = await fetch(
-    url +
+    priceUrl +
       '/previewPrices?' +
       new URLSearchParams({
         websiteLink: params.websiteLink,

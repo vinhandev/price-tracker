@@ -13,6 +13,7 @@ import { Label } from '@/components/atoms';
 import { showError, showSuccess } from '@/utils';
 import { Button } from '@/components';
 import { previewWebsite } from '@/services';
+import { DEFAULT_IMAGE } from '@/constants';
 export default function UpdateWebsite() {
   const [websiteLink, setWebsiteLink] = useState<string>('');
   const [image, setImage] = useState<string>('');
@@ -406,6 +407,9 @@ export default function UpdateWebsite() {
                   >
                     <img
                       src={image}
+                      onError={() => {
+                        setImage(DEFAULT_IMAGE);
+                      }}
                       style={{
                         height: '100%',
                         width: '100%',
