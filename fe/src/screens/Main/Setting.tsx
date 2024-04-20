@@ -19,7 +19,7 @@ import { Button, ConfirmDialog } from '@/components';
 import { graphTheme } from '@/assets/colors';
 import { useMemo, useState } from 'react';
 import { updateAllData } from '@/services';
-import { useColors } from '@/hooks';
+import { useColors, useConfirmDialog } from '@/hooks';
 
 export default function SettingScreen() {
   const colors = useColors();
@@ -49,11 +49,12 @@ export default function SettingScreen() {
 
   const isDarkMode = useStore((state) => state.isDarkMode);
 
+  const { setOpen: setConfirmDialogOpen } = useConfirmDialog();
+
   async function onDeleteAllRecords() {
     setLoading(true);
     try {
-      const confirm = window.confirm('Are you sure?');
-      if (confirm && user) {
+      if (user) {
         const tmpPrices = prices.map((item) => {
           const tmpProduct = item.data.map((subItem) => {
             return {
@@ -81,7 +82,7 @@ export default function SettingScreen() {
     setLoading(false);
   }
 
-  const onDeleteAllData = async () => {
+  async function onDeleteAllData() {
     if (user) {
       setLoading(true);
       try {
@@ -95,7 +96,7 @@ export default function SettingScreen() {
       }
       setLoading(false);
     }
-  };
+  }
 
   const handleUpdateData = async () => {
     setLoading(true);
@@ -196,181 +197,173 @@ export default function SettingScreen() {
         width: '100%',
       }}
     >
-      <Tab title="Setting">
-        <Stack sx={{ paddingTop: '20px' }} spacing={3}>
-          <Stack spacing={1} direction={'row'}>
-            <Button
-              onClick={onDeleteAllRecords}
-              color="error"
-              variant="contained"
-            >
-              Delete all record
-            </Button>
-            <Button
-              onClick={() => {
-                setOnPress(() => onDeleteAllData);
-                setOpen(() => true);
-              }}
-              color="error"
-              variant="contained"
-            >
-              Delete all data
-            </Button>
-            <Button
-              onClick={() => {
-                setOnPress(() => handleUpdateData);
-                setOpen(() => true);
-              }}
-              variant="contained"
-            >
-              Update all user data
-            </Button>
+      <Stack direction={'row'} gap={2}>
+        <Tab style={{ flex: 1 }} title="Setting">
+          <Stack sx={{ paddingTop: '20px' }} spacing={3}>
+            <Stack spacing={1}>
+              <Button
+                onClick={() => {
+                  setConfirmDialogOpen(true, onDeleteAllRecords);
+                }}
+                color="error"
+                variant="contained"
+              >
+                Delete all record
+              </Button>
+              <Button
+                onClick={() => {
+                  setConfirmDialogOpen(true, onDeleteAllData);
+                }}
+                color="error"
+                variant="contained"
+              >
+                Delete all data
+              </Button>
+              <Button onClick={handleUpdateData} variant="contained">
+                Update all user data
+              </Button>
+            </Stack>
+            <Stack spacing={1}>
+              <FormControlLabel
+                checked={isShowBreadcrumb}
+                onChange={async (_, checked) => {
+                  await handleUpdateShowBreadcrumb(checked);
+                }}
+                label="Show breadcrumb"
+                sx={{
+                  '.MuiTypography-root': {
+                    fontSize: '12px',
+                    fontWeight: '400',
+                    fontFamily: 'Roboto',
+                    color: colors.text,
+                  },
+                }}
+                control={<Switch />}
+              />
+              <FormControlLabel
+                checked={isUseDrawer}
+                onChange={async (_, checked) =>
+                  await handleUpdateUseDrawer(checked)
+                }
+                label="Use Drawer"
+                sx={{
+                  '.MuiTypography-root': {
+                    fontSize: '12px',
+                    fontWeight: '400',
+                    fontFamily: 'Roboto',
+                    color: colors.text,
+                  },
+                }}
+                control={<Switch />}
+              />
+              <FormControlLabel
+                checked={isUseBiggerNavigation}
+                onChange={async (_, checked) =>
+                  handleUpdateUseBiggerNavigation(checked)
+                }
+                label="Use bigger pagination"
+                sx={{
+                  '.MuiTypography-root': {
+                    fontSize: '12px',
+                    fontWeight: '400',
+                    fontFamily: 'Roboto',
+                    color: colors.text,
+                  },
+                }}
+                control={<Switch />}
+              />
+            </Stack>
           </Stack>
-          <Stack spacing={1}>
-            <FormControlLabel
-              checked={isShowBreadcrumb}
-              onChange={async (_, checked) => {
-                await handleUpdateShowBreadcrumb(checked);
-              }}
-              label="Show breadcrumb"
-              sx={{
-                '.MuiTypography-root': {
-                  fontSize: '12px',
-                  fontWeight: '400',
-                  fontFamily: 'Roboto',
-                  color: colors.text,
-                },
-              }}
-              control={<Switch />}
-            />
-            <FormControlLabel
-              checked={isUseDrawer}
-              onChange={async (_, checked) =>
-                await handleUpdateUseDrawer(checked)
-              }
-              label="Use Drawer"
-              sx={{
-                '.MuiTypography-root': {
-                  fontSize: '12px',
-                  fontWeight: '400',
-                  fontFamily: 'Roboto',
-                  color: colors.text,
-                },
-              }}
-              control={<Switch />}
-            />
-            <FormControlLabel
-              checked={isUseBiggerNavigation}
-              onChange={async (_, checked) =>
-                handleUpdateUseBiggerNavigation(checked)
-              }
-              label="Use bigger pagination"
-              sx={{
-                '.MuiTypography-root': {
-                  fontSize: '12px',
-                  fontWeight: '400',
-                  fontFamily: 'Roboto',
-                  color: colors.text,
-                },
-              }}
-              control={<Switch />}
-            />
-          </Stack>
-        </Stack>
-      </Tab>
-      <Tab title="Graph Theme">
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            alignItems: 'flex-start',
-            paddingTop: '20px',
-            gap: '10px',
-          }}
-        >
+        </Tab>
+        <Tab style={{ flex: 1 }} title="Graph Theme">
           <Box
             sx={{
               display: 'flex',
-              flexDirection: 'row',
+              flex: 1,
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              paddingTop: '20px',
               gap: '10px',
-              width: '100%',
             }}
           >
             <Box
               sx={{
                 display: 'flex',
-                flexDirection: 'column',
+                flexDirection: 'row',
                 gap: '10px',
-                flex: 1,
-              }}
-            >
-              <FormControl>
-                <Label label="Theme" />
-                <RadioGroup
-                  value={themeIndex}
-                  onChange={(e) => setThemeIndex(Number(e.target.value))}
-                  aria-labelledby="demo-radio-buttons-group-label"
-                  defaultValue="female"
-                  name="radio-buttons-group"
-                >
-                  <FormControlLabel
-                    value="0"
-                    control={<Radio />}
-                    label="Night Volcano"
-                  />
-                  <FormControlLabel
-                    value="1"
-                    control={<Radio />}
-                    label="Deep Sea"
-                  />
-                  <FormControlLabel
-                    value="2"
-                    control={<Radio />}
-                    label="Peace"
-                  />
-                </RadioGroup>
-              </FormControl>
-              <FormControl>
-                <Label label="Opacity" />
-                <Slider
-                  aria-label="Volume"
-                  value={opacity}
-                  onChange={(_, value) => {
-                    setOpacity(Number(value));
-                    console.log(value);
-                  }}
-                />
-              </FormControl>
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                flex: 1,
-                justifyContent: 'flex-end',
+                width: '100%',
               }}
             >
               <Box
                 sx={{
-                  width: '200px',
-                  height: '200px',
-                  borderRadius: '10px',
-                  background: linearGradient,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '10px',
+                  flex: 1,
                 }}
-              />
+              >
+                <FormControl>
+                  <Label label="Theme" />
+                  <RadioGroup
+                    value={themeIndex}
+                    onChange={(e) => setThemeIndex(Number(e.target.value))}
+                    aria-labelledby="demo-radio-buttons-group-label"
+                    defaultValue="female"
+                    name="radio-buttons-group"
+                  >
+                    <FormControlLabel
+                      value="0"
+                      control={<Radio />}
+                      label="Night Volcano"
+                    />
+                    <FormControlLabel
+                      value="1"
+                      control={<Radio />}
+                      label="Deep Sea"
+                    />
+                    <FormControlLabel
+                      value="2"
+                      control={<Radio />}
+                      label="Peace"
+                    />
+                  </RadioGroup>
+                </FormControl>
+                <FormControl>
+                  <Label label="Opacity" />
+                  <Slider
+                    aria-label="Volume"
+                    value={opacity}
+                    onChange={(_, value) => {
+                      setOpacity(Number(value));
+                      console.log(value);
+                    }}
+                  />
+                </FormControl>
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flex: 1,
+                  justifyContent: 'flex-end',
+                }}
+              >
+                <Box
+                  sx={{
+                    width: '200px',
+                    height: '200px',
+                    borderRadius: '10px',
+                    background: linearGradient,
+                  }}
+                />
+              </Box>
             </Box>
+            <Button variant="contained" onClick={handleSave}>
+              Save
+            </Button>
           </Box>
-          <Button variant="contained" onClick={handleSave}>
-            Save
-          </Button>
-        </Box>
-      </Tab>
-      <RatingTab />
-      <ConfirmDialog
-        open={open}
-        onClose={() => setOpen(false)}
-        onPress={onPress}
-      />
+        </Tab>
+        <RatingTab />
+      </Stack>
     </Box>
   );
 }

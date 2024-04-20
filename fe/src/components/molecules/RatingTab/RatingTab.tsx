@@ -33,7 +33,7 @@ export default function RatingTab() {
   }, [uid]);
 
   return (
-    <Tab title="Rating">
+    <Tab style={{ flex: 1 }} title="Rating">
       <Box
         sx={{
           display: 'flex',

@@ -5,17 +5,17 @@ import { Label } from '../..';
 export type TextInputProps = Omit<TextFieldProps, 'label' | 'onChange'> & {
   value: string;
   onChange: (value: string) => void;
-  label: string;
-  isError: boolean;
-  errorText: string;
+  label?: string;
+  isError?: boolean;
+  errorText?: string;
 };
 
 export default function TextInput({
   value,
   onChange,
-  errorText,
-  isError,
-  label,
+  errorText = '',
+  isError = false,
+  label = undefined,
   ...props
 }: TextInputProps) {
   const colors = useColors();
@@ -27,7 +27,7 @@ export default function TextInput({
         gap: 1,
       }}
     >
-      <Label label={label} />
+      {label ? <Label label={label} /> : null}
       <TextField
         sx={{
           '.MuiInputBase-root': {

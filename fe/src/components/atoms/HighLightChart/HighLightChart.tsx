@@ -25,6 +25,7 @@ import { Line } from 'react-chartjs-2';
 import { useStore } from '../../../store/useStore';
 import { formatDate } from '../../../utils/helper';
 import { getGradient } from '@/utils';
+import { Stack } from '@mui/material';
 
 type Props = {
   colors: string[];
@@ -39,13 +40,20 @@ export default function HighLightChart({ data, colors }: Props) {
   if (data.length === 0) return null;
 
   return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
+    <Stack
+      sx={{
+        canvas: {
+          height: '100% !important',
+          width: '100% !important',
+
+        },
       }}
     >
       <Line
+        style={{
+          display: 'flex',
+          flex: 1,
+        }}
         options={{
           layout: {
             padding: -10,
@@ -74,9 +82,6 @@ export default function HighLightChart({ data, colors }: Props) {
               grid: {
                 display: false,
               },
-              // border: {
-              //   display: false,
-              // },
             },
           },
           elements: {
@@ -113,6 +118,6 @@ export default function HighLightChart({ data, colors }: Props) {
           ],
         }}
       />
-    </div>
+    </Stack>
   );
 }

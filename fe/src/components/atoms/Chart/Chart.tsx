@@ -37,12 +37,14 @@ import {
   FormGroup,
   List,
   ListItem,
+  Stack,
   Typography,
 } from '@mui/material';
 import React, { useEffect, useMemo } from 'react';
 import { getGradientMainChart } from '@/utils';
 import { graphTheme } from '@/assets/colors';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Tab } from '@/HOCs';
 
 export default function Chart() {
   const [isShowAll, setIsShowAll] = React.useState(true);
@@ -121,8 +123,6 @@ export default function Chart() {
     }
   }, [isShowAll, shop]);
 
-  console.log(item?.data);
-
   if (
     item?.data.length === 0 ||
     !item ||
@@ -130,288 +130,293 @@ export default function Chart() {
     !item?.data?.[0].data
   )
     return (
-      <Box
-        style={{
-          width: '100%',
-          height: '100%',
-
-          background: colors.background,
-          borderRadius: 3,
-          padding: '20px',
-
-          justifyContent: 'center',
-          alignItems: 'center',
-          display: 'flex',
-          flex: 1,
-        }}
-      >
-        No data
-      </Box>
+      <Tab>
+        <Stack
+          sx={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Typography
+            sx={{
+              textAlign: 'center',
+              color: colors.text,
+              fontSize: '20px',
+              fontWeight: '400',
+              fontFamily: 'Roboto',
+            }}
+          >
+            No data.
+          </Typography>
+        </Stack>
+      </Tab>
     );
 
   return (
     <Accordion
       expanded={isShowDetail}
       sx={{
-        height: '100%',
+        flex: 1,
         boxShadow: 'none',
-        borderRadius: '10px',
-        overflow: 'hidden',
         background: colors.background,
         transition: 'background 1s ease',
+        borderRadius: '12px !important',
       }}
     >
-      <AccordionSummary
-        sx={{
-          justifyContent: 'flex-start',
-          alignItems: 'flex-start',
-        }}
-      >
-        <Box
-          style={{
-            width: '100%',
-            height: '465px',
-
-            transition: 'background 1s ease',
-            background: colors.background,
-            borderRadius: 10,
-            overflow: 'hidden',
-
-            paddingRight: '20px',
-            paddingTop: '20px',
-            paddingBottom: '40px',
-
-            display: 'flex',
-            flex: 1,
-            flexDirection: 'column',
-            gap: '10px',
+      <Stack>
+        <AccordionSummary
+          sx={{
+            justifyContent: 'flex-start',
+            alignItems: 'flex-start',
           }}
         >
-          <Box
+          <Stack
+            gap={2}
             sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
+              transition: 'background 1s ease',
+
+              flex: 1,
+              canvas: {
+                flex: 1,
+                height: '100% !important',
+                width: '100% !important',
+                aspectRatio: 'auto !important',
+                boxSizing: 'content-box !important',
+                display: 'flex !important',
+              },
             }}
           >
-            <Typography
+            <Stack
+              direction={'row'}
               sx={{
-                fontWeight: '700',
-                color: colors.text,
-              }}
-            >
-              Chart
-            </Typography>
-            <FormGroup
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
+                justifyContent: 'space-between',
                 alignItems: 'center',
               }}
             >
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    sx={{
-                      transform: 'scale(0.8)',
-                      color: colors.primary,
-                      '&.Mui-checked': {
-                        color: colors.primary,
-                      },
-                    }}
-                    defaultChecked
-                    checked={isShowAll}
-                    onChange={() => {
-                      setIsShowAll(!isShowAll);
-                    }}
-                  />
-                }
-                label="All"
+              <Typography
                 sx={{
-                  '.MuiTypography-root': {
-                    color: colors.text3,
-                    fontSize: '14px',
-                    fontWeight: '300',
-                  },
-                }}
-              />
-              <Box
-                onClick={() => setShowDetail(!isShowDetail)}
-                sx={{
-                  transform: isShowDetail ? 'rotate(180deg)' : 'rotate(0deg)',
+                  fontWeight: '700',
+                  color: colors.text,
                 }}
               >
-                <ExpandMoreIcon
+                Chart
+              </Typography>
+              <FormGroup
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}
+              >
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      sx={{
+                        transform: 'scale(0.8)',
+                        color: colors.primary,
+                        '&.Mui-checked': {
+                          color: colors.primary,
+                        },
+                      }}
+                      defaultChecked
+                      checked={isShowAll}
+                      onChange={() => {
+                        setIsShowAll(!isShowAll);
+                      }}
+                    />
+                  }
+                  label="All"
                   sx={{
-                    color: colors.text,
+                    '.MuiTypography-root': {
+                      color: colors.text3,
+                      fontSize: '14px',
+                      fontWeight: '300',
+                    },
                   }}
                 />
-              </Box>
-            </FormGroup>
-          </Box>
-          <Line
-            style={{ paddingBottom: '20px' }}
-            options={{
-              plugins: {
-                legend: {
-                  display: false,
-                },
-              },
-              elements: {
-                line: {
-                  tension: 0.4,
-                },
-                point: {
-                  radius: 2,
-                },
-              },
-              responsive: true,
-              maintainAspectRatio: false,
-              onClick: (_, elements) => {
-                if (elements.length > 0) {
-                  const clickedElement = elements[0];
-                  const datasetIndex = clickedElement.datasetIndex;
-                  const selectedData = item?.data?.[datasetIndex];
-                  if (selectedData?.link) {
-                    window.open(selectedData.link, '_blank');
-                  }
-                }
-              },
-            }}
-            data={{
-              labels:
-                labels.map((item) => {
-                  return formatDate(new Date(item));
-                }) ?? [],
-              datasets: chartItems.map((subItem) => ({
-                label: subItem.name,
-                data:
-                  subItem?.data?.map((subItem) => {
-                    if (subItem.price === -1) {
-                      return undefined;
-                    }
-                    return subItem.price;
-                  }) ?? [],
-
-                backgroundColor: (context) =>
-                  getGradientMainChart(context, graphColors),
-                borderColor: !isShowAll
-                  ? graphColors[0]
-                  : colors.chartColors[subItem.keyIndex],
-                borderWidth: 2,
-                fill: !isShowAll ? true : false,
-              })),
-            }}
-          />
-        </Box>
-      </AccordionSummary>
-      <AccordionDetails>
-        <Typography
-          sx={{
-            fontWeight: '700',
-            color: colors.text,
-          }}
-        >
-          Last price of shops
-        </Typography>
-        <List
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            width: '100%',
-            flexWrap: 'wrap',
-            transition: 'transform 0.3s ease',
-            height,
-          }}
-        >
-          {transitions((style, subItem, _, index) => (
-            <animated.div
-              style={{ zIndex: sortedItems.length - index, ...style }}
-              key={subItem.keyIndex}
-            >
-              <ListItem
-                sx={{
-                  padding: 0,
-                  height: `${itemHeight}px`,
-                  transition: 'all 0.3s ease',
-                  width: '100%',
-                }}
-              >
                 <Box
+                  onClick={() => setShowDetail(!isShowDetail)}
                   sx={{
-                    display: 'flex',
+                    transform: isShowDetail ? 'rotate(180deg)' : 'rotate(0deg)',
+                  }}
+                >
+                  <ExpandMoreIcon
+                    sx={{
+                      color: colors.text,
+                    }}
+                  />
+                </Box>
+              </FormGroup>
+            </Stack>
+            <Stack flex={1}>
+              <Line
+                options={{
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                  },
+                  elements: {
+                    line: {
+                      tension: 0.4,
+                    },
+                    point: {
+                      radius: 2,
+                    },
+                  },
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  onClick: (_, elements) => {
+                    if (elements.length > 0) {
+                      const clickedElement = elements[0];
+                      const datasetIndex = clickedElement.datasetIndex;
+                      const selectedData = item?.data?.[datasetIndex];
+                      if (selectedData?.link) {
+                        window.open(selectedData.link, '_blank');
+                      }
+                    }
+                  },
+                }}
+                data={{
+                  labels:
+                    labels.map((item) => {
+                      return formatDate(new Date(item));
+                    }) ?? [],
+                  datasets: chartItems.map((subItem) => ({
+                    label: subItem.name,
+                    data:
+                      subItem?.data?.map((subItem) => {
+                        if (subItem.price === -1) {
+                          return undefined;
+                        }
+                        return subItem.price;
+                      }) ?? [],
+
+                    backgroundColor: (context) =>
+                      getGradientMainChart(context, graphColors),
+                    borderColor: !isShowAll
+                      ? graphColors[0]
+                      : colors.chartColors[subItem.keyIndex],
+                    borderWidth: 2,
+                    fill: !isShowAll ? true : false,
+                  })),
+                }}
+              />
+            </Stack>
+          </Stack>
+        </AccordionSummary>
+      </Stack>
+      <Stack>
+        <AccordionDetails>
+          <Typography
+            sx={{
+              fontWeight: '700',
+              color: colors.text,
+            }}
+          >
+            Last price of shops
+          </Typography>
+          <List
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '100%',
+              flexWrap: 'wrap',
+              transition: 'transform 0.3s ease',
+              height,
+            }}
+          >
+            {transitions((style, subItem, _, index) => (
+              <animated.div
+                style={{ zIndex: sortedItems.length - index, ...style }}
+                key={subItem.keyIndex}
+              >
+                <ListItem
+                  sx={{
+                    padding: 0,
+                    height: `${itemHeight}px`,
+                    transition: 'all 0.3s ease',
                     width: '100%',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: '10px',
                   }}
                 >
                   <Box
                     sx={{
                       display: 'flex',
+                      width: '100%',
                       flexDirection: 'row',
                       alignItems: 'center',
+                      justifyContent: 'space-between',
                       gap: '10px',
                     }}
                   >
-                    <Checkbox
-                      size="small"
-                      color={'error'}
-                      checked={!removedList.includes(subItem.name)}
-                      onChange={() => {
-                        if (removedList.includes(subItem.name)) {
-                          setRemovedList(
-                            removedList.filter((item) => item !== subItem.name)
-                          );
-                        } else {
-                          setRemovedList([...removedList, subItem.name]);
-                        }
-                      }}
+                    <Box
                       sx={{
-                        width: '10px',
-                        height: '10px',
-                        borderRadius: '100px',
-                        '&.Mui-checked': {
-                          color: !isShowAll
-                            ? graphColors[0]
-                            : colors.chartColors[subItem.keyIndex],
-                        },
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: '10px',
                       }}
-                    />
+                    >
+                      <Checkbox
+                        size="small"
+                        color={'error'}
+                        checked={!removedList.includes(subItem.name)}
+                        onChange={() => {
+                          if (removedList.includes(subItem.name)) {
+                            setRemovedList(
+                              removedList.filter(
+                                (item) => item !== subItem.name
+                              )
+                            );
+                          } else {
+                            setRemovedList([...removedList, subItem.name]);
+                          }
+                        }}
+                        sx={{
+                          width: '10px',
+                          height: '10px',
+                          borderRadius: '100px',
+                          '&.Mui-checked': {
+                            color: !isShowAll
+                              ? graphColors[0]
+                              : colors.chartColors[subItem.keyIndex],
+                          },
+                        }}
+                      />
+                      <Typography
+                        sx={{
+                          fontSize: '12px',
+                          fontWeight: '400',
+                          fontFamily: 'Roboto',
+                          color: colors.text,
+                        }}
+                      >
+                        {subItem.name}
+                      </Typography>
+                    </Box>
                     <Typography
                       sx={{
                         fontSize: '12px',
-                        fontWeight: '400',
+                        fontWeight: '300',
                         fontFamily: 'Roboto',
                         color: colors.text,
                       }}
                     >
-                      {subItem.name}
+                      {subItem.data?.length === 0 ||
+                      subItem?.data?.[subItem.data.length - 1].price === -1
+                        ? 'NO DATA'
+                        : formatMoney(
+                            subItem?.data?.[subItem.data.length - 1].price ?? 0
+                          )}
                     </Typography>
                   </Box>
-                  <Typography
-                    sx={{
-                      fontSize: '12px',
-                      fontWeight: '300',
-                      fontFamily: 'Roboto',
-                      color: colors.text,
-                    }}
-                  >
-                    {subItem.data?.length === 0 ||
-                    subItem?.data?.[subItem.data.length - 1].price === -1
-                      ? 'NO DATA'
-                      : formatMoney(
-                          subItem?.data?.[subItem.data.length - 1].price ?? 0
-                        )}
-                  </Typography>
-                </Box>
-              </ListItem>
-            </animated.div>
-          ))}
-        </List>
-      </AccordionDetails>
+                </ListItem>
+              </animated.div>
+            ))}
+          </List>
+        </AccordionDetails>
+      </Stack>
     </Accordion>
   );
 }

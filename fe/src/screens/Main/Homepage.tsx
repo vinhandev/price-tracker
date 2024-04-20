@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { useStore } from '../../store/useStore';
 import { useEffect } from 'react';
 import ShopRecords from '../../components/molecules/Homepage/Records/ShopRecords';
-import { Box } from '@mui/material';
+import { Stack } from '@mui/material';
 import Tab from '@/HOCs/Tab';
 import HorizonSelector from '@/components/molecules/Homepage/HorizonSelector/HorizonSelector';
 import { SkeletonWrapper } from '@/HOCs';
@@ -191,23 +191,19 @@ export default function Homepage() {
   }, [prices, product, setProduct]);
 
   return (
-    <Box
+    <Stack
+      gap={2}
       sx={{
-        width: '100%',
-
-        display: 'flex',
+        flex: 1,
         flexDirection: {
           xs: 'column',
           md: 'row',
         },
-        gap: '10px',
       }}
     >
-      <Box
+      <Stack
+        gap={2}
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '10px',
           width: {
             xs: '100%',
             md: '60%',
@@ -216,53 +212,33 @@ export default function Homepage() {
         }}
       >
         <SkeletonWrapper>
-          <Box>
-            <Chart />
-          </Box>
+          <Chart />
         </SkeletonWrapper>
-        <SkeletonWrapper>
-          <Box>
-            <Tab noPadding title="Records">
+        <Stack flex={1}>
+          <SkeletonWrapper>
+            <Tab noPadding title="Records" style={{ flex: 1 }}>
               <ShopRecords />
             </Tab>
-          </Box>
-        </SkeletonWrapper>
-      </Box>
-      <Box
+          </SkeletonWrapper>
+        </Stack>
+      </Stack>
+      <Stack
+        gap={2}
         sx={{
-          height: 'calc( 100vh - 60px - 60px)',
           width: {
             xs: '100%',
             md: '40%',
             lg: '380px',
           },
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '10px',
         }}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            flex: 1,
-          }}
-        >
-          <HighLight data={highlightData} />
-        </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            flex: 1,
-            width: '100%',
-          }}
-        >
-          <SkeletonWrapper>
-            <Tab title="Filters">
-              <HorizonSelector />
-            </Tab>
-          </SkeletonWrapper>
-        </Box>
-      </Box>
-    </Box>
+        <SkeletonWrapper>
+          <Tab title="Filters">
+            <HorizonSelector />
+          </Tab>
+        </SkeletonWrapper>
+        <HighLight data={highlightData} />
+      </Stack>
+    </Stack>
   );
 }

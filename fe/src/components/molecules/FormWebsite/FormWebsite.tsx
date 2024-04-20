@@ -57,7 +57,7 @@ export default function FormWebsite({
 }: Props) {
   const disabled = product === '';
   return (
-    <Stack spacing={2}>
+    <Stack spacing={2} flex={1}>
       <Tab title="Step">
         <Stepper
           sx={{
@@ -89,20 +89,11 @@ export default function FormWebsite({
           })}
         </Stepper>
       </Tab>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          gap: '10px',
-        }}
-      >
-        <Box
+      <Stack gap={2} direction={'row'} flex={1}>
+        <Stack
+          gap={2}
           sx={{
             width: '400px',
-
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px',
           }}
         >
           <Box
@@ -111,7 +102,7 @@ export default function FormWebsite({
               flex: 1,
             }}
           >
-            <Tab title="Select Product">
+            <Tab title="Select Product" style={{ flex: 1 }}>
               <IconButton
                 onClick={onAddNewProduct}
                 sx={{
@@ -152,28 +143,24 @@ export default function FormWebsite({
             sx={{
               display: 'flex',
               flexGrow: 2,
+              gap: 2,
             }}
           >
-            <Tab title="Input New Website">
-              <Box
+            <Tab
+              title="Input New Website"
+              style={{
+                display: 'flex',
+                flex: 1,
+              }}
+            >
+              <Stack
+                flex={1}
+                gap={2}
                 sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'flex-start',
-                  gap: '10px',
-
-                  flex: 1,
-
-                  paddingTop: '20px',
+                  justifyContent: 'space-between',
                 }}
               >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '5px',
-                  }}
-                >
+                <Stack gap={1}>
                   <TextInput
                     disabled={disabled}
                     label={'Website'}
@@ -198,28 +185,31 @@ export default function FormWebsite({
                     errorText=""
                     isError={false}
                   />
-                </Box>
-                <Button
-                  sx={{
-                    height: '50px',
-                  }}
-                  variant="contained"
-                  disabled={disabled}
-                  onClick={onPreview}
-                >
-                  Preview
-                </Button>
-              </Box>
+                </Stack>
+                <Stack>
+                  <Button
+                    sx={{
+                      height: '50px',
+                    }}
+                    variant="contained"
+                    disabled={disabled}
+                    onClick={onPreview}
+                  >
+                    Preview
+                  </Button>
+                </Stack>
+              </Stack>
             </Tab>
           </Box>
-        </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            flexGrow: 1,
-          }}
-        >
-          <Tab title="Preview">
+        </Stack>
+        <Stack flex={1}>
+          <Tab
+            title="Preview"
+            style={{
+              display: 'flex',
+              flex: 1,
+            }}
+          >
             <Box
               sx={{
                 display: 'flex',
@@ -232,86 +222,87 @@ export default function FormWebsite({
                 paddingTop: '20px',
               }}
             >
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  gap: '10px',
-                }}
-              >
+              <Stack gap={2}>
                 <Box
                   sx={{
                     display: 'flex',
-                    flexDirection: 'column',
+                    flexDirection: 'row',
                     gap: '10px',
                   }}
                 >
-                  <Label label={'Photo'} />
-                  <Box
+                  <Stack
                     sx={{
-                      borderRadius: '10px',
-                      height: '150px',
-                      width: undefined,
-                      aspectRatio: 1,
-                      border: `1px solid rgba(228, 219, 233, 0.25)`,
+                      gap: '10px',
                     }}
                   >
-                    <img
-                      src={requestParams.logo}
-                      onError={() => requestParams.onChangeLogo(DEFAULT_IMAGE)}
-                      style={{
-                        height: '100%',
-                        width: '100%',
+                    <Label label={'Photo'} />
+                    <Stack
+                      sx={{
                         borderRadius: '10px',
+                        padding: 2,
+                        height: '120px',
+                        width: '120px',
+                        border: `1px solid rgba(228, 219, 233, 0.25)`,
                       }}
+                    >
+                      <img
+                        src={requestParams.logo}
+                        onError={() =>
+                          requestParams.onChangeLogo(DEFAULT_IMAGE)
+                        }
+                        style={{
+                          height: '100%',
+                          width: '100%',
+                          borderRadius: '10px',
+                        }}
+                      />
+                    </Stack>
+                  </Stack>
+                  <Stack
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      flex: 1,
+                      gap: '10px',
+                    }}
+                  >
+                    <TextInput
+                      disabled={disabled}
+                      label={'Price only numbers'}
+                      value={`${responseData.price}`}
+                      onChange={() => {}}
+                      errorText=""
+                      isError={false}
                     />
-                  </Box>
+                    <TextInput
+                      disabled={disabled}
+                      label={'Formatted price'}
+                      value={formatMoney(responseData.price)}
+                      onChange={() => {}}
+                      errorText=""
+                      isError={false}
+                    />
+                  </Stack>
                 </Box>
                 <Box
                   sx={{
                     display: 'flex',
                     flexDirection: 'column',
-                    flexGrow: 1,
-
                     gap: '10px',
                   }}
                 >
                   <TextInput
+                    multiline
+                    rows={3}
                     disabled={disabled}
-                    label={'Price only numbers'}
-                    value={`${responseData.price}`}
-                    onChange={() => {}}
-                    errorText=""
-                    isError={false}
-                  />
-                  <TextInput
-                    disabled={disabled}
-                    label={'Formatted price'}
-                    value={formatMoney(responseData.price)}
+                    label={'Raw Text'}
+                    value={responseData.rawText}
                     onChange={() => {}}
                     errorText=""
                     isError={false}
                   />
                 </Box>
-              </Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '10px',
-                }}
-              >
-                <TextInput
-                  multiline
-                  rows={3}
-                  disabled={disabled}
-                  label={'Raw Text'}
-                  value={responseData.rawText}
-                  onChange={() => {}}
-                  errorText=""
-                  isError={false}
-                />
-              </Box>
+              </Stack>
               <Stack direction="row" spacing={1}>
                 <Button
                   sx={{
@@ -339,8 +330,8 @@ export default function FormWebsite({
               </Stack>
             </Box>
           </Tab>
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
     </Stack>
   );
 }

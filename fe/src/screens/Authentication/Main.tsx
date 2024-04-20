@@ -9,6 +9,7 @@ import {
   Container,
   Grid,
   Snackbar,
+  Stack,
 } from '@mui/material';
 import {
   convertLabelToUrl,
@@ -20,7 +21,12 @@ import {
 } from '@/utils';
 import { useStore, useUser } from '@/store';
 import Loading from '../Helper/Loading';
-import { CustomBreadcrumbs, Sidebar } from '@/components';
+import {
+  ConfirmDialog,
+  CustomBreadcrumbs,
+  InputDialog,
+  Sidebar,
+} from '@/components';
 import { Header } from '@/components/molecules';
 import { useColors } from '@/hooks';
 import { updateUserPrices } from '@/services';
@@ -49,8 +55,6 @@ export default function Main() {
   const isUseDrawer = useStore((state) => state.isUseDrawer);
   const isSuccess = useStore((state) => state.isSuccess);
   const setSuccess = useStore((state) => state.setSuccess);
-
-  const isShowBreadcrumb = useStore((state) => state.isShowBreadcrumb);
 
   const initData = useStore((state) => state.initData);
 
@@ -159,135 +163,98 @@ export default function Main() {
 
   return (
     <Container maxWidth={false} disableGutters>
-      <Box
+      <Grid
+        container
         sx={{
-          minHeight: '100vh',
+          height: '100vh',
           width: '100vw',
+          padding: {
+            xs: '20px',
+            md: '30px',
+          },
+
+          transition: 'all 1s ease',
 
           background: colors.background2,
-          transition: 'all 1s ease',
         }}
       >
         <Grid
-          container
-          spacing={2}
+          item
+          lg={2}
           sx={{
-            height: '100%',
+            height: {
+              xs: 'calc( 100vh - 40px )',
+              md: 'calc( 100vh - 60px )',
+            },
+            display: {
+              xs: 'none',
+              md: 'none',
+              lg: 'flex',
+            },
+            justifyContent: 'space-between',
+            flexDirection: 'column',
+            gap: '20px',
+
+            background: colors.background2,
+          }}
+        >
+          <Sidebar navBarList={NavBarList} onReload={handleReload} />
+        </Grid>
+
+        <Grid item xs={12} lg={10}>
+          <Stack sx={{ height: '100%' }}>
+            <Header />
+            <CustomBreadcrumbs />
+            <Outlet />
+          </Stack>
+        </Grid>
+      </Grid>
+      {!isUseDrawer ? (
+        <Box
+          sx={{
+            zIndex: 100,
+            background: colors.background,
+            position: 'fixed',
+            bottom: 0,
             width: '100%',
-
-            display: 'flex',
-            flexDirection: 'row',
-
-            padding: {
-              xs: '20px',
-              md: '30px',
+            display: {
+              xs: 'block',
+              md: 'block',
+              lg: 'none',
             },
           }}
         >
-          <Grid
-            item
-            lg={2}
+          <BottomNavigation
             sx={{
-              height: {
-                xs: 'calc( 100vh - 40px )',
-                md: 'calc( 100vh - 60px )',
-              },
-
-              display: {
-                xs: 'none',
-                md: 'none',
-                lg: 'flex',
-              },
-              justifyContent: 'space-between',
-              flexDirection: 'column',
-              gap: '20px',
+              height: '80px',
+              borderTop: `1px solid ${colors.border}`,
+            }}
+            showLabels
+            value={pathname}
+            onChange={(_, newValue) => {
+              navigate(newValue);
             }}
           >
-            <Box
-              sx={{
-                flex: 1,
-                background: colors.background2,
-              }}
-            >
-              <Sidebar navBarList={NavBarList} onReload={handleReload} />
-            </Box>
-          </Grid>
-
-          <Grid
-            item
-            xs={12}
-            lg={10}
-            sx={{
-              display: 'flex',
-              position: 'relative',
-              flexDirection: 'column',
-            }}
-          >
-            <Box
-              sx={{
-                width: '100%',
-              }}
-            >
-              <Header />
-            </Box>
-            <Box
-              sx={{
-                display: isShowBreadcrumb ? 'block' : 'none',
-                transition: 'all 1s ease',
-              }}
-            >
-              <CustomBreadcrumbs />
-            </Box>
-            <Box>
-              <Outlet />
-            </Box>
-          </Grid>
-        </Grid>
-        {!isUseDrawer ? (
-          <Box
-            sx={{
-              zIndex: 100,
-              background: colors.background,
-              position: 'fixed',
-              bottom: 0,
-              width: '100%',
-              display: {
-                xs: 'block',
-                md: 'block',
-                lg: 'none',
-              },
-            }}
-          >
-            <BottomNavigation
-              sx={{
-                height: '80px',
-                borderTop: `1px solid ${colors.border}`,
-              }}
-              showLabels
-              value={pathname}
-              onChange={(_, newValue) => {
-                navigate(newValue);
-              }}
-            >
-              <BottomNavigationAction
-                value={'/products'}
-                label="Products"
-                icon={<WidgetsIcon />}
-              />
-              <BottomNavigationAction
-                value={'/home'}
-                label="Dashboard"
-                icon={<HomeIcon />}
-              />
-              <BottomNavigationAction
-                value={'/setting'}
-                label="Setting"
-                icon={<SettingsIcon />}
-              />
-            </BottomNavigation>
-          </Box>
-        ) : null}
-      </Box>
+            <BottomNavigationAction
+              value={'/products'}
+              label="Products"
+              icon={<WidgetsIcon />}
+            />
+            <BottomNavigationAction
+              value={'/home'}
+              label="Dashboard"
+              icon={<HomeIcon />}
+            />
+            <BottomNavigationAction
+              value={'/setting'}
+              label="Setting"
+              icon={<SettingsIcon />}
+            />
+          </BottomNavigation>
+        </Box>
+      ) : null}
+      <ConfirmDialog />
+      <InputDialog />
       <Loading
         count={count}
         currentProduct={currentProduct}

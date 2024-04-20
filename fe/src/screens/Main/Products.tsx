@@ -1,12 +1,9 @@
 import {
   Box,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   Divider,
   Fab,
   IconButton,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -19,15 +16,12 @@ import {
 } from '@mui/material';
 import NavigationIcon from '@mui/icons-material/Navigation';
 import { useEffect, useMemo, useState } from 'react';
-import { useColors } from '@/hooks';
-import { useStore, useUser } from '@/store';
+import { useAddNewProduct, useColors } from '@/hooks';
+import { useStore } from '@/store';
 import { SkeletonWrapper, Tab } from '@/HOCs';
-import { showSuccess, updateFirebasePrices } from '@/utils';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
-import TextInput from '@/components/atoms/Inputs/TextInput/TextInput';
-import { Button } from '@/components';
-import { convertLabelToUrl, getPath } from '@/utils/route';
+import { convertLabelToUrl, getPath } from '@/utils';
 
 export default function ProductsScreen() {
   const theme = useTheme();
@@ -35,17 +29,13 @@ export default function ProductsScreen() {
   const navigate = useNavigate();
 
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [open, setOpen] = useState(false);
-  const [newProductName, setNewProductName] = useState('');
 
   const isActive = scrollPosition > 0;
 
-  const user = useUser((state) => state.user);
-
   const prices = useStore((state) => state.prices);
-  const labels = useStore((state) => state.labels);
-  const setLoading = useStore((state) => state.setLoading);
   const setSelectedProduct = useStore((state) => state.setSelectedProduct);
+
+  const { addProduct } = useAddNewProduct();
 
   const priceList = useMemo(() => {
     const tmpList: {
@@ -65,32 +55,9 @@ export default function ProductsScreen() {
     setScrollPosition(position);
   };
 
-  const handleClose = () => {
-    setOpen(!open);
+  const handleAddProduct = async () => {
+    await addProduct();
   };
-
-  async function handleAddNewProduct() {
-    if (user) {
-      handleClose();
-      setLoading(true);
-      try {
-        prices.push({
-          label: newProductName,
-          data: [],
-        });
-        await updateFirebasePrices(user?.uid, {
-          prices,
-          labels,
-          lastUpdate: new Date().getTime(),
-        });
-        showSuccess();
-        window.location.reload();
-      } catch (error) {
-        console.error(error);
-      }
-      setLoading(false);
-    }
-  }
 
   const handleScrollToTop = () => {
     window.scrollTo({
@@ -114,44 +81,17 @@ export default function ProductsScreen() {
 
   return (
     <SkeletonWrapper>
-      <Box
+      <Stack
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-          paddingTop: '10px',
+          flex: 1,
         }}
       >
-        <Dialog
-          sx={{
-            '.MuiPaper-root': {
-              width: 500,
-              padding: '10px',
-            },
-          }}
-          open={open}
-          onClose={handleClose}
-        >
-          <DialogTitle>New Product</DialogTitle>
-          <DialogContent>
-            <TextInput
-              onChange={setNewProductName}
-              value={newProductName}
-              label="Name"
-              errorText=""
-              isError={false}
-            />
-          </DialogContent>
-          <Divider />
-          <DialogActions>
-            <Button onClick={handleAddNewProduct}>Add</Button>
-            <Button color="inherit" onClick={handleClose}>
-              Cancel
-            </Button>
-          </DialogActions>
-        </Dialog>
-        <Tab>
-          <Box>
+        <Tab style={{ flex: 1 }}>
+          <Stack
+            sx={{
+              flex: 1,
+            }}
+          >
             <Box
               sx={{
                 display: 'flex',
@@ -168,7 +108,7 @@ export default function ProductsScreen() {
                 Products
               </Typography>
               <IconButton
-                onClick={handleClose}
+                onClick={handleAddProduct}
                 sx={{
                   borderRadius: 1000,
                   background: colors.primary,
@@ -286,7 +226,7 @@ export default function ProductsScreen() {
                 </Typography>
               </Box>
             )}
-          </Box>
+          </Stack>
         </Tab>
         <Zoom
           in={isActive}
@@ -312,7 +252,7 @@ export default function ProductsScreen() {
             Scroll to top
           </Fab>
         </Zoom>
-      </Box>
+      </Stack>
     </SkeletonWrapper>
   );
 }

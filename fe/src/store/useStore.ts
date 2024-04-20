@@ -1,7 +1,20 @@
 import { create } from 'zustand';
 import { GroupPriceProps } from '@/types';
+import { ReactNode } from 'react';
 
 type Store = {
+  initData: (
+    prices: GroupPriceProps[],
+    labels: number[],
+    lastUpdate: number,
+    metadata: {
+      isShowBreadcrumb: boolean;
+      isUseBiggerPagination: boolean;
+      isUseDrawer: boolean;
+      opacity: number;
+      themeIndex: number;
+    }
+  ) => void;
   isDarkMode: boolean;
   setDarkMode: () => void;
   openSidebar: boolean;
@@ -36,16 +49,29 @@ type Store = {
   setThemeIndex: (themeIndex: number) => void;
   opacity: number;
   setOpacity: (opacity: number) => void;
-  initData: (
-    prices: GroupPriceProps[],
-    labels: number[],
-    lastUpdate: number,
-    metadata: {
-      isShowBreadcrumb: boolean;
-      isUseBiggerPagination: boolean;
-      isUseDrawer: boolean;
-      opacity: number;
-      themeIndex: number;
+  isOpenConfirmDialog: boolean;
+  callbackConfirmDialog: undefined | (() => void);
+  setIsOpenConfirmDialog: (value: boolean, onConfirm?: () => void) => void;
+  isOpenInputDialog: boolean;
+  callbackInputDialog: undefined | (() => void | Promise<void>);
+  bodyInputDialog: ReactNode;
+  inputDialogTexts: {
+    title: string;
+    description: string;
+    confirm: string;
+    cancel: string;
+  };
+  setIsOpenInputDialog: (
+    value: boolean,
+    props?: {
+      inputDialogTexts?: {
+        title: string;
+        description: string;
+        confirm: string;
+        cancel: string;
+      };
+      bodyInputDialog?: ReactNode;
+      onConfirm?: () => void | Promise<void>;
     }
   ) => void;
 };
@@ -92,4 +118,29 @@ export const useStore = create<Store>((set) => ({
   setThemeIndex: (themeIndex: number) => set({ themeIndex }),
   opacity: 50,
   setOpacity: (opacity: number) => set({ opacity }),
+  isOpenConfirmDialog: false,
+  callbackConfirmDialog: undefined,
+  setIsOpenConfirmDialog: (value: boolean, onConfirm?: () => void) =>
+    set({ isOpenConfirmDialog: value, callbackConfirmDialog: onConfirm }),
+  isOpenInputDialog: false,
+  callbackInputDialog: undefined,
+  bodyInputDialog: undefined,
+  inputDialogTexts: {
+    title: 'Input dialog',
+    description: 'Are your confirm this action?',
+    confirm: 'Confirm',
+    cancel: 'Cancel',
+  },
+  setIsOpenInputDialog: (value, props) => {
+    if (value) {
+      set({
+        isOpenInputDialog: value,
+        inputDialogTexts: props?.inputDialogTexts,
+        bodyInputDialog: props?.bodyInputDialog,
+        callbackInputDialog: props?.onConfirm,
+      });
+    } else {
+      set({ isOpenInputDialog: value });
+    }
+  },
 }));

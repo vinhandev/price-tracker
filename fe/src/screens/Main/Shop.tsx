@@ -105,12 +105,11 @@ export default function ShopScreen() {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        overflow: 'hidden',
-        paddingTop: '10px',
-        width: '100%',
+
+        flex: 1,
       }}
     >
-      <Tab>
+      <Tab style={{ flex: 1 }}>
         <Box>
           <Link
             style={{

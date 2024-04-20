@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { HightLightType } from '@/screens/Main/Homepage';
 import HighLightChart from '../HighLightChart/HighLightChart';
 import { formatMoney } from '@/utils';
@@ -15,112 +15,77 @@ export default function HighLight({ data }: Props) {
   const theme = useStore((state) => state.themeIndex);
   const selectedTheme = graphTheme[theme];
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        flex: 1,
-        gap: '10px',
-      }}
-    >
+    <Stack gap={2} flex={1}>
       {data.map((item, index) => {
         return (
-          <Box
-            key={index}
-            sx={{ width: '100%', flex: 1, flexGrow: 1, display: 'flex' }}
-          >
-            <SkeletonWrapper>
-              <Box
-                sx={{
-                  background: colors.background,
-                  transition: 'background 1s ease',
-                  borderRadius: 2,
+          <SkeletonWrapper>
+            <Stack
+              gap={4}
+              direction={'row'}
+              sx={{
+                flex: 1,
+                width: '100%',
+                transition: 'background 1s ease',
 
-                  flex: 1,
-                  height: '130px',
-                  width: '100%',
+                padding: '20px',
 
-                  position: 'relative',
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-end',
-                  gap: '20px',
-
-                  overflow: 'hidden',
-                  padding: '20px',
-                }}
-              >
-                <Box
-                  sx={{
-                    zIndex: 1,
-                    borderRadius: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    width: 'calc(50% - 10px)',
-
-                    // backdropFilter: 'blur(5px)',
+                background: colors.background,
+                borderRadius: 2,
+              }}
+            >
+              <Stack flex={1}>
+                <Typography
+                  style={{
+                    fontWeight: '700',
+                    fontFamily: 'Roboto',
+                    color: colors.text,
                   }}
                 >
-                  <Typography
-                    style={{
-                      fontWeight: '700',
-                      fontFamily: 'Roboto',
-                      color: colors.text,
-                    }}
-                  >
-                    {item.label}
-                  </Typography>
-                  <Typography
-                    style={{
-                      fontSize: 25,
-                      fontFamily: 'Roboto',
-                      fontWeight: 'bold',
-                      color: colors.primary,
-                    }}
-                  >
-                    {formatMoney(item.price)}
-                  </Typography>
-                  <Typography
-                    onClick={() => {
-                      if (item.link) {
-                        window.open(item.link);
-                      }
-                    }}
-                    sx={{
-                      fontSize: 12,
-                      fontWeight: '300',
-                      fontFamily: 'Roboto',
-                      color: colors.text,
-                      cursor: 'pointer',
-                      ':hover': {
-                        textDecoration: 'underline',
-                      },
-
-                      display: '-webkit-box',
-                      overflow: 'hidden',
-                      WebkitBoxOrient: 'vertical',
-                      WebkitLineClamp: 1,
-                    }}
-                  >
-                    {item.name}
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    height: '100%',
-                    width: 'calc(50% - 10px)',
+                  {item.label}
+                </Typography>
+                <Typography
+                  style={{
+                    fontSize: 25,
+                    fontFamily: 'Roboto',
+                    fontWeight: 'bold',
+                    color: colors.primary,
                   }}
                 >
-                  <HighLightChart
-                    colors={[selectedTheme[index]]}
-                    data={item.data}
-                  />
-                </Box>
-              </Box>
-            </SkeletonWrapper>
-          </Box>
+                  {formatMoney(item.price)}
+                </Typography>
+                <Typography
+                  onClick={() => {
+                    if (item.link) {
+                      window.open(item.link);
+                    }
+                  }}
+                  sx={{
+                    fontSize: 12,
+                    fontWeight: '300',
+                    fontFamily: 'Roboto',
+                    color: colors.text,
+                    cursor: 'pointer',
+                    ':hover': {
+                      textDecoration: 'underline',
+                    },
+
+                    display: '-webkit-box',
+                    overflow: 'hidden',
+                    WebkitBoxOrient: 'vertical',
+                    WebkitLineClamp: 1,
+                  }}
+                >
+                  {item.name}
+                </Typography>
+              </Stack>
+              <HighLightChart
+                colors={[selectedTheme[index]]}
+                data={item.data}
+              />
+            </Stack>
+          </SkeletonWrapper>
         );
       })}
-    </div>
+    </Stack>
   );
 }

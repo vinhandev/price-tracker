@@ -95,32 +95,17 @@ export default function SearchBar() {
             placeholder="Search Product"
             sx={{
               flex: 1,
-              borderWidth: 2,
               borderColor: colors.text,
               color: colors.text,
+              background: colors.background,
+
               input: {
+                fontSize: '16px',
+                fontWeight: '300',
                 color: colors.text,
                 '::placeholder': {
                   color: colors.text3,
                 },
-              },
-              '.MuiInputBase-root': {
-                borderColor: colors.text,
-              },
-              '.MuiOutlinedInput-root': {
-                width: '100%',
-                background: colors.transparent,
-                borderRadius: '20px',
-                '& fieldset': {
-                  borderColor: colors.text,
-                },
-                '&:hover fieldset': {
-                  borderColor: colors.text3,
-                },
-              },
-              '.Mui-focused': {
-                transition: 'all 1s ease',
-                background: colors.background,
               },
             }}
             {...params}

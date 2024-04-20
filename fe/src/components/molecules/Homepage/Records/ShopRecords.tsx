@@ -8,8 +8,8 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  Box,
   TablePagination,
+  Stack,
 } from '@mui/material';
 import { useColors } from '@/hooks';
 
@@ -47,13 +47,11 @@ export default function ShopRecords() {
     return tmpList.sort((a, b) => b.date - a.date);
   }, [prices, selectedProduct, selectedShop]);
   return (
-    <Box
+    <Stack
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
         paddingTop: '10px',
         paddingX: '20px',
+        flex: 1,
       }}
     >
       <TableContainer
@@ -160,6 +158,6 @@ export default function ShopRecords() {
           setPage(0);
         }}
       />
-    </Box>
+    </Stack>
   );
 }

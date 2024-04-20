@@ -1,11 +1,11 @@
 import { useStore } from '../../../../store/useStore';
-import { Box, ButtonGroup, Typography } from '@mui/material';
-import { useEffect } from 'react';
+import { ButtonGroup, Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useColors } from '@/hooks';
-import { useForm } from 'react-hook-form';
-import { Button, FormInput } from '@/components';
+import { useColors, useDeleteProduct, useEditProduct } from '@/hooks';
+import { Button } from '@/components';
 import { DEFAULT_IMAGE } from '@/constants';
+import { convertLabelToUrl, getPath } from '@/utils';
+import { Selector } from '@/components/atoms/Inputs/Selector/Selector';
 export default function HorizonSelector() {
   const colors = useColors();
   const navigation = useNavigate();
@@ -17,6 +17,9 @@ export default function HorizonSelector() {
   const selectedShop = useStore((state) => state.selectedShop);
   const product = useStore((state) => state.selectedProduct);
 
+  const { updateProduct } = useEditProduct();
+  const { deleteProduct } = useDeleteProduct();
+
   const productSelectedData = prices.find(
     (item) => item.label === selectedProduct
   );
@@ -24,22 +27,6 @@ export default function HorizonSelector() {
   const shopSelectedData = productSelectedData?.data?.find(
     (item) => item.name === selectedShop
   );
-
-  const { control, handleSubmit, watch } = useForm({
-    defaultValues: {
-      product: product,
-      shop: selectedShop,
-    },
-    values: {
-      product: product,
-      shop: selectedShop,
-    },
-  });
-
-  const onSubmit = (data: { product: string; shop: string }) => {
-    setSelectedProduct(data.product);
-    setSelectedShop(data.shop);
-  };
 
   const handleOpenLink = () => {
     const url = prices
@@ -50,165 +37,132 @@ export default function HorizonSelector() {
     }
   };
 
-  const handleUpdateProduct = () => {
-    navigation('/update_product');
-  };
-
   const handleUpdateShop = () => {
-    navigation('/update_shop');
+    navigation(
+      getPath({
+        path: 'UPDATE_WEBSITE',
+        params: {
+          productId: convertLabelToUrl(selectedProduct),
+          shopId: convertLabelToUrl(selectedShop),
+        },
+      })
+    );
   };
 
-  const watchProduct = watch('product');
-  useEffect(() => {
-    if (watchProduct) {
-      setSelectedProduct(watchProduct);
-      const selectedShop = prices.find((item) => item.label === watchProduct)
-        ?.data[0].name;
-      setSelectedShop(selectedShop ?? '');
-    }
-  }, [watchProduct]);
+  const handleDelete = async () => {
+    await deleteProduct();
+  };
+
+  const handleUpdateProduct = async () => {
+    await updateProduct();
+  };
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        gap: '10px',
+    <Stack gap={2} paddingTop={2}>
+      <Stack gap={2} direction={'row'}>
+        <Stack
+          sx={{
+            width: undefined,
+            aspectRatio: 1,
+            height: 60,
 
-        height: '100%',
-        width: '100%',
-      }}
-    >
-      <Box
+            padding: '5px',
+            borderRadius: 1,
+
+            background: colors.border,
+          }}
+        >
+          <img
+            style={{ height: '100%', width: '100%' }}
+            src={shopSelectedData?.avatar ?? DEFAULT_IMAGE}
+          />
+        </Stack>
+        <Stack>
+          <Typography
+            noWrap={false}
+            onClick={handleOpenLink}
+            sx={{
+              color: colors.text,
+              lineHeight: '20px',
+              fontSize: 10,
+              fontWeight: '300',
+              fontFamily: 'Roboto',
+              cursor: 'pointer',
+              '&:hover': {
+                textDecorationLine: 'underline',
+              },
+            }}
+          >
+            {productSelectedData?.label ?? ' '}
+          </Typography>
+          <Typography
+            noWrap={false}
+            variant="h6"
+            onClick={handleOpenLink}
+            sx={{
+              fontFamily: 'Roboto',
+              color: colors.text,
+              lineHeight: '20px',
+              cursor: 'pointer',
+              '&:hover': {
+                textDecorationLine: 'underline',
+              },
+            }}
+          >
+            {shopSelectedData?.name ?? ' '}
+          </Typography>
+          <Typography
+            noWrap={false}
+            variant="body1"
+            sx={{
+              fontFamily: 'Roboto',
+              color: colors.text,
+              lineHeight: '20px',
+              fontSize: 10,
+              fontWeight: '300',
+
+              display: '-webkit-box',
+              overflow: 'hidden',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: 1,
+            }}
+          >
+            {shopSelectedData?.link}
+          </Typography>
+        </Stack>
+      </Stack>
+      <ButtonGroup
+        variant="outlined"
+        aria-label="Basic button group"
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '10px',
-
           width: '100%',
+          height: '40px',
+          button: {
+            // width: '100%',
+            display: 'flex',
+            flex: 1,
+            fontFamily: 'Roboto',
+            fontSize: '12px',
+            fontWeight: '500',
+            color: colors.primary,
+          },
         }}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: '10px',
+        <Button onClick={handleUpdateProduct}>Edit Product</Button>
+        <Button onClick={handleUpdateShop}>Edit Shop</Button>
+        <Button onClick={handleDelete}>Delete Shop</Button>
+      </ButtonGroup>
+      <Stack gap={1}>
+        <Selector
+          value={selectedProduct}
+          onChange={(value) => {
+            setSelectedProduct(value);
+            const paramShop =
+              prices.find((item) => item.label === value)?.data?.[0]?.name ??
+              '';
+            setSelectedShop(paramShop);
           }}
-        >
-          <Box
-            sx={{
-              height: 50,
-              padding: '5px',
-              width: undefined,
-              aspectRatio: 1,
-              borderRadius: 1,
-              background: colors.border,
-
-              marginY: 1,
-            }}
-          >
-            <img
-              style={{ height: '100%', width: '100%' }}
-              src={shopSelectedData?.avatar ?? DEFAULT_IMAGE}
-            />
-          </Box>
-          <Box>
-            <Typography
-              noWrap={false}
-              onClick={handleOpenLink}
-              sx={{
-                color: colors.text,
-                lineHeight: '20px',
-                fontSize: 10,
-                fontWeight: '300',
-                fontFamily: 'Roboto',
-                cursor: 'pointer',
-                '&:hover': {
-                  textDecorationLine: 'underline',
-                },
-              }}
-            >
-              {productSelectedData?.label}
-            </Typography>
-            <Typography
-              noWrap={false}
-              variant="h6"
-              onClick={handleOpenLink}
-              sx={{
-                fontFamily: 'Roboto',
-                color: colors.text,
-                lineHeight: '20px',
-                cursor: 'pointer',
-                '&:hover': {
-                  textDecorationLine: 'underline',
-                },
-              }}
-            >
-              {shopSelectedData?.name}
-            </Typography>
-            <Typography
-              noWrap={false}
-              variant="body1"
-              sx={{
-                fontFamily: 'Roboto',
-                color: colors.text,
-                lineHeight: '20px',
-                fontSize: 10,
-                fontWeight: '300',
-
-                display: '-webkit-box',
-                overflow: 'hidden',
-                WebkitBoxOrient: 'vertical',
-                WebkitLineClamp: 1,
-              }}
-            >
-              {shopSelectedData?.link}
-            </Typography>
-          </Box>
-        </Box>
-        <ButtonGroup
-          variant="outlined"
-          aria-label="Basic button group"
-          sx={{
-            height: '40px',
-            borderColor: colors.red,
-            '.MuiButtonGroup-root': {
-              borderColor: colors.red,
-            },
-          }}
-        >
-          <Button
-            onClick={handleUpdateProduct}
-            sx={{
-              flex: 1,
-              flexDirection: 'column',
-              color: colors.primary,
-              fontFamily: 'Roboto',
-              fontSize: '10px',
-            }}
-          >
-            Edit Product
-          </Button>
-          <Button
-            onClick={handleUpdateShop}
-            sx={{
-              flex: 1,
-              flexDirection: 'column',
-              color: colors.primary,
-              fontFamily: 'Roboto',
-              fontSize: '10px',
-            }}
-          >
-            Edit Shop
-          </Button>
-        </ButtonGroup>
-
-        <FormInput
-          variant="dropdown"
-          control={control}
-          name="product"
+          label={'Products'}
           data={
             prices.map((item) => {
               return {
@@ -217,12 +171,14 @@ export default function HorizonSelector() {
               };
             }) ?? []
           }
-          label="Products"
         />
-        <FormInput
-          variant="dropdown"
-          control={control}
-          name="shop"
+
+        <Selector
+          value={selectedShop}
+          onChange={(value) => {
+            setSelectedShop(value);
+          }}
+          label={'Shops'}
           data={
             productSelectedData?.data.map((item) => {
               return {
@@ -231,19 +187,8 @@ export default function HorizonSelector() {
               };
             }) ?? []
           }
-          label="Shops"
         />
-      </Box>
-
-      <Button
-        sx={{
-          height: 50,
-        }}
-        variant="contained"
-        onClick={handleSubmit(onSubmit)}
-      >
-        Search Product
-      </Button>
-    </Box>
+      </Stack>
+    </Stack>
   );
 }

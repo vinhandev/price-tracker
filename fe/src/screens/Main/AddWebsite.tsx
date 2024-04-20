@@ -4,7 +4,7 @@ import { GroupPriceProps } from '../../types/prices';
 import { useStore } from '../../store/useStore';
 import { updateFirebasePrices } from '../../utils/firebase';
 import { useUser } from '../../store/useUser';
-import { showError, showSuccess } from '@/utils';
+import { getPath, showError, showSuccess } from '@/utils';
 import { previewWebsite } from '@/services';
 import { FormWebsite } from '@/components/molecules';
 
@@ -120,7 +120,9 @@ export default function AddWebsite() {
 
         showSuccess();
         await delay(1000);
-        window.location.reload();
+        window.location.href = getPath({
+          path: 'HOME',
+        });
       } catch (error) {
         setLoading(false);
 
