@@ -15,16 +15,14 @@ import {
 import { Label } from '@/components/atoms';
 import RatingTab from '@/components/molecules/RatingTab/RatingTab';
 import { alphaToHex, showError } from '@/utils';
-import { Button, ConfirmDialog } from '@/components';
+import { Button} from '@/components';
 import { graphTheme } from '@/assets/colors';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { updateAllData } from '@/services';
 import { useColors, useConfirmDialog } from '@/hooks';
 
 export default function SettingScreen() {
   const colors = useColors();
-  const [open, setOpen] = useState(false);
-  const [onPress, setOnPress] = useState<() => void>(() => {});
   const user = useUser((state) => state.user);
 
   const themeIndex = useStore((state) => state.themeIndex);

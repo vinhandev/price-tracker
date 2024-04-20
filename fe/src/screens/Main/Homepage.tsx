@@ -214,13 +214,13 @@ export default function Homepage() {
         <SkeletonWrapper>
           <Chart />
         </SkeletonWrapper>
+        <SkeletonWrapper>
         <Stack flex={1}>
-          <SkeletonWrapper>
             <Tab noPadding title="Records" style={{ flex: 1 }}>
               <ShopRecords />
             </Tab>
-          </SkeletonWrapper>
         </Stack>
+        </SkeletonWrapper>
       </Stack>
       <Stack
         gap={2}
@@ -236,8 +236,8 @@ export default function Homepage() {
           <Tab title="Filters">
             <HorizonSelector />
           </Tab>
+          <HighLight data={highlightData} />
         </SkeletonWrapper>
-        <HighLight data={highlightData} />
       </Stack>
     </Stack>
   );
