@@ -24,7 +24,7 @@ const ReloadButton = ({ onClick }: Props) => {
         borderRadius: '50%',
         aspectRatio: 1,
         cursor: 'pointer',
-        transition: 'all 1s ease',
+        transition: 'all 200ms ease',
         background: colors.background2,
 
         boxShadow: isClicked
