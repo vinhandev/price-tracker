@@ -130,7 +130,7 @@ export default function Chart() {
     !item?.data?.[0].data
   )
     return (
-      <Tab>
+      <Tab style={{ flex: 1 }}>
         <Stack
           sx={{
             flex: 1,
@@ -157,9 +157,8 @@ export default function Chart() {
     <Accordion
       expanded={isShowDetail}
       sx={{
-        flex: 1,
-        boxShadow: 'none',
         background: colors.background,
+        boxShadow: 'none',
         transition: 'background 1s ease',
         borderRadius: '12px !important',
       }}
@@ -178,12 +177,10 @@ export default function Chart() {
 
               flex: 1,
               canvas: {
-                flex: 1,
-                height: '100% !important',
+                height: '40vh',
                 width: '100% !important',
-                aspectRatio: 'auto !important',
                 boxSizing: 'content-box !important',
-                display: 'flex !important',
+                aspectRatio: 'auto !important',
               },
             }}
           >
@@ -251,6 +248,10 @@ export default function Chart() {
             </Stack>
             <Stack flex={1}>
               <Line
+                style={{
+                  height: '100% !important',
+                  width: '100% !important',
+                }}
                 options={{
                   plugins: {
                     legend: {

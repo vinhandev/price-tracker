@@ -1,4 +1,4 @@
-import { useConfirmDialog } from '@/hooks';
+import { useColors, useConfirmDialog } from '@/hooks';
 import {
   Button,
   DialogActions,
@@ -9,6 +9,7 @@ import {
 import Dialog from '../Dialog/Dialog';
 
 export default function ConfirmDialog() {
+  const colors = useColors();
   const { open, onClose, onConfirm: onConfirmFromHook } = useConfirmDialog();
 
   const onConfirm = async () => {

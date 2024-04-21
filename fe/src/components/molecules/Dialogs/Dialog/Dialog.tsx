@@ -1,7 +1,9 @@
+import { useColors } from '@/hooks';
 import { DialogProps, Dialog as RNDialog } from '@mui/material';
 
 type Props = DialogProps;
 export default function Dialog(props: Props) {
+  const colors = useColors();
   return (
     <RNDialog
       {...props}
@@ -13,6 +15,8 @@ export default function Dialog(props: Props) {
           fontSize: '14px',
           fontWeight: 'bold',
           fontFamily: 'Roboto',
+
+          color: colors.text,
         },
         '.MuiDialogContentText-root': {
           paddingY: 1,
@@ -20,11 +24,14 @@ export default function Dialog(props: Props) {
           fontSize: '14px',
           fontWeight: '400',
           fontFamily: 'Roboto',
+
+          color: colors.text,
         },
         '.MuiPaper-root': {
           width: 500,
           padding: 3,
           borderRadius: 3,
+          backgroundColor: colors.background,
         },
         '.MuiDialogActions-root': {
           paddingX: 0,
@@ -45,6 +52,8 @@ export default function Dialog(props: Props) {
           fontFamily: 'Roboto',
           fontWeight: 'bold',
           textTransform: 'capitalize',
+
+          color: colors.text,
 
           boxShadow: 'none',
         },

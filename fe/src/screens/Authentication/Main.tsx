@@ -166,16 +166,16 @@ export default function Main() {
       <Grid
         container
         sx={{
-          height: '100vh',
+          minHeight: '100vh',
           width: '100vw',
-          padding: {
-            xs: '20px',
-            md: '30px',
+          padding: '30px',
+          marginBottom: {
+            xs: isUseDrawer ? '0px' : '80px',
+            lg: 0,
           },
-
-          transition: 'all 1s ease',
-
+          transition: 'all 200ms ease',
           background: colors.background2,
+          overflow: 'auto',
         }}
       >
         <Grid
@@ -201,11 +201,30 @@ export default function Main() {
           <Sidebar navBarList={NavBarList} onReload={handleReload} />
         </Grid>
 
-        <Grid item xs={12} lg={10}>
-          <Stack sx={{ height: '100%' }}>
-            <Header />
-            <CustomBreadcrumbs />
-            <Outlet />
+        <Grid
+          item
+          xs={12}
+          lg={10}
+          sx={{
+            display: 'flex',
+            flex: 1,
+          }}
+        >
+          <Stack sx={{ flex: 1, width: '100%' }}>
+            <Box sx={{ height: '50px' }}>
+              <Header />
+            </Box>
+            <Box sx={{ height: '40px' }}>
+              <CustomBreadcrumbs />
+            </Box>
+            <Stack
+              sx={{
+                flex: 1,
+                overflow: 'scroll',
+              }}
+            >
+              <Outlet />
+            </Stack>
           </Stack>
         </Grid>
       </Grid>

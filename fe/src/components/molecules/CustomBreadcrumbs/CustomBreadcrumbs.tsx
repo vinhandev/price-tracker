@@ -7,8 +7,7 @@ export default function CustomBreadcrumbs() {
   const paths = pathname.replace('/', '').split('/');
   const selectedProduct = useStore((state) => state.selectedProduct);
   const selectedShop = useStore((state) => state.selectedShop);
-  const isShowBreadcrumb = useStore((state) => state.isShowBreadcrumb);
-
+  
   const getBreadCrumbsPath = (paths: string[], index: number) => {
     let path = '';
     for (let i = 0; i <= index; i++) {
@@ -21,8 +20,7 @@ export default function CustomBreadcrumbs() {
     <Box
       sx={{
         paddingY: '10px',
-        display: isShowBreadcrumb ? 'block' : 'none',
-        transition: 'all 1s ease',
+        transition: 'all 200ms ease',
       }}
     >
       <Breadcrumbs>

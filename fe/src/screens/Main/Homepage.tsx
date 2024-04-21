@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { useStore } from '../../store/useStore';
 import { useEffect } from 'react';
 import ShopRecords from '../../components/molecules/Homepage/Records/ShopRecords';
-import { Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import Tab from '@/HOCs/Tab';
 import HorizonSelector from '@/components/molecules/Homepage/HorizonSelector/HorizonSelector';
 import { SkeletonWrapper } from '@/HOCs';
@@ -194,6 +194,7 @@ export default function Homepage() {
     <Stack
       gap={2}
       sx={{
+        overflow: 'hidden',
         flex: 1,
         flexDirection: {
           xs: 'column',
@@ -204,6 +205,7 @@ export default function Homepage() {
       <Stack
         gap={2}
         sx={{
+          flex: 1,
           width: {
             xs: '100%',
             md: '60%',
@@ -215,16 +217,20 @@ export default function Homepage() {
           <Chart />
         </SkeletonWrapper>
         <SkeletonWrapper>
-        <Stack flex={1}>
+          <Stack flex={1}>
             <Tab noPadding title="Records" style={{ flex: 1 }}>
               <ShopRecords />
             </Tab>
-        </Stack>
+          </Stack>
         </SkeletonWrapper>
       </Stack>
-      <Stack
+      <Box
         gap={2}
         sx={{
+          height: {
+            lg: 'calc(100vh - 60px - 90px)',
+            md: 'auto',
+          },
           width: {
             xs: '100%',
             md: '40%',
@@ -232,13 +238,15 @@ export default function Homepage() {
           },
         }}
       >
-        <SkeletonWrapper>
-          <Tab title="Filters">
-            <HorizonSelector />
-          </Tab>
-          <HighLight data={highlightData} />
-        </SkeletonWrapper>
-      </Stack>
+        <Stack flex={1} gap={2} sx={{ height: '100%' }}>
+          <SkeletonWrapper>
+            <Tab title="Filters">
+              <HorizonSelector />
+            </Tab>
+            <HighLight data={highlightData} />
+          </SkeletonWrapper>
+        </Stack>
+      </Box>
     </Stack>
   );
 }

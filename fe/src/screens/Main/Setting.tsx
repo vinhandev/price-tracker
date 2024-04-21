@@ -15,7 +15,7 @@ import {
 import { Label } from '@/components/atoms';
 import RatingTab from '@/components/molecules/RatingTab/RatingTab';
 import { alphaToHex, showError } from '@/utils';
-import { Button} from '@/components';
+import { Button } from '@/components';
 import { graphTheme } from '@/assets/colors';
 import { useMemo } from 'react';
 import { updateAllData } from '@/services';
@@ -308,6 +308,11 @@ export default function SettingScreen() {
                     aria-labelledby="demo-radio-buttons-group-label"
                     defaultValue="female"
                     name="radio-buttons-group"
+                    sx={{
+                      span: {
+                        color: colors.text,
+                      },
+                    }}
                   >
                     <FormControlLabel
                       value="0"
