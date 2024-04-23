@@ -45,6 +45,8 @@ import { getGradientMainChart } from '@/utils';
 import { graphTheme } from '@/assets/colors';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Tab } from '@/HOCs';
+import { isMockData } from '@/constants';
+import { generateMockData } from '@/utils/mock';
 
 export default function Chart() {
   const [isShowAll, setIsShowAll] = React.useState(true);
@@ -63,6 +65,8 @@ export default function Chart() {
   const graphColors = graphTheme[themeIndex].map(
     (item) => `${item}${alphaToHex(opacity)}`
   );
+
+  const mockData = generateMockData(15, 5, graphColors, isShowAll);
 
   const sortedItems = useMemo(() => {
     if (item) {
@@ -279,30 +283,34 @@ export default function Chart() {
                     }
                   },
                 }}
-                data={{
-                  labels:
-                    labels.map((item) => {
-                      return formatDate(new Date(item));
-                    }) ?? [],
-                  datasets: chartItems.map((subItem) => ({
-                    label: subItem.name,
-                    data:
-                      subItem?.data?.map((subItem) => {
-                        if (subItem.price === -1) {
-                          return undefined;
-                        }
-                        return subItem.price;
-                      }) ?? [],
+                data={
+                  isMockData
+                    ? mockData
+                    : {
+                        labels:
+                          labels.map((item) => {
+                            return formatDate(new Date(item));
+                          }) ?? [],
+                        datasets: chartItems.map((subItem) => ({
+                          label: subItem.name,
+                          data:
+                            subItem?.data?.map((subItem) => {
+                              if (subItem.price === -1) {
+                                return undefined;
+                              }
+                              return subItem.price;
+                            }) ?? [],
 
-                    backgroundColor: (context) =>
-                      getGradientMainChart(context, graphColors),
-                    borderColor: !isShowAll
-                      ? graphColors[0]
-                      : colors.chartColors[subItem.keyIndex],
-                    borderWidth: 2,
-                    fill: !isShowAll ? true : false,
-                  })),
-                }}
+                          backgroundColor: (context) =>
+                            getGradientMainChart(context, graphColors),
+                          borderColor: !isShowAll
+                            ? graphColors[0]
+                            : colors.chartColors[subItem.keyIndex],
+                          borderWidth: 2,
+                          fill: !isShowAll ? true : false,
+                        })),
+                      }
+                }
               />
             </Stack>
           </Stack>

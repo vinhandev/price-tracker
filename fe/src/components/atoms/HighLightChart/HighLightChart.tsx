@@ -49,7 +49,7 @@ export default function HighLightChart({ data, colors }: Props) {
         },
       }}
     >
-      {/* <Line
+      <Line
         style={{
           display: 'flex',
           flex: 1,
@@ -117,7 +117,7 @@ export default function HighLightChart({ data, colors }: Props) {
             },
           ],
         }}
-      /> */}
+      />
     </Stack>
   );
 }

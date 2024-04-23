@@ -5,3 +5,5 @@ export const ADD_WEBSITE_STEPS = [
   'Preview Website',
   'Submit new website',
 ];
+
+export const isMockData = false;
