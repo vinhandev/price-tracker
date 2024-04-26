@@ -1,5 +1,5 @@
 import firebase, { ServiceAccount } from 'firebase-admin';
-import credentials from './credentials.json';
+import credentials from '../../../pricetracker-8da04-firebase-adminsdk-w3rnr-d71d5ac377.json';
 
 const serviceAccount = credentials as ServiceAccount;
 
